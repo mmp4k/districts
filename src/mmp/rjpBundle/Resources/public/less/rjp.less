@@ -1,0 +1,245 @@
+@import "../../mopabootstrap/less/mopabootstrapbundle-fa.less";
+
+
+@icon-font-path: "/bundles/mopabootstrap/fonts/bootstrap/";
+
+@colorBkg: #ecebea;
+@colorGrayLink: #6a6a6a;
+@colorBlueBkg: #0686be;
+@colorGrayBkg: #f1f1f1;
+@colorGrayTextOnGrayBkg: #b9b9b9;
+
+body {
+    background: @colorBkg;
+    font-family: Helvetica;
+}
+body #rjp_footer {
+    background: url('../images/footer.jpg');
+    min-height: 170px;
+    color: white;
+
+    .padding-top {
+        padding: 2em 0;
+    }
+}
+body #rjp_header {
+    height: 179px;
+    background: url('../images/background-top.jpg');
+    color: #fff;
+
+    .row {
+        padding-top: 40px;
+    }
+
+    p {
+        padding-top: 30px;
+    }
+    @media (max-width: @screen-md-max) {
+        .col-md-6 p {
+            padding-top: 20px;
+        }
+    }
+}
+
+.navbar-default { 
+    border: 0;
+        
+    .navbar-nav {
+        .active a {
+            background-color: @colorBkg;
+        }
+    }
+}
+
+.entry {
+
+    .avatar {
+        width: 100%;
+    }
+    .white {
+        background: #fff;
+        padding: 0;
+        margin-bottom: 1em;
+    }
+
+    h2 a {
+        color: @colorGrayLink;
+    }
+
+    .border-right {
+        border-right: 2px solid @colorBkg;
+    }
+
+    .border-bottom {
+        border-bottom: 2px solid @colorBkg;
+    }
+
+    .padding {
+        padding: 1em;
+    }
+
+    h2 {
+        margin-top: 0;
+        font-size: 1.5em;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        color: white;
+
+        a {
+            display: inline-block;;
+            color: white;
+            font-size: 0.9em;
+        }
+
+        li {
+            background: @colorBlueBkg;
+            margin-bottom: 0.2em;
+            padding: 0.2em 1em;
+        }
+    }    
+    dl {
+        dt, dd {
+            padding: 0.5em 0;
+            margin-bottom: 0.5em;
+        }
+        dt {
+            font-weight: normal;
+        }
+
+        dd {
+            font-weight: bold;
+            padding: 0.5em;
+            display: inline-block;
+            width: auto;
+            margin-left: 1em;
+        }
+
+        .bkg-blue {
+            background: @colorBlueBkg;
+            color: white;
+        }
+
+        .bkg-grey {
+            background: @colorGrayBkg;
+            color: @colorGrayTextOnGrayBkg;        
+        }
+    }
+    strong {
+        color: @colorBlueBkg;
+    }
+    .councilors {
+        max-height: 136px;
+        overflow: scroll;
+    }
+    .councilors a {
+        margin-right: 1em;
+        display: inline-block;;
+    }
+}
+
+.sponsors {
+    margin-top: 1em;
+    background: white;
+    padding: 2em;
+}
+
+.district {
+    strong {
+        color: @colorBlueBkg;
+    }
+    .white {
+        background: white;
+    }
+
+    .padding {
+        padding: 1em;
+    }
+
+    .info {
+        font-size: 1.3em;
+        padding: 0.5em 0;
+    }
+
+    h1, h2 {
+        margin-top: 0;
+    }  
+    dl {
+        font-size: 1.3em;
+
+        dt, dd {
+            padding: 0.5em 0;
+            margin-bottom: 0.5em;
+        }
+        dt {
+            font-weight: normal;
+        }
+
+        dd {
+            font-weight: bold;
+            padding: 0.5em;
+            display: inline-block;
+            width: auto;
+            margin-left: 1em;
+        }
+
+        .bkg-blue {
+            background: @colorBlueBkg;
+            color: white;
+        }
+
+        .bkg-grey {
+            background: @colorGrayBkg;
+            color: @colorGrayTextOnGrayBkg;        
+        }
+    }
+    ul {
+        list-style: none;
+        padding: 0;
+        li {
+            margin-bottom: 0.2em;
+            padding: 0.2em 0em;
+        }
+        a {
+            color: black;
+        }
+        i {
+            position: relative;
+            top: 1px;
+        }
+    }
+    .margin-bottom {
+        margin-bottom: 2em;
+    }
+}
+
+#map {
+    margin-top: 2em;
+    width: 100%;
+    height: 500px;
+    border-top: 1px solid @colorGrayTextOnGrayBkg;
+    border-bottom: 1px solid @colorGrayTextOnGrayBkg;
+    margin-bottom: 2em;
+}
+#map.big {
+    height: 600px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,40 @@
+<a href="{{ path('mmp_rjp_admin') }}">Menu</a> | <a href="{{ path('mmp_rjp_admin_user_add') }}">Dodaj</a>
+<table style="width:100%">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>Nick</th>
+            <th>E-mail</th>
+            <th>Admin</th>
+            <th>Radny</th>
+            <th>Opcje</th>
+        </tr>
+    </thead>
+    {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.getFirstName() }}</td>
+            <td>{{ user.getLastName() }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+                {% if user.hasRole('ROLE_ADMIN') %}
+                    Tak
+                {% else %}
+                    Nie
+                {% endif %}
+            </td>
+            <td>
+                {% for candidate in user.getCandidates %}
+                    {{ candidate.district }}
+                {% endfor %}
+            </td>
+            <td>
+                <a href="{{ path('mmp_rjp_admin_user_edit', { 'id' : user.id }) }}">Edytuj</a>
+                <a href="{{ path('mmp_rjp_admin_user_delete', { 'id' : user.id }) }}">Usuń</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>

@@ -1,0 +1,93 @@
+{% extends 'MopaBootstrapBundle::base_less.html.twig' %}
+{% set activePage = activePage | default('index') %}
+
+
+{% block head_style %}
+
+{% stylesheets filter="cssrewrite"
+       'bundles/mopabootstrap/bootstrap/docs/assets/css/docs.min.css'       
+       'bundles/mmprjp/less/rjp.less' 
+%}
+<link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+{% endstylesheets %}
+
+{% endblock head_style %}
+
+{% block head_script %}
+{% javascripts
+    '//code.jquery.com/jquery-1.11.0.min.js'
+%}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+{% endblock head_script %}
+
+{% block title %}
+Rady Dzielnic Katowice
+{% endblock title %}
+
+{% block body_start %}
+<div class="row" id="rjp_header">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4 col-md-3">
+                <a href="{{ url('_default') }}" class="logo">
+                    {% image "@mmpRjpBundle/Resources/public/images/logo.png" %}
+                    <img src="{{ asset_url }}" />
+                    {% endimage %}                
+                </a>
+            </div>
+            <div class="col-sm-1 text-center">
+                {% image "@mmpRjpBundle/Resources/public/images/top-dots.png" %}
+                <img src="{{ asset_url }}" />
+                {% endimage %}
+            </div>        
+            <div class="col-sm-7 col-md-6">
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+            </div>    
+        </div>
+    </div>
+</div>
+{% endblock body_start %}
+
+{% block navbar %}
+<div class="navbar navbar-default">
+    <div class="container">
+        <div class="row">
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li {% if activePage == 'index' %}class="active"{% endif %}>
+                        <a href="{{ url('_default') }}">Strona główna</a>
+                    </li>
+                    <li  {% if activePage == 'map' %}class="active"{% endif %}>
+                        <a href="{{ url('mmp_rjp_map') }}">Dzielnicowa mapa Katowice</a>
+                    </li>
+                    <li {% if activePage == 'leaders' %}class="active"{% endif %}>
+                        <a href="{{ url('mmp_rjp_leaders') }}">Liderzy dzielnicowi</a>
+                    </li>
+                    <li><a href="">Kontakt</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock navbar %}
+
+{% block body_end_before_js %}
+<div class="col-sm-12 text-center sponsors">
+    {% image "@mmpRjpBundle/Resources/public/images/eog.jpg" %}
+    <img src="{{ asset_url }}" alt="Projekt finansowany z funduszy EOG" />
+    {% endimage %}
+</div>
+
+<div class="col-sm-12" id="rjp_footer">
+    <div class="container">
+        <div class="row">
+            <div class="padding-top col-sm-4">
+                <p><strong>Bogucice - kierunek przyszłośc</strong></p>
+                <p>Ul. Księdza Norberta Bończyka 9/6<br />40-209 Katowice</p>
+                <p>stowarzyszenie@bogucice.org.pl</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

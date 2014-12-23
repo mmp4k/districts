@@ -1,0 +1,23 @@
+<a href="{{ url('mmp_rjp_admin') }}">Menu</a> |
+<a href="{{ url('mmp_rjp_admin_election_add') }}">Dodaj wybory</a>
+<table style="width:100%">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Data wyborów</th>
+            <th>Liczba kandydatów</th>
+            <th>Operacje</th>
+        </tr>
+    </thead>
+    {% for election in elections %} 
+        <tr>
+            <td>{{ election.id }}</td>
+            <td>{{ election.date.format('d.m.Y') }}</td>
+            <td>{{ election.candidates.count }}</td>            
+            <td>
+                <a href="{{ url('mmp_rjp_admin_election_edit', {'id' : election.id}) }}">Edytuj</a>
+                <a href="{{ url('mmp_rjp_admin_election_delete', {'id' : election.id}) }}">Usuń</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>

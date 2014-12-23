@@ -1,0 +1,22 @@
+{% extends 'mmpRjpBundle::layout.html.twig' %}
+{% set activePage = 'leaders' %}
+
+{% block container %}
+<div class="container entry">
+    <div class="row">
+        {% for district in districts %}
+        <div class="col-sm-3">
+            <div class="white padding">
+                <h2><a href="{{ url('mmp_rjp_district', {'slug' : district.slug}) }}">{{ district.name }}</a></h2>
+                <ol>
+                    {% for councilor in district.councilors %}
+                        <li>{{ councilor.candidate.user }}</li>
+                    {% endfor %}
+                </ol>
+                
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock container %}

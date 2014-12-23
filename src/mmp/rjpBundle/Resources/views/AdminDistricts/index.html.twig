@@ -1,0 +1,36 @@
+<a href="{{ path('mmp_rjp_admin') }}">Menu</a> | <a href="{{ path('mmp_rjp_admin_districts_add') }}">Dodaj dzielnicę</a>
+<table style="width:100%">
+    <thead>        
+        <th colspan="2">ID</th>
+        <th>Nazwa</th>
+        <th>Stan</th>
+        <th>Koordynator</th>
+        <th>Opcje</th>        
+    </thead>
+    {% for district in districts %}
+        <tr>
+            <td style="width:60px"> 
+                {% if district.avatar %}
+                    <img src="/{{ district.getWebPath() }}" width="50" />
+                {% else %}
+                    {% image '@mmpRjpBundle/Resources/public/images/no_avatar.png' %}
+                        <img src="{{ asset_url }}" width="50" />
+                    {% endimage %}                
+                {% endif %}
+            </td>
+            <td >
+                {{ district.id }}                
+            </td>
+            <td>{{ district.name }}</td>
+            <td>{{ district.status }}</td>
+            <td>{% if district.coordinator %} 
+                {{ district.coordinator.username }}
+                {% endif %}
+            </td>
+            <td>
+                <a href="{{ path('mmp_rjp_admin_district_edit', { 'id' : district.id }) }}">Edytuj</a>
+                <a href="{{ path('mmp_rjp_admin_district_delete', { 'slug' : district.slug }) }}">Usuń</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>

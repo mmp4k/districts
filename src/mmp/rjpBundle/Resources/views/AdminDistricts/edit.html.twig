@@ -1,0 +1,11 @@
+{% extends 'MopaBootstrapBundle::base_less.html.twig' %}
+
+{% block body %}
+    <div class="container">
+{% if district.avatar is not null %}
+    <img src="{{ asset(district.getWebPath()) }}" />
+{% endif %}
+
+{{ form(form) }}
+</div>
+{% endblock body %}

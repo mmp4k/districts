@@ -1,0 +1,28 @@
+mmp_rjp_annotations: 
+    resource: "@mmpRjpBundle/Controller/"
+    type: annotation
+
+mmp_rjp_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: mmpRjpBundle:Default:index }
+
+_default:
+    path: /
+    defaults: { _controller: mmpRjpBundle:Index:index }
+
+# admin panel
+mmp_rjp_admin: 
+    path:	/admin/	
+    defaults: { _controller: mmpRjpBundle:Admin:index }
+
+
+
+# admin: councilors
+mmp_rjp_admin_councilors:
+    path:   /admin/councilors
+    defaults: { _controller: mmpRjpBundle:AdminCouncilors:index }
+
+# admin: districts-images
+mmp_rjp_admin_districts_images:
+    path:   /admin/districts-images
+    defaults: { _controller: mmpRjpBundle:AdminDistrictsImages:index }

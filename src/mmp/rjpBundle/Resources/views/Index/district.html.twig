@@ -1,0 +1,152 @@
+{% extends 'mmpRjpBundle::layout.html.twig' %}
+
+{% block container %}
+<div class="container district">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="white">
+                <div class="row padding">
+                    <div class="col-sm-3">
+                        {% image "@mmpRjpBundle/Resources/public/images/no_avatar.png" %}
+                            {% if district.getAvatar %}
+                                <img src="/{{ district.getWebPath }}" class="avatar" />
+                            {% else %}
+                                <img src="{{ asset_url }}" class="avatar" />
+                            {% endif %}
+                        {% endimage %}
+                    </div>
+                    <div class="col-sm-9">
+                        <h1>{{ district.name }}</h1>
+                        <p class="info">
+                            {% if district.statusIsExists %}
+                            Rada Dzielnicy już tutaj istnieje.
+                            {% elseif district.statusIsElections %}
+                            Wybory do tej Rady Dzielnicy zostały zapowiedziane.
+                            {% elseif district.statusIsNeedCoordinator %}
+                            Ta dzielnica potrzebuje koordynatora, jesteś zainteresowany?
+                            {% elseif district.statusIsCollecting %}
+                            Zbiórka podpisów trwa!
+                            {% elseif district.statusIsInOffice %}
+                            Podpisy zostały złożone do Urzedu Miasta.
+                            {% endif %}
+                        </p>
+                        {% if district.rjpName %}
+                        <p class="info">{{ district.rjpName }}</p>
+                        {% endif %}
+                        {% if district.rjpStreet %}
+                        <p class="info">ul. {{ district.rjpStreet }}</p>
+                        {% endif %}
+                        {% if district.statusIsNeedCoordinator %}
+                            <dl>
+                                <dt class="col-sm-9 col-md-4 pull-left">Liczba potrzebnych podpisów:</dt>
+                                <dd class="pull-left bkg-blue">{{ district.getSignatureNeeded }}</dd>
+                            </dl>
+                        {% elseif district.statusIsCollecting %}
+                            <dl>
+                                <dt class="col-sm-9 col-md-4 pull-left">Liczba zebranych podpisów:</dt>
+                                <dd class="pull-left bkg-blue">{{ district.getSignatureGained }}</dd>
+                                <div class="clearfix"> </div>
+                                <dt class="col-sm-9 col-md-4 pull-left">Liczba brakujących podpisów:</dt>
+                                <dd class="pull-left bkg-grey">{{ district.getSignatureNeeded - district.getSignatureGained }}</dd>
+                            </dl>
+                        {% endif %}                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="map">
+</div>
+
+<div class="container district">
+    <div class="row">
+        <div class="col-sm-6">
+            {% if district.meetings.count %}
+            <div class="white margin-bottom">
+                <div class=" padding">
+                    <h2>Spotkania w dzielnicy</h2>
+                    <ul>
+                        {% for meeting in district.meetings %}
+                            {% if meeting.linkFacebook %}
+                                <li>
+                                    <a href="{{ meeting.linkFacebook }}">
+                                        <strong>{{ meeting.date | localizeddate('full', 'none', null, null, 'd MMMM Y HH:mm') }}</strong> - {{ meeting.place }}</a> 
+                                    <i class="fa fa-external-link"></i>
+                                </li>
+                            {% else %}
+                                <li><strong>{{ meeting.date | localizeddate('full', 'none', null, null, 'd MMMM Y HH:mm') }}</strong> - {{ meeting.place }}</li>
+                            {% endif %}                            
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+            <div class="white margin-bottom">
+                <div class="padding">
+                    <h2>Masz pytania?</h2>
+                    {% if district.coordinator %}
+                    Koordynator: <strong>{{ district.getCoordinator.getFirstName }} {{ district.getCoordinator.getLastName }}</strong><br />
+                    Telefon: <strong>{{ district.getCoordinator.getPhone | number_format(0, ' ', ' ') }}</strong><br />
+                    {% endif %}
+                    E-mail: <strong>kontakt@radydzielnic.pl</strong>
+                </div>
+            </div>
+            {% if district.councilors.count %}
+            <div class="white margin-bottom">
+                <div class="padding">
+                    <h2>Radni Dzielnicowi</h2>
+                    <ol>
+                        {% for councilor in district.councilors %}
+                            <li>{{ councilor.candidate.user.firstName }} {{ councilor.candidate.user.lastName }}</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-sm-6">
+            <div class="white">
+                <div class="padding">
+                    {% if district.facebookBox %}
+                    {{ district.facebookBox | raw }}
+                    {% else %}
+                    <iframe src="//www.facebook.com/plugins/likebox.php?href=https%3A%2F%2Fwww.facebook.com%2Frady.dzielnic%3Ffref%3Dts&amp;width&amp;height=590&amp;colorscheme=light&amp;show_faces=true&amp;header=true&amp;stream=true&amp;show_border=false&amp;appId=172077316138725" scrolling="no" frameborder="0" style="border:none; overflow:hidden; height:590px;width:100%;" allowTransparency="true"></iframe>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
+<script type="text/javascript">
+    function initialize() {
+        var chicago = new google.maps.LatLng(41.875696,-87.624207);
+        var mapOptions = {
+            zoom: 13,
+            center: chicago
+        }
+
+        var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+        var ctaLayer = new google.maps.KmlLayer({
+            url: '{{ district.linkKml }}',            
+        });
+        ctaLayer.setMap(map);
+
+google.maps.event.addListener(ctaLayer, 'status_changed', function () {
+  console.log('kml loaded:');
+  google.maps.event.addListenerOnce(map, 'zoom_changed', function () {
+    console.log('zoom_changed:');
+    map.setZoom(14);
+    var bounds = ctaLayer.getDefaultViewport();
+   map.setCenter(bounds.getCenter());
+  });
+});        
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+{% endblock container %}

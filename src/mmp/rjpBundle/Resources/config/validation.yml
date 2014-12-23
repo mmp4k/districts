@@ -1,0 +1,12 @@
+mmp\rjpBundle\Entity\User:
+    properties:
+        email: 
+            - NotBlank: { groups: [normal_user] }
+        plainPassword:
+            - NotBlank: { groups: [normal_user] }
+        username:
+            - NotBlank: { groups: [normal_user] }
+        first_name:
+            - NotBlank: { groups: [if_councilor] }
+        last_name:
+            - NotBlank: { groups: [if_councilor] }

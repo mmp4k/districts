@@ -1,0 +1,23 @@
+<a href="{{ path('mmp_rjp_admin') }}">Menu</a> | <a href="{{ path('mmp_rjp_admin_meeting_add') }}">Dodaj</a>
+
+<table style="width:100%">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Kiedy</th>
+            <th>Gdzie</th>
+            <th>Opcje</th>
+        </tr>
+    </thead>
+    {% for meeting in meetings %}
+        <tr>
+            <td>{{ meeting.id }}</td>
+            <td>{{ meeting.date.format('d.m.Y H:i') }}</td>
+            <td>{{ meeting.place }}, {{ meeting.district.name }}</td>
+            <td>
+                <a href="{{ path('mmp_rjp_admin_meeting_edit', {'id' : meeting.id}) }}">Edytuj</a>
+                <a href="{{ path('mmp_rjp_admin_meeting_delete', {'id' : meeting.id}) }}">Usuń</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>

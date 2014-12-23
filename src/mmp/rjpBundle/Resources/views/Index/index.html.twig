@@ -1,0 +1,106 @@
+{% extends 'mmpRjpBundle::layout.html.twig' %}
+
+{% block container %}
+<div class="container entry">
+    <div class="row">
+        <div class="col-sm-12">
+            {% for district in districts %}
+            <div class="white">
+                <div class="row">
+                    <div class="col-sm-6 border-right">
+                        <div class="row padding">
+                            <div class="col-sm-3">
+                                {% image "@mmpRjpBundle/Resources/public/images/no_avatar.png" %}
+                                    {% if district.getAvatar %}
+                                    <img src="/{{ district.getWebPath }}" class="avatar" />
+                                    {% else %}
+                                    <img src="{{ asset_url }}" class="avatar" />
+                                    {% endif %}
+                                {% endimage %}
+                            </div>
+                            <div class="col-sm-9">
+                                <h2><a href="{{ url('mmp_rjp_district', {'slug' : district.getSlug}) }}">{{ district.getName }}</a></h2>
+                                <p>
+                                    {% if district.statusIsExists %}
+                                        Rada Dzielnicy już tutaj istnieje.
+                                    {% elseif district.statusIsElections %}
+                                        Wybory do tej Rady Dzielnicy zostały zapowiedziane.
+                                    {% elseif district.statusIsNeedCoordinator %}
+                                        Ta dzielnica potrzebuje koordynatora, jesteś zainteresowany?
+                                    {% elseif district.statusIsCollecting %}
+                                        Zbiórka podpisów trwa!
+                                    {% elseif district.statusIsInOffice %}
+                                        Podpisy zostały złożone do Urzedu Miasta.
+                                    {% endif %}
+                                </p>
+                                <ul>
+                                    {% if district.getLinkFacebook %}
+                                    <li><i class="fa fa-facebook"></i> 
+                                        <a href="{{ district.linkFacebook }}"> {{ district.getName }} na Facebooku</a></li>
+                                    {% endif %}
+                                    {% if (district.statusIsCollecting or district.statusIsNeedCoordinator) %}
+                                    <li><a href="{{ district.getLinkTemplate }}">
+                                        <i class="glyphicon glyphicon-sort-by-alphabet"></i> Pobierz listę podpisów</a></li>
+                                    {% endif %}
+                                    {% if district.getLinkPoster %}
+                                    <li><a href="">
+                                        <i class="glyphicon glyphicon-picture"></i> Pobierz materiały graficzne</a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        {% if district.statusIsExists %}
+
+                        <div class="row">
+                            <div class="padding councilors">
+                                <p><strong>Radni Dzielnicowi:</strong></p>
+                                {% for councilor in district.getCouncilors %}
+                                    <a href="{{ url('mmp_rjp_district', {'slug' : district.getSlug}) }}#c{{ councilor.getCandidate.getUser.getId }}">{{ councilor.getCandidate.getUser.getFirstName }} {{ councilor.getCandidate.getUser.getLastName }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="row border-bottom">
+                            <div class="padding">
+                                {% if district.statusIsNeedCoordinator %}
+                                <dl>
+                                    <dt class="col-sm-9 col-md-6 pull-left">Liczba potrzebnych podpisów:</dt>
+                                    <dd class="pull-left bkg-blue">{{ district.getSignatureNeeded }}</dd>
+                                </dl>
+                                {% elseif district.statusIsCollecting %}
+                                <dl>
+                                    <dt class="col-sm-9 col-md-6 pull-left">Liczba zebranych podpisów:</dt>
+                                    <dd class="pull-left bkg-blue">{{ district.getSignatureGained }}</dd>
+                                    <div class="clearfix"> </div>
+                                    <dt class="col-sm-9 col-md-6 pull-left">Liczba brakujących podpisów:</dt>
+                                    <dd class="pull-left bkg-grey">{{ district.getSignatureNeeded - district.getSignatureGained }}</dd>
+                                </dl>
+                                {% endif %}
+                            </div>
+                        </div>    
+                        <div class="row">
+                            <div class="col-sm-6 padding"> 
+                                {% if district.meetings.count %}                               
+                                <p>Najbliższe spotkanie mieszkańców:</p>                           
+                                <p><strong>{{ district.meetings.last.date | localizeddate('full', 'none', null, null, 'd MMMM Y') }}</strong></p>
+                                {% endif %}
+                            </div>        
+                            <div class="col-sm-6 padding">                       
+                                {% if district.getCoordinator %}
+                                <p>Koordynator: <strong>{{ district.getCoordinator.getFirstName }} {{ district.getCoordinator.getLastName }}</strong></p>
+                                <p><strong>tel. {{ district.getCoordinator.getPhone | number_format(0, ' ', ' ') }}</strong></p>
+                                {% endif %}
+                            </div>                        
+                        </div>   
+                        {% endif %}              
+                    </div>
+                </div>                
+            </div>
+            <!-- end entry -->
+        {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock container %}

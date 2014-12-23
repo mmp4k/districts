@@ -1,0 +1,186 @@
+<?xml version="1.0"?>
+<skipper version="3.0.1.1129" name="RjpBundle" mvc="Symfony2" orm="Doctrine2" uuid="190dd8f7-b8c9-4007-b099-4c71668911ee">
+  <module name="RjpBundle" import-format="Doctrine2Php" import-path="Entity" uuid="3fbd56f2-f9aa-4223-8eb2-480011fd794c">
+    <entity name="User" description="U&#x17C;ytkownik dziedziczony z fos_user" uuid="7513f308-a5f6-4dfb-adf0-3647d5835c9f">
+      <field name="id" type="integer" size="11" required="true" unique="true" primary="true" auto-increment="true" uuid="d823c98d-8c52-4e3e-a08e-59a706a34760"/>
+      <field name="first_name" type="string" size="255" uuid="789c36a9-cc94-4231-90e4-0ea6dde127ea"/>
+      <field name="last_name" type="string" size="255" uuid="7afead5e-61f8-4d2c-8aec-b1f0cdeec143"/>
+      <field name="phone" type="integer" size="11" uuid="b4e42841-5d34-4fc1-b69e-3eadd8f493c3"/>
+      <orm-attributes>
+        <attribute name="table">fos_user</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="District" description="Obiekt dzielnicy" uuid="fe3cb8c7-740c-47af-b9e2-bfaea4ad346c">
+      <field name="id" type="integer" size="11" required="true" unique="true" primary="true" auto-increment="true" uuid="f582c1cc-7ac6-4d91-b041-5e5dfb53a569"/>
+      <field name="coordinator_id" description="Koordynator" type="integer" size="11" uuid="d1320c68-23af-4171-8f64-92a731cbba8c"/>
+      <field name="slug" type="string" size="255" uuid="a78d8c8c-b5b6-40fe-b421-88f39b7f0fac"/>
+      <field name="name" type="string" size="255" uuid="80557bb3-3688-46ef-88f5-ee09b9800c73"/>
+      <field name="status" type="string" size="255" enum-values="exists,collecting,need_coordinator,elections,in_office" uuid="e76600fe-16bf-41b8-8f78-23cc253378b1"/>
+      <field name="signature_needed" description="Liczba potrzebnych podpis&#xF3;w" type="integer" size="11" uuid="8ddc9c94-752c-4273-bf7c-96f4fa5bbdc0"/>
+      <field name="signature_gained" description="Liczba zdobytych podpis&#xF3;w" type="integer" size="11" uuid="c5bfd5dc-4a93-4af6-a515-9c015e91ce25"/>
+      <field name="avatar" type="string" size="255" uuid="47f983c3-5718-41b7-96fd-9a49830fea4b"/>
+      <field name="link_facebook" type="string" size="255" uuid="00109fda-de4c-4a69-a124-80559705588e"/>
+      <field name="link_poster" type="string" size="255" uuid="a0612dfd-76dc-4139-b9a1-3fc40459270f"/>
+      <field name="link_template" type="string" size="255" uuid="e05623fb-2546-4e5c-9166-9dabbc6eafb6"/>
+      <field name="link_kml" type="string" size="255" uuid="b8bf1d65-526d-419e-961e-b003ac7e3c8a"/>
+      <field name="facebook_box" type="text" uuid="445e5c46-1c33-42d1-81f9-83804650384f"/>
+      <field name="rjp_name" type="string" size="255" uuid="71b3099f-52e3-418c-856f-85473607c7df"/>
+      <field name="rjp_street" type="string" size="255" uuid="c80ba1af-b179-49c3-9cd2-6d7d766321f6"/>
+      <index name="CoordinatorIndex">
+        <index-field name="coordinator_id"/>
+      </index>
+      <index name="SlugIndex" unique="true">
+        <index-field name="slug"/>
+      </index>
+      <orm-attributes>
+        <attribute name="lifecycle-callbacks">
+          <attribute name="lifecycle-callback">
+            <attribute name="method">preUpload</attribute>
+            <attribute name="type">prePersist</attribute>
+          </attribute>
+          <attribute name="lifecycle-callback">
+            <attribute name="method">preUpload</attribute>
+            <attribute name="type">preUpdate</attribute>
+          </attribute>
+          <attribute name="lifecycle-callback">
+            <attribute name="method">upload</attribute>
+            <attribute name="type">postPersist</attribute>
+          </attribute>
+          <attribute name="lifecycle-callback">
+            <attribute name="method">upload</attribute>
+            <attribute name="type">postUpdate</attribute>
+          </attribute>
+          <attribute name="lifecycle-callback">
+            <attribute name="method">removeUpload</attribute>
+            <attribute name="type">postRemove</attribute>
+          </attribute>
+        </attribute>
+        <attribute name="repository-class">mmp\rjpBundle\Entity\Repository\DistrictRepository</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="District" to="User" caption="User District" owner-alias="districts" inverse-alias="coordinator" uuid="7a1a55bc-367e-4ec5-a2fc-f25c8a40bcdc">
+      <association-field from="coordinator_id" to="id"/>
+    </association>
+    <entity name="Meeting" uuid="5b08fed5-0999-449c-825c-1376c94ab5fc">
+      <field name="id" type="integer" size="11" required="true" unique="true" primary="true" auto-increment="true" uuid="3d06da94-cb2a-420d-ad37-30b9dac046d3"/>
+      <field name="district_id" type="integer" size="11" enum-values="Dzielnica" uuid="5860e0f6-bd57-4264-851e-895bed9d56e8"/>
+      <field name="organizer_id" type="integer" size="11" enum-values="Organizator" uuid="a131c24e-482f-41d3-a55c-f398f2147e45"/>
+      <field name="date" type="datetimetz" uuid="edf4d660-fc1a-48b8-b04c-abd5064ea06f"/>
+      <field name="place" type="string" size="255" uuid="50447970-5f21-4f7c-8500-13f944af89cc"/>
+      <field name="map_coords" type="string" size="255" enum-values="Koordynaty do mapy" uuid="e8555b17-abb3-45ca-b2e5-e1bc4dcac90a"/>
+      <field name="link_facebook" type="string" size="255" uuid="c7c13057-7989-420f-b965-fe94d618701c"/>
+      <index name="IndexDistrict">
+        <index-field name="district_id"/>
+      </index>
+      <index name="IndexOrganizer">
+        <index-field name="organizer_id"/>
+      </index>
+      <index name="IndexDate">
+        <index-field name="date"/>
+      </index>
+    </entity>
+    <association from="Meeting" to="User" caption="User Meeting" owner-alias="meetings" inverse-alias="organizer" uuid="2c77bb61-ced1-41fd-9f10-40be4709568b">
+      <association-field from="organizer_id" to="id"/>
+    </association>
+    <association from="Meeting" to="District" caption="District Meeting" owner-alias="meetings" inverse-alias="district" uuid="6867a152-f116-46ce-9a9d-d95baee83e38">
+      <association-field from="district_id" to="id"/>
+    </association>
+    <entity name="DistrictImage" uuid="91a3a438-eb5b-4094-96da-b7770790f92b">
+      <field name="id" type="integer" size="11" required="true" unique="true" primary="true" auto-increment="true" uuid="69f31715-3a15-4325-8798-ca090912d258"/>
+      <field name="district_id" type="integer" size="11" uuid="790a7dd9-405a-477b-a611-a9bf2c6c81c1"/>
+      <field name="title" type="string" size="255" uuid="6e5a6cbb-d030-43d4-b502-24f4d2097f7b"/>
+      <field name="image" type="string" size="255" uuid="925dc925-66b2-4a42-952d-929b3ca025ba"/>
+      <index name="IndexDistrict">
+        <index-field name="district_id"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">district_images</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="DistrictImage" to="District" caption="District DistrictImage" owner-alias="images" inverse-alias="district" uuid="9066a6a6-0258-4636-ba99-08fdaa0bbcb2">
+      <association-field from="district_id" to="id"/>
+    </association>
+    <entity name="Councilor" description="Radni Dzielnicowi" uuid="de4a31d6-6e03-4443-ba73-3accdce1a21f">
+      <field name="id" type="integer" size="11" required="true" unique="true" primary="true" auto-increment="true" uuid="277c6d6e-8cbf-4c30-90e3-07d19b8d86f3"/>
+      <field name="district_id" type="integer" size="11" uuid="677b365a-b523-49c2-b5ba-794b09914d21"/>
+      <field name="candidate_id" type="integer" required="true" unique="true" uuid="bbf39857-2dea-40f9-b04c-24f7a563e478"/>
+      <index name="User2District">
+        <index-field name="district_id"/>
+      </index>
+    </entity>
+    <association from="Councilor" to="District" caption="District Councilor" owner-alias="councilors" inverse-alias="district" uuid="dde0de3f-e0a1-449f-a2d5-0b78770ae120">
+      <association-field from="district_id" to="id"/>
+    </association>
+    <association from="Councilor" to="Candidate" caption="Candidate Councilor" owner-alias="councilor" inverse-alias="candidate" uuid="b074b663-f1c2-4d78-9c94-61153e9d32b0">
+      <association-field from="candidate_id" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="Candidate" uuid="6c5298b0-c36c-4081-990d-a9a5341f4d8b">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="3a52278e-f56a-4954-8ec0-41414c3ebe8a"/>
+      <field name="user_id" type="integer" size="11" required="true" uuid="dc9b272f-b598-4316-bbbd-fca1aa194685"/>
+      <field name="district_id" type="integer" size="11" required="true" uuid="9bfe5a8b-1115-49f0-9ac2-5bbf0aa1648c"/>
+      <field name="election_id" type="integer" size="11" required="true" uuid="ad3258e0-b1d9-48d0-a887-bfbfa1f7bdd5"/>
+      <field name="votes" type="integer" size="11" uuid="35ee5f32-0bc6-4941-b076-93f6bcc4d3de"/>
+      <index name="UserIndex">
+        <index-field name="user_id"/>
+      </index>
+      <index name="DistrictIndex">
+        <index-field name="district_id"/>
+      </index>
+      <index name="ElectionIndex">
+        <index-field name="election_id"/>
+      </index>
+      <orm-attributes>
+        <attribute name="lifecycle-callbacks">
+          <attribute name="lifecycle-callback">
+            <attribute name="method">appendCouncilorIfNeeded</attribute>
+            <attribute name="type">postPersist</attribute>
+          </attribute>
+          <attribute name="lifecycle-callback">
+            <attribute name="method">appendCouncilorIfNeeded</attribute>
+            <attribute name="type">postUpdate</attribute>
+          </attribute>
+        </attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Candidate" to="Election" caption="Election Candidate" owner-alias="candidates" inverse-alias="election" uuid="512c3b58-fe6b-40ec-b918-09d0e33d25c6">
+      <association-field from="election_id" to="id"/>
+    </association>
+    <association from="Candidate" to="District" caption="District Candidate" owner-alias="candidates" inverse-alias="district" uuid="bc97e17e-f3b4-4d45-8755-c14410bbd8f6">
+      <association-field from="district_id" to="id"/>
+    </association>
+    <association from="Candidate" to="User" caption="User Candidate" owner-alias="candidates" inverse-alias="user" uuid="31fcfeb7-d7ad-4984-8cb2-ae2890774c7d">
+      <association-field from="user_id" to="id"/>
+    </association>
+    <entity name="Election" uuid="6bfcd612-6517-43b8-8f56-d5f263764ec9">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="975df83f-0d7f-4f1a-bb92-b55753cadc64"/>
+      <field name="date" type="date" required="true" uuid="a12d62e7-1ff0-47e2-83a6-4958284a7d4a"/>
+    </entity>
+    <orm-attributes>
+      <attribute name="namespace">mmp\rjpBundle\Entity</attribute>
+      <attribute name="filename-format">entity-name-only</attribute>
+    </orm-attributes>
+  </module>
+  <visual-data>
+    <project uuid="190dd8f7-b8c9-4007-b099-4c71668911ee" size-x="0" size-x2="1304" size-y="0" size-y2="740"/>
+    <association uuid="2c77bb61-ced1-41fd-9f10-40be4709568b" color="4288059030"/>
+    <association uuid="31fcfeb7-d7ad-4984-8cb2-ae2890774c7d" color="4288059030"/>
+    <module uuid="3fbd56f2-f9aa-4223-8eb2-480011fd794c" bg-color="4293584113" position-x="30" position-y="107" size-x="11" size-x2="1193" size-y="22" size-y2="583"/>
+    <association uuid="512c3b58-fe6b-40ec-b918-09d0e33d25c6" color="4288059030"/>
+    <entity uuid="5b08fed5-0999-449c-825c-1376c94ab5fc" bg-color="4294967295" hdr-color="4292006610" position-x="491" position-y="19" size-x="0" size-x2="130" size-y="0" size-y2="115"/>
+    <association uuid="6867a152-f116-46ce-9a9d-d95baee83e38" caption1-position-x="2" caption1-position-y="0" center-position-x="0" center-position-y="0" color="4288059030"/>
+    <entity uuid="6bfcd612-6517-43b8-8f56-d5f263764ec9" bg-color="4294967295" hdr-color="4292006610" position-x="1090" position-y="291" size-x="0" size-x2="68" size-y="0" size-y2="45"/>
+    <entity uuid="6c5298b0-c36c-4081-990d-a9a5341f4d8b" bg-color="4294967295" hdr-color="4292006610" position-x="923" position-y="453" size-x="0" size-x2="113" size-y="0" size-y2="73"/>
+    <entity uuid="7513f308-a5f6-4dfb-adf0-3647d5835c9f" bg-color="4294967295" hdr-color="4292006610" position-x="138" position-y="-16" size-x="0" size-x2="117" size-y="0" size-y2="73"/>
+    <association uuid="7a1a55bc-367e-4ec5-a2fc-f25c8a40bcdc" color="4288059030"/>
+    <association uuid="9066a6a6-0258-4636-ba99-08fdaa0bbcb2" color="4288059030"/>
+    <entity uuid="91a3a438-eb5b-4094-96da-b7770790f92b" bg-color="4294967295" hdr-color="4292006610" position-x="759" position-y="222" size-x="0" size-x2="98" size-y="0" size-y2="73"/>
+    <association uuid="b074b663-f1c2-4d78-9c94-61153e9d32b0" color="4288059030"/>
+    <association uuid="bc97e17e-f3b4-4d45-8755-c14410bbd8f6" color="4288059030"/>
+    <association uuid="dde0de3f-e0a1-449f-a2d5-0b78770ae120" color="4288059030"/>
+    <entity uuid="de4a31d6-6e03-4443-ba73-3accdce1a21f" bg-color="4294967295" hdr-color="4292006610" position-x="162" position-y="504" size-x="0" size-x2="126" size-y="0" size-y2="59"/>
+    <entity uuid="fe3cb8c7-740c-47af-b9e2-bfaea4ad346c" bg-color="4294967295" hdr-color="4292006610" position-x="311" position-y="178" size-x="0" size-x2="147" size-y="0" size-y2="171"/>
+  </visual-data>
+</skipper>

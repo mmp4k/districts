@@ -1,0 +1,35 @@
+<a href="{{ url('mmp_rjp_admin') }}">Menu</a> |
+<a href="{{ url('mmp_rjp_admin_candidate_add') }}">Dodaj</a>
+<table style="width:100%">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Wybory</th>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>Dzielnica</th>
+            <th>Radny</th>            
+            <th>Operacje</th>
+        </tr>
+    </thead>
+    {% for candidate in candidates %}
+        <tr>
+            <td>{{ candidate.id }}</td>
+            <td>{{ candidate.election }}</td>
+            <td>{{ candidate.user.firstName }}</td>
+            <td>{{ candidate.user.lastName }}</td>
+            <td>{{ candidate.district }} ({{ candidate.votes }})</td>
+            <td>
+                {% if candidate.councilor %}
+                    Tak
+                {% else %}
+                    Nie
+                {% endif %}
+            </td>
+            <td>
+                <a href="{{ url('mmp_rjp_admin_candidate_edit', {'id' : candidate.id}) }}">Edytuj</a>
+                <a href="{{ url('mmp_rjp_admin_candidate_delete', {'id' : candidate.id }) }}">Usuń</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
