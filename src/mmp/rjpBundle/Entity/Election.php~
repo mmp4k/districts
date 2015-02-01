@@ -3,7 +3,7 @@ namespace mmp\rjpBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="mmp\rjpBundle\Entity\Repository\ElectionRepository")
  */
 class Election
 {

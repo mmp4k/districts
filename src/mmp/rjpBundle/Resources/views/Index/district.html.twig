@@ -107,13 +107,59 @@
             {% endif %}
         </div>
         <div class="col-sm-6">
-            <div class="white">
+            <div class="white margin-bottom">
                 <div class="padding">
                     {% if district.facebookBox %}
                     {{ district.facebookBox | raw }}
                     {% else %}
                     <iframe src="//www.facebook.com/plugins/likebox.php?href=https%3A%2F%2Fwww.facebook.com%2Frady.dzielnic%3Ffref%3Dts&amp;width&amp;height=590&amp;colorscheme=light&amp;show_faces=true&amp;header=true&amp;stream=true&amp;show_border=false&amp;appId=172077316138725" scrolling="no" frameborder="0" style="border:none; overflow:hidden; height:590px;width:100%;" allowTransparency="true"></iframe>
                     {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="white">
+                <div class="padding">
+                    <h2>Wyniki wyborów</h2>
+                    <div role="tabpanel">
+                        <ul class="nav nav-tabs" role="tablist">                            
+                            {% for election in district.getElections %}
+                            <li role="presentation" {% if loop.first %}class="active"{% endif %}>
+                                <a href="#el{{ election.id }}" aria-controls="el{{ election.id }}" role="tab" data-toggle="tab">
+                                    {{ election.date | localizeddate('full', 'none', null, null, 'd MMMM Y') }}
+                                </a>                                   
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <div class="tab-content">
+                            {% for election in district.getElections %}
+                            <div role="tabpanel" class="tab-pane {% if loop.first %}active{% endif %}" id="el{{ election.id }}">
+                                <table class="table table-striped table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>Lp</th>
+                                            <th>Imię</th>
+                                            <th>Nazwisko</th>
+                                            <th>Liczba głosów</th>
+                                            <th>Radny</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for candidate in election.candidates %}
+                                            <tr {% if candidate.isCouncilor %}class="success"{% endif %}>
+                                                <td>{{ loop.index }}</td>
+                                                <td>{{ candidate.user.firstName }}</td>
+                                                <td>{{ candidate.user.lastName }}</td>
+                                                <td>{{ candidate.votes }}</td>
+                                                <td>{% if candidate.isCouncilor %}TAK{% else %}NIE{% endif %}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -30,7 +30,7 @@ class IndexController extends Controller
     public function districtAction($slug)
     {
         $em = $this->getDoctrine()->getManager();
-        $district = $em->getRepository('mmpRjpBundle:District')->findOneBy(['slug' => $slug]);
+        $district = $em->getRepository('mmpRjpBundle:District')->findOneByElections(['slug' => $slug]);
 
         return [
             'district'  =>  $district

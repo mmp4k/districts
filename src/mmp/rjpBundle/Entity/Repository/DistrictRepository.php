@@ -4,6 +4,7 @@ namespace mmp\rjpBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use mmp\rjpBundle\Entity\Election;
 
 /**
  * DistrictRepository
@@ -13,6 +14,40 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class DistrictRepository extends EntityRepository
 {   
+    public function findOneByElections($rules, $order = null) {
+        $em = $this->getEntityManager();
+
+        $district = $this->findOneBy($rules, $order);
+
+        $electionsIds = array();
+        foreach($district->getCandidates() as $candidate) {
+            $electionsIds[$candidate->getElection()->getId()] = $candidate->getElection();
+        }
+        // $electionsIds = array_keys($electionsIds);        
+
+        foreach($electionsIds as $election) {
+            // $electionNew = new Election;
+            // $electionNew->setId($election->getId());
+
+            $qdb = $em->getRepository('mmpRjpBundle:Candidate')->createQueryBuilder('c');            
+            $qdb->join('c.user', 'u')->addSelect('u');
+            $qdb->where('c.district = :district AND c.election = :election');
+
+            $qdb->setParameters([
+                'district' => $district->getId(),
+                'election' => $election
+            ]);
+            // $qdb->setParameter('election', $election);
+            $candidates = $qdb->getQuery()->getResult();            
+            $election->getCandidates()->clear();
+            foreach($candidates as $candidate) {
+                $election->addCandidate($candidate);
+            }
+            $district->addElection($election);
+        } 
+
+        return $district;
+    }
     public function findAllWithLeaders() {
         $districts = $this->findBy([], [
             'slug'  =>  'asc'

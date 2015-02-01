@@ -117,6 +117,11 @@ class District
      */
     private $coordinator;
 
+    /**
+     * Elections
+     */
+    private $elections;
+
     private $file;
     private $temp;
 
@@ -232,6 +237,7 @@ class District
         $this->meetings = new \Doctrine\Common\Collections\ArrayCollection();
         $this->councilors = new \Doctrine\Common\Collections\ArrayCollection();
         $this->images = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->elections = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -730,4 +736,50 @@ class District
     {
         return $this->link_kml;
     }
+
+    /**
+     * Set election
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $elections
+     * @return District
+     */
+    public function setElections(\Doctrine\Common\Collections\ArrayCollection $elections) 
+    {
+        $this->elections = $elections;
+
+        return $this;
+    }
+
+    /**
+     * Add election
+     *
+     * @param \mmp\rjpBundle\Entity\Election $elections
+     * @return District
+     */
+    public function addElection(\mmp\rjpBundle\Entity\Election $elections)
+    {
+        $this->elections[] = $elections;
+
+        return $this;
+    }
+
+    /**
+     * Remove election
+     *
+     * @param \mmp\rjpBundle\Entity\Election $elections
+     */
+    public function removeElection(\mmp\rjpBundle\Entity\Councilor $elections)
+    {
+        $this->elections->removeElement($elections);
+    }
+
+    /**
+     * Get elections
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getElections()
+    {
+        return $this->elections;
+    } 
 }
