@@ -1,1 +1,13 @@
-{{ form(form) }}
+{% extends 'MopaBootstrapBundle::base_less.html.twig' %}
+{% block body %}
+    {{ form(form) }}
+<script>
+var input = document.getElementById('mmp_rjpbundle_candidate_votes');
+input.onchange = function() {
+    if(input.value >= 23) {
+        var checkbox = document.getElementById('mmp_rjpbundle_candidate_is_councilor');
+        checkbox.checked = true;
+    }
+}
+</script>
+{% endblock %}

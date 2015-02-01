@@ -34,6 +34,8 @@ class AdminCandidatesController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $candidate = new Candidate;
+        $candidate->setElection($em->getRepository('mmpRjpBundle:Election')->find(6));
+        $candidate->setDistrict($em->getRepository('mmpRjpBundle:District')->find(22));
 
         $form = $this->createForm(new CandidateType, $candidate);
         
