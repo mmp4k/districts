@@ -1,12 +1,13 @@
 $(function() {
-    $('.col-sm-6.border-right').each(function() {
-        var heightLeft  = $(this).height();
-        var heightRight = $(this).next().height();
+    $('.col-sm-6.border-right img').load(function() {
+        var row = $(this).parents('.col-sm-6.border-right');
+        var heightLeft  = $(row).height();
+        var heightRight = $(row).next().height();
 
         if(heightLeft > heightRight) {
-            $(this).next().height(heightLeft);
+            $(row).next().height(heightLeft);
         } else {
-            $(this).height(heightRight);
+            $(row).height(heightRight);
         }
     });
 });
