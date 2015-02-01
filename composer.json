@@ -18,11 +18,10 @@
         "sensio/distribution-bundle": "~3.0",
         "sensio/framework-extra-bundle": "~3.0",
         "incenteev/composer-parameter-handler": "~2.0",
-        "friendsofsymfony/user-bundle": "~2.0@dev",
-        "stof/doctrine-extensions-bundle": "~1.1@dev",
+        "friendsofsymfony/user-bundle": "~2.0",
+        "stof/doctrine-extensions-bundle": "~1.1",
         "gedmo/doctrine-extensions": "dev-master",
-        "mopa/bootstrap-bundle": "dev-master",
-        "twbs/bootstrap": "dev-master",
+        "mopa/bootstrap-bundle": "dev-master",        
         "twitter/bootstrap": "v3.0.0"
     },
     "require-dev": {
