@@ -92,6 +92,7 @@ class District
 
     /**
      * @ORM\OneToMany(targetEntity="mmp\rjpBundle\Entity\Meeting", mappedBy="district")
+     * @ORM\OrderBy({"date" = "ASC"})
      */
     private $meetings;
 

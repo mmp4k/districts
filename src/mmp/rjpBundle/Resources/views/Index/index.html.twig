@@ -30,7 +30,7 @@
                                     {% elseif district.statusIsCollecting %}
                                         Zbiórka podpisów trwa!
                                     {% elseif district.statusIsInOffice %}
-                                        Podpisy zostały złożone do Urzedu Miasta.
+                                        Podpisy zostały złożone do Urzędu Miasta.
                                     {% endif %}
                                 </p>
                                 <ul>
@@ -82,8 +82,12 @@
                         </div>    
                         <div class="row">
                             <div class="col-sm-6 padding"> 
-                                {% if district.meetings.count %}                               
-                                <p>Najbliższe spotkanie mieszkańców:</p>                           
+                                {% if district.meetings.count %}               
+                                {% if "now"|date('Y-m-d') > district.meetings.last.date|date('Y-m-d') %}
+                                    <p>Ostatnie spotkanie mieszkańców:</p>
+                                {% else %}
+                                    <p>Najbliższe spotkanie mieszkańców:</p>
+                                {% endif %}
                                 <p><strong>{{ district.meetings.last.date | localizeddate('full', 'none', null, null, 'd MMMM Y') }}</strong></p>
                                 {% endif %}
                             </div>        
