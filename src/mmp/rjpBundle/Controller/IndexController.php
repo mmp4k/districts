@@ -61,4 +61,20 @@ class IndexController extends Controller
             'districts'  =>  $districts
         ];
     }
+
+    /**
+     * @Route("/spotkania-mieszkancow", name="mmp_rjp_meetings")
+     * @Template()
+     */
+    public function meetingsAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $meetings = $em->getRepository('mmpRjpBundle:Meeting')->findBy([], [
+            'date' => 'desc'
+        ]);
+
+        return [
+            'meetings' => $meetings
+        ];
+    }
 }
