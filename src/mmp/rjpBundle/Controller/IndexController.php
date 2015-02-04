@@ -77,4 +77,18 @@ class IndexController extends Controller
             'meetings' => $meetings
         ];
     }
+
+    /**
+     * @Route("/wybory", name="mmp_rjp_elections")
+     * @Template()
+     */
+    public function electionsAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $elections = $em->getRepository('mmpRjpBundle:Election')->findAllWithDistricts();
+
+        return [
+            'elections' => $elections
+        ];
+    }
 }

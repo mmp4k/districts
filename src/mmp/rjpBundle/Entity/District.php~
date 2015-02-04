@@ -7,12 +7,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
- * @ORM\Entity(repositoryClass="mmp\rjpBundle\Entity\Repository\DistrictRepository")
+ * 
  * @ORM\Table(
  *     indexes={@ORM\Index(name="CoordinatorIndex", columns={"coordinator_id"})},
  *     uniqueConstraints={@ORM\UniqueConstraint(name="SlugIndex", columns={"slug"})}
  * )
- * @ORM\HasLifecycleCallbacks
+ * 
+ * 
+ * 
+ * 
+ * @ORM\Entity(repositoryClass="mmp\rjpBundle\Entity\Repository\DistrictRepository")
+ * 
  */
 class District
 {
@@ -92,6 +97,7 @@ class District
 
     /**
      * @ORM\OneToMany(targetEntity="mmp\rjpBundle\Entity\Meeting", mappedBy="district")
+     * @ORM\OrderBy({"date"="ASC"})
      */
     private $meetings;
 
@@ -116,6 +122,12 @@ class District
      */
     private $coordinator;
 
+    /**
+     * Elections
+     * @ORM\ManyToMany(targetEntity="mmp\rjpBundle\Entity\Election", mappedBy="districts")
+     */
+    private $elections;
+
     private $file;
     private $temp;
 
@@ -124,8 +136,8 @@ class District
     }
     
     /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
+     * 
+     * 
      */
     public function preUpload()
     {
@@ -137,8 +149,8 @@ class District
 
 
     /**
-     * @ORM\PostPersist()
-     * @ORM\PostUpdate()
+     * 
+     * 
      */
     public function upload()
     {
@@ -163,7 +175,7 @@ class District
     }
 
     /**
-     * @ORM\PostRemove()
+     * 
      */
     public function removeUpload()
     {
@@ -231,6 +243,7 @@ class District
         $this->meetings = new \Doctrine\Common\Collections\ArrayCollection();
         $this->councilors = new \Doctrine\Common\Collections\ArrayCollection();
         $this->images = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->elections = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -484,18 +497,6 @@ class District
     }
 
     /**
-     * Set councilors
-     *
-     * @param \Doctrine\Common\Collections\ArrayCollection $councilors
-     * @return District
-     */
-    public function setCouncilors(\Doctrine\Common\Collections\ArrayCollection $councilors) {
-        $this->councilors = $councilors;
-
-        return $this;
-    }
-
-    /**
      * Add councilors
      *
      * @param \mmp\rjpBundle\Entity\Councilor $councilors
@@ -606,6 +607,18 @@ class District
     }
 
     /**
+     * Set candidates
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $candidates
+     * @return District
+     */
+    public function setCandidates(\Doctrine\Common\Collections\ArrayCollection $candidates) {
+        $this->candidates = $candidates;
+
+        return $this;
+    }
+
+    /**
      * Add candidates
      *
      * @param \mmp\rjpBundle\Entity\Candidate $candidates
@@ -637,4 +650,142 @@ class District
     {
         return $this->candidates;
     }
+
+    /**
+     * Set rjp_street
+     *
+     * @param string $rjpStreet
+     * @return District
+     */
+    public function setRjpStreet($rjpStreet)
+    {
+        $this->rjp_street = $rjpStreet;
+
+        return $this;
+    }
+
+    /**
+     * Get rjp_street
+     *
+     * @return string 
+     */
+    public function getRjpStreet()
+    {
+        return $this->rjp_street;
+    }
+
+    /**
+     * Set rjp_name
+     *
+     * @param string $rjpName
+     * @return District
+     */
+    public function setRjpName($rjpName)
+    {
+        $this->rjp_name = $rjpName;
+
+        return $this;
+    }
+
+    /**
+     * Get rjp_name
+     *
+     * @return string 
+     */
+    public function getRjpName()
+    {
+        return $this->rjp_name;
+    }
+
+    /**
+     * Set facebook_box
+     *
+     * @param string $facebookBox
+     * @return District
+     */
+    public function setFacebookBox($facebookBox)
+    {
+        $this->facebook_box = $facebookBox;
+
+        return $this;
+    }
+
+    /**
+     * Get facebook_box
+     *
+     * @return string 
+     */
+    public function getFacebookBox()
+    {
+        return $this->facebook_box;
+    }
+
+    /**
+     * Set link_kml
+     *
+     * @param string $linkKml
+     * @return District
+     */
+    public function setLinkKml($linkKml)
+    {
+        $this->link_kml = $linkKml;
+
+        return $this;
+    }
+
+    /**
+     * Get link_kml
+     *
+     * @return string 
+     */
+    public function getLinkKml()
+    {
+        return $this->link_kml;
+    }
+
+    /**
+     * Set election
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $elections
+     * @return District
+     */
+    public function setElections(\Doctrine\Common\Collections\ArrayCollection $elections) 
+    {
+        $this->elections = $elections;
+
+        return $this;
+    }
+
+    /**
+     * Add election
+     *
+     * @param \mmp\rjpBundle\Entity\Election $elections
+     * @return District
+     */
+    public function addElection(\mmp\rjpBundle\Entity\Election $elections)
+    {
+        $this->elections[] = $elections;
+
+        return $this;
+    }
+
+    /**
+     * Remove election
+     *
+     * @param \mmp\rjpBundle\Entity\Election $elections
+     */
+    public function removeElection(\mmp\rjpBundle\Entity\Councilor $elections)
+    {
+        $this->elections->removeElement($elections);
+    }
+
+    /**
+     * Get elections
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getElections()
+    {
+        return $this->elections;
+    } 
 }

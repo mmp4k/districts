@@ -124,7 +124,7 @@
                     <h2>Wyniki wyborów</h2>
                     <div role="tabpanel">
                         <ul class="nav nav-tabs" role="tablist">                            
-                            {% for election in district.getElections %}
+                            {% for election in district.elections %}
                             <li role="presentation" {% if loop.first %}class="active"{% endif %}>
                                 <a href="#el{{ election.id }}" aria-controls="el{{ election.id }}" role="tab" data-toggle="tab">
                                     {{ election.date | localizeddate('full', 'none', null, null, 'd MMMM Y') }}
@@ -146,7 +146,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% for candidate in election.candidates %}
+                                        {% for candidate in district.getCandidatesOnElection(election) %}
                                             <tr {% if candidate.isCouncilor %}class="success"{% endif %}>
                                                 <td>{{ loop.index }}</td>
                                                 <td>{{ candidate.user.firstName }}</td>

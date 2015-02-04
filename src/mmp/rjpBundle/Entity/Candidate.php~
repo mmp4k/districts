@@ -12,7 +12,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
  *         @ORM\Index(name="ElectionIndex", columns={"election_id"})
  *     }
  * )
- * @ORM\HasLifecycleCallbacks
+ * 
  */
 class Candidate
 {
@@ -168,8 +168,8 @@ class Candidate
     }
 
     /**
-     * @ORM\PostPersist     
-     * @ORM\PostUpdate
+     *      
+     * 
      */
     public function appendCouncilorIfNeeded(LifecycleEventArgs $args) {
         if(!$this->isCouncilor) {
@@ -185,5 +185,28 @@ class Candidate
         $em->persist($councilor);
         $em->flush();
 
+    }
+
+    /**
+     * Set votes
+     *
+     * @param integer $votes
+     * @return Candidate
+     */
+    public function setVotes($votes)
+    {
+        $this->votes = $votes;
+
+        return $this;
+    }
+
+    /**
+     * Get votes
+     *
+     * @return integer 
+     */
+    public function getVotes()
+    {
+        return $this->votes;
     }
 }

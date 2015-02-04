@@ -4,6 +4,7 @@ use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity(repositoryClass="mmp\rjpBundle\Entity\Repository\ElectionRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Election
 {
@@ -25,11 +26,23 @@ class Election
     private $candidates;
 
     /**
+     * @ORM\ManyToMany(targetEntity="mmp\rjpBundle\Entity\District", inversedBy="elections")
+     * @ORM\JoinTable(
+     *     name="DistrictHasElection",
+     *     joinColumns={@ORM\JoinColumn(name="election_id", referencedColumnName="id", nullable=false)},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="district_id", referencedColumnName="id", nullable=false)}
+     * )
+     */
+
+    private $districts;    
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->candidates = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->districts = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -100,5 +113,49 @@ class Election
 
     public function __toString() {
         return $this->date->format('d.m.Y');
+    }
+
+    public function getCandidatesByDistrict(\mmp\rjpBundle\Entity\District $district) {
+        $candidatesByDistrict = array();
+        foreach($this->getCandidates() as $candidate) {
+            if($candidate->getDistrict() == $district) {
+                $candidatesByDistrict[] = $candidate;
+            }
+        }
+
+        return new \Doctrine\Common\Collections\ArrayCollection($candidatesByDistrict);
+    }
+
+    /**
+     * Add districts
+     *
+     * @param \mmp\rjpBundle\Entity\District $districts
+     * @return Election
+     */
+    public function addDistrict(\mmp\rjpBundle\Entity\District $districts)
+    {
+        $this->districts[] = $districts;
+
+        return $this;
+    }
+
+    /**
+     * Remove districts
+     *
+     * @param \mmp\rjpBundle\Entity\District $districts
+     */
+    public function removeDistrict(\mmp\rjpBundle\Entity\District $districts)
+    {
+        $this->districts->removeElement($districts);
+    }
+
+    /**
+     * Get districts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDistricts()
+    {
+        return $this->districts;
     }
 }

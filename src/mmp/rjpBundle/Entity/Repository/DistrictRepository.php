@@ -16,35 +16,24 @@ class DistrictRepository extends EntityRepository
 {   
     public function findOneByElections($rules, $order = null) {
         $em = $this->getEntityManager();
-
         $district = $this->findOneBy($rules, $order);
-
-        $electionsIds = array();
-        foreach($district->getCandidates() as $candidate) {
-            $electionsIds[$candidate->getElection()->getId()] = $candidate->getElection();
-        }
-        // $electionsIds = array_keys($electionsIds);        
-
-        foreach($electionsIds as $election) {
-            // $electionNew = new Election;
-            // $electionNew->setId($election->getId());
-
-            $qdb = $em->getRepository('mmpRjpBundle:Candidate')->createQueryBuilder('c');            
+        
+        foreach($district->getElections() as $election) {
+            $qdb = $em->getRepository('mmpRjpBundle:Candidate')->createQueryBuilder('c');
             $qdb->join('c.user', 'u')->addSelect('u');
+            $qdb->leftJoin('c.councilor', 'c2')->addSelect('c2');
             $qdb->where('c.district = :district AND c.election = :election');
-
             $qdb->setParameters([
                 'district' => $district->getId(),
-                'election' => $election
+                'election' => $election->getId()
             ]);
-            // $qdb->setParameter('election', $election);
-            $candidates = $qdb->getQuery()->getResult();            
-            $election->getCandidates()->clear();
-            foreach($candidates as $candidate) {
-                $election->addCandidate($candidate);
-            }
-            $district->addElection($election);
-        } 
+            $qdb->groupBy('c.id');
+
+            $candidates = $qdb->getQuery()->getResult();
+                
+            $district->addCandidatesOnElection(new \Doctrine\Common\Collections\ArrayCollection($candidates), $election);
+        }
+          
 
         return $district;
     }
@@ -67,7 +56,10 @@ class DistrictRepository extends EntityRepository
                 unset($districts[$key]);
             }
 
-            $district->setCouncilors(new ArrayCollection($counilors));
+            $district->getCouncilors()->clear();
+            foreach($counilors as $councilor) {
+                $district->addCouncilor($councilor);
+            }
         }
 
         return $districts;
@@ -84,8 +76,11 @@ class DistrictRepository extends EntityRepository
             $qdb->where('c.district = :district');
             $qdb->setParameter('district', $district);
             $qdb->orderBy('u.last_name', 'ASC');
-            
-            $district->setCouncilors(new ArrayCollection($qdb->getQuery()->getResult()));
+
+            $district->getCouncilors()->clear();
+            foreach($qdb->getQuery()->getResult() as $councilor) {
+                $district->addCouncilor($councilor);
+            }
         }
 
         return $districts;

@@ -7,7 +7,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 /**
  * @ORM\Entity
  * @ORM\Table(name="fos_user")
- * @ORM\HasLifecycleCallbacks
+ * 
  */
 class User extends BaseUser
 {

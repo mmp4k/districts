@@ -34,16 +34,17 @@ class AdminCandidatesController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $candidate = new Candidate;
-        $candidate->setElection($em->getRepository('mmpRjpBundle:Election')->find(6));
-        $candidate->setDistrict($em->getRepository('mmpRjpBundle:District')->find(22));
+        $candidate->setElection($em->getRepository('mmpRjpBundle:Election')->find(7));
+        $candidate->setDistrict($em->getRepository('mmpRjpBundle:District')->find(14));//dąbrówka
 
         $form = $this->createForm(new CandidateType, $candidate);
         
         $form->handleRequest($request);
         
-        if ($form->isValid()) {
-            // echo '<pre>';
-            // \Doctrine\Common\Util\Debug::dump($candidate);
+        if ($form->isValid()) {            
+            if(!$candidate->getDistrict()->getElections()->contains($candidate->getElection())) {
+                $candidate->getElection()->addDistrict($candidate->getDistrict());                
+            }
             $em->persist($candidate);
             $em->flush();
             return $this->redirect($this->generateUrl('mmp_rjp_admin_candidates'));

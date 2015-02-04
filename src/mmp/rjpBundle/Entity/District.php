@@ -7,11 +7,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
- * @ORM\Entity(repositoryClass="mmp\rjpBundle\Entity\Repository\DistrictRepository")
+ * 
  * @ORM\Table(
  *     indexes={@ORM\Index(name="CoordinatorIndex", columns={"coordinator_id"})},
  *     uniqueConstraints={@ORM\UniqueConstraint(name="SlugIndex", columns={"slug"})}
  * )
+ * 
+ * @ORM\Entity(repositoryClass="mmp\rjpBundle\Entity\Repository\DistrictRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class District
@@ -92,7 +94,7 @@ class District
 
     /**
      * @ORM\OneToMany(targetEntity="mmp\rjpBundle\Entity\Meeting", mappedBy="district")
-     * @ORM\OrderBy({"date" = "ASC"})
+     * @ORM\OrderBy({"date"="ASC"})
      */
     private $meetings;
 
@@ -119,8 +121,12 @@ class District
 
     /**
      * Elections
+     * @ORM\ManyToMany(targetEntity="mmp\rjpBundle\Entity\Election", mappedBy="districts")
+     * @ORM\OrderBy({"date"="desc"})
      */
     private $elections;
+
+    private $candidatesOnElection;
 
     private $file;
     private $temp;
@@ -128,10 +134,17 @@ class District
     public function __toString() {
         return $this->getName();
     }
+
+    /**
+     * @ORM\PostLoad
+     */
+    public function init() {
+        $this->candidatesOnElection = new \Doctrine\Common\Collections\ArrayCollection();;
+    }
     
     /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
+     * 
+     * 
      */
     public function preUpload()
     {
@@ -143,8 +156,8 @@ class District
 
 
     /**
-     * @ORM\PostPersist()
-     * @ORM\PostUpdate()
+     * 
+     * 
      */
     public function upload()
     {
@@ -169,7 +182,7 @@ class District
     }
 
     /**
-     * @ORM\PostRemove()
+     * 
      */
     public function removeUpload()
     {
@@ -234,10 +247,11 @@ class District
      */
     public function __construct()
     {
-        $this->meetings = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->councilors = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->images = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->elections = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->meetings             = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->councilors           = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->images               = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->elections            = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->candidatesOnElection = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -491,18 +505,6 @@ class District
     }
 
     /**
-     * Set councilors
-     *
-     * @param \Doctrine\Common\Collections\ArrayCollection $councilors
-     * @return District
-     */
-    public function setCouncilors(\Doctrine\Common\Collections\ArrayCollection $councilors) {
-        $this->councilors = $councilors;
-
-        return $this;
-    }
-
-    /**
      * Add councilors
      *
      * @param \mmp\rjpBundle\Entity\Councilor $councilors
@@ -610,6 +612,18 @@ class District
 
     public function statusIsElections() {
         return $this->status == 'elections';
+    }
+
+    /**
+     * Set candidates
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $candidates
+     * @return District
+     */
+    public function setCandidates(\Doctrine\Common\Collections\ArrayCollection $candidates) {
+        $this->candidates = $candidates;
+
+        return $this;
     }
 
     /**
@@ -782,4 +796,33 @@ class District
     {
         return $this->elections;
     } 
+
+
+
+    /**
+     * Add candidates
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $candidates
+     * @param \mmp\rjpBundle\Entity\Election $election
+     * @return District
+     */
+    public function addCandidatesOnElection(\Doctrine\Common\Collections\ArrayCollection $candidates, \mmp\rjpBundle\Entity\Election $election)
+    {        
+        if(!$this->getCandidatesOnElection($election)) {
+            $this->candidatesOnElection->set($election->getId(), $candidates);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get candidates on election
+     *
+     * @param \mmp\rjpBundle\Entity\Election $election
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCandidatesOnElection(\mmp\rjpBundle\Entity\Election $election)
+    {
+        return $this->candidatesOnElection->get($election->getId());
+    }    
 }
