@@ -1,0 +1,309 @@
+<?xml version="1.0"?>
+<skipper version="3.0.2.1162" name="mmpRjpBundle" mvc="Symfony2" orm="Doctrine2" uuid="ecbc9a14-2892-49d1-b899-87963fbe9326">
+  <module name="mmp\rjpBundle\Entity" import-format="Doctrine2Php" import-path="." uuid="4836ca98-9b3d-4a51-812e-cde39e628c22">
+    <entity name="Candidate" uuid="b8bbecd6-22a5-4080-9a1c-3413370df31e">
+      <field name="id" type="integer" required="true" primary="true" uuid="efd97769-db30-4c0b-818b-12d230095286">
+        <orm-attributes>
+          <attribute name="generator">
+            <attribute name="strategy">AUTO</attribute>
+          </attribute>
+        </orm-attributes>
+      </field>
+      <field name="votes" type="integer" size="11" uuid="8c0898f2-643f-49af-a40c-adbe9afa5015"/>
+      <field name="election_id" required="true" uuid="c65610f7-23f0-47cd-999d-b51ca38de8ef"/>
+      <field name="district_id" required="true" uuid="3cfb01e1-1e6c-4429-9a75-f81b65a1646a"/>
+      <field name="user_id" required="true" uuid="fa467307-a394-4024-822a-fe840882c430"/>
+      <index name="UserIndex">
+        <index-field name="user_id"/>
+      </index>
+      <index name="DistrictIndex">
+        <index-field name="district_id"/>
+      </index>
+      <index name="ElectionIndex">
+        <index-field name="election_id"/>
+      </index>
+      <orm-attributes>
+        <attribute name="export-file-name">Candidate.php</attribute>
+        <attribute name="lifecycle-callbacks">
+          <attribute name="lifecycle-callback">
+            <attribute name="type">postPersist</attribute>
+            <attribute name="method">appendCouncilorIfNeeded</attribute>
+          </attribute>
+          <attribute name="lifecycle-callback">
+            <attribute name="method">appendCouncilorIfNeeded</attribute>
+            <attribute name="type">postUpdate</attribute>
+          </attribute>
+        </attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Candidate" to="Election" owner-alias="candidates" inverse-alias="election" many-owner="true" many-inverse="false" parent-required="true" uuid="dc20b56f-dfef-4014-bbac-0facc429ec29">
+      <association-field from="election_id" to="id"/>
+      <orm-attributes>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse"/>
+      </orm-attributes>
+    </association>
+    <association from="Candidate" to="District" owner-alias="candidates" inverse-alias="district" many-owner="true" many-inverse="false" parent-required="true" uuid="fad00814-867d-4a34-92cd-09cc4987fb9e">
+      <association-field from="district_id" to="id"/>
+      <orm-attributes>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse"/>
+      </orm-attributes>
+    </association>
+    <association from="Candidate" to="User" owner-alias="candidates" inverse-alias="user" many-owner="true" many-inverse="false" parent-required="true" uuid="cf2cad5c-222d-4547-bbcd-193435e494ab">
+      <association-field from="user_id" to="id"/>
+      <orm-attributes>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse"/>
+      </orm-attributes>
+    </association>
+    <entity name="Councilor" uuid="39facf6f-7344-491e-9ca8-ddacb91daee1">
+      <field name="id" type="integer" size="11" required="true" primary="true" uuid="732de8a6-b92b-4fcc-b62d-cae71b6a44a8">
+        <orm-attributes>
+          <attribute name="generator">
+            <attribute name="strategy">AUTO</attribute>
+          </attribute>
+        </orm-attributes>
+      </field>
+      <field name="candidate_id" required="true" unique="true" uuid="c60aeba0-28e7-4607-9519-2a6ba548eca0"/>
+      <field name="district_id" uuid="335485eb-d0bb-4a61-bdb7-cea1e17ba006"/>
+      <index name="User2District">
+        <index-field name="district_id"/>
+      </index>
+      <orm-attributes>
+        <attribute name="export-file-name">Councilor.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Councilor" to="Candidate" owner-alias="councilor" inverse-alias="candidate" many-owner="false" many-inverse="false" parent-required="true" uuid="5c1c8b21-178d-4dd3-9b7f-1ac97f624b82">
+      <association-field from="candidate_id" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse"/>
+      </orm-attributes>
+    </association>
+    <association from="Councilor" to="District" owner-alias="councilors" inverse-alias="district" many-owner="true" many-inverse="false" uuid="0d28dbe6-638f-4434-8599-825b7d1ed671">
+      <association-field from="district_id" to="id"/>
+      <orm-attributes>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse"/>
+      </orm-attributes>
+    </association>
+    <entity name="District" uuid="e3a8d6da-9a28-4fc0-839c-d7c984ed7f74">
+      <field name="id" type="integer" size="11" required="true" primary="true" uuid="0c1607a8-e418-4858-a6ce-b861efa397cc">
+        <orm-attributes>
+          <attribute name="generator">
+            <attribute name="strategy">AUTO</attribute>
+          </attribute>
+        </orm-attributes>
+      </field>
+      <field name="slug" type="string" size="255" uuid="898ac206-0f89-4e85-8ff7-d43d6714f438"/>
+      <field name="name" type="string" size="255" uuid="d9cee4d7-d693-4ad8-ba73-19c271adb636"/>
+      <field name="status" type="string" size="255" uuid="a34ac801-926c-4a7d-bd25-8abd0e1b8f8e"/>
+      <field name="signature_needed" type="integer" size="11" uuid="fd416c2a-1c0c-424f-9e6e-d8f6cd1293c2"/>
+      <field name="signature_gained" type="integer" size="11" uuid="70e874ea-59c9-4f95-adc1-2e549fefa09e"/>
+      <field name="avatar" type="string" size="255" uuid="c137d444-8dce-468f-b471-1b513d30a09e"/>
+      <field name="link_facebook" type="string" size="255" uuid="f85e442d-4f7c-45aa-aa84-a7b223ad0c73"/>
+      <field name="link_poster" type="string" size="255" uuid="9d85b07d-ece2-4507-8644-a6d0aabcf8a1"/>
+      <field name="link_template" type="string" size="255" uuid="47e5325e-7848-40d5-8883-57168f5689a1"/>
+      <field name="rjp_street" type="string" size="255" uuid="f1b8be21-7f7e-4a2c-918e-c1c47493a6f6"/>
+      <field name="rjp_name" type="string" size="255" uuid="8439fb4d-cca8-4963-8bf6-8840b1f8fea7"/>
+      <field name="facebook_box" type="text" uuid="6226e646-37de-47a5-a560-1e1d3c265d34"/>
+      <field name="link_kml" type="string" size="255" uuid="251c84b2-b1d5-4606-bc0d-696b1edab1a0"/>
+      <field name="coordinator_id" uuid="db40159d-46cd-49f0-8080-909d2a1876da"/>
+      <index name="CoordinatorIndex">
+        <index-field name="coordinator_id"/>
+      </index>
+      <index name="SlugIndex" unique="true">
+        <index-field name="slug"/>
+      </index>
+      <orm-attributes>
+        <attribute name="repository-class">mmp\rjpBundle\Entity\Repository\DistrictRepository</attribute>
+        <attribute name="export-file-name">District.php</attribute>
+        <attribute name="lifecycle-callbacks">
+          <attribute name="lifecycle-callback">
+            <attribute name="method">preUpload</attribute>
+            <attribute name="type">prePersist</attribute>
+          </attribute>
+          <attribute name="lifecycle-callback">
+            <attribute name="method">preUpload</attribute>
+            <attribute name="type">preUpdate</attribute>
+          </attribute>
+          <attribute name="lifecycle-callback">
+            <attribute name="method">upload</attribute>
+            <attribute name="type">postPersist</attribute>
+          </attribute>
+          <attribute name="lifecycle-callback">
+            <attribute name="type">postUpdate</attribute>
+            <attribute name="method">upload</attribute>
+          </attribute>
+          <attribute name="lifecycle-callback">
+            <attribute name="method">removeUpload</attribute>
+            <attribute name="type">postRemove</attribute>
+          </attribute>
+          <attribute name="lifecycle-callback">
+            <attribute name="method">init</attribute>
+            <attribute name="type">postLoad</attribute>
+          </attribute>
+        </attribute>
+      </orm-attributes>
+    </entity>
+    <association from="District" to="User" owner-alias="districts" inverse-alias="coordinator" many-owner="true" many-inverse="false" uuid="eb3ce920-9eec-40aa-9b42-e6b73ab640ab">
+      <association-field from="coordinator_id" to="id"/>
+      <orm-attributes>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse"/>
+      </orm-attributes>
+    </association>
+    <entity name="DistrictImage" uuid="be065b38-6ce4-4422-8070-f87a53261dc5">
+      <field name="id" type="integer" size="11" required="true" primary="true" uuid="3bf9b345-25da-4222-82c1-4573b18184a9">
+        <orm-attributes>
+          <attribute name="generator">
+            <attribute name="strategy">AUTO</attribute>
+          </attribute>
+        </orm-attributes>
+      </field>
+      <field name="title" type="string" size="255" uuid="aa29ee38-db1b-4bfe-8f33-b4221e02eea4"/>
+      <field name="image" type="string" size="255" uuid="b4643510-f598-48cf-b878-175fe942d7f0"/>
+      <field name="district_id" uuid="c51934a2-89fa-464a-8215-b43d49f37f23"/>
+      <index name="IndexDistrict">
+        <index-field name="district_id"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">district_images</attribute>
+        <attribute name="export-file-name">DistrictImage.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="DistrictImage" to="District" owner-alias="images" inverse-alias="district" many-owner="true" many-inverse="false" uuid="1f99fef5-a3c7-4f68-a8d4-ce429f27892e">
+      <association-field from="district_id" to="id"/>
+      <orm-attributes>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse"/>
+      </orm-attributes>
+    </association>
+    <entity name="Election" uuid="0a7e7682-d116-49b2-8d2c-8568d6357210">
+      <field name="id" type="integer" required="true" primary="true" uuid="f2069500-6dd8-4ea3-a48c-653da6ceba97">
+        <orm-attributes>
+          <attribute name="generator">
+            <attribute name="strategy">AUTO</attribute>
+          </attribute>
+        </orm-attributes>
+      </field>
+      <field name="date" type="date" required="true" uuid="bce2af68-59a9-4045-a9de-f4cd5bed59e1"/>
+      <orm-attributes>
+        <attribute name="repository-class">mmp\rjpBundle\Entity\Repository\ElectionRepository</attribute>
+        <attribute name="export-file-name">Election.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="DistrictHasElection" uuid="0d4ccc5d-e385-4c4e-9aa3-d2c248562dd6">
+      <field name="id" type="integer" required="true" unique="true" primary="true" uuid="72430539-7e38-440e-9515-69e7630e726e"/>
+      <field name="election_id" required="true" uuid="afa6887f-e22a-4ad9-b8cb-08b81720a449"/>
+      <field name="district_id" required="true" uuid="2db224d5-fd2a-4f5e-a8a1-4bd9085c0304"/>
+    </entity>
+    <many-to-many mn-entity="DistrictHasElection" uuid="3b10610a-0602-4d2e-bbc3-7177397354df">
+      <many-to-many-entity name="Election" owning-side="true" alias="elections" uuid="32936395-226f-428f-a675-a63be07e4866">
+        <many-to-many-field from="election_id" to="id"/>
+      </many-to-many-entity>
+      <many-to-many-entity name="District" owning-side="false" alias="districts" uuid="7a13e105-1378-42f6-b056-92a1791e1083">
+        <many-to-many-field from="district_id" to="id"/>
+        <orm-attributes>
+          <attribute name="order-by">
+            <attribute name="order-by-field">
+              <attribute name="field">date</attribute>
+              <attribute name="direction">desc</attribute>
+            </attribute>
+          </attribute>
+        </orm-attributes>
+      </many-to-many-entity>
+    </many-to-many>
+    <entity name="Meeting" uuid="8026538f-689c-484f-9a3d-3ef132cecf90">
+      <field name="id" type="integer" size="11" required="true" primary="true" uuid="21809ec6-2719-4fc4-a315-7eef72fe5cfc">
+        <orm-attributes>
+          <attribute name="generator">
+            <attribute name="strategy">AUTO</attribute>
+          </attribute>
+        </orm-attributes>
+      </field>
+      <field name="date" type="datetimetz" uuid="3b8bcfd9-fc0d-49eb-87d1-14ebb87379ae"/>
+      <field name="place" type="string" size="255" uuid="37f27ce0-0a0a-4e3a-a9a0-1af6d4b7ffb0"/>
+      <field name="map_coords" type="string" size="255" uuid="5d5d57ce-5e79-459f-95f5-89ccf66d6249"/>
+      <field name="link_facebook" type="string" size="255" uuid="ae27b5e2-36e6-4115-9e71-0184916c348d"/>
+      <field name="organizer_id" uuid="6563ffa2-7178-421f-9b5e-2840f4e2c98e"/>
+      <field name="district_id" uuid="55aff1b9-7cbb-4fbd-bee2-df5ee9124a39"/>
+      <index name="IndexDistrict">
+        <index-field name="district_id"/>
+      </index>
+      <index name="IndexOrganizer">
+        <index-field name="organizer_id"/>
+      </index>
+      <index name="IndexDate">
+        <index-field name="date"/>
+      </index>
+      <orm-attributes>
+        <attribute name="export-file-name">Meeting.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Meeting" to="User" owner-alias="meetings" inverse-alias="organizer" many-owner="true" many-inverse="false" uuid="7a66131d-50de-43cd-9225-15bc61f47320">
+      <association-field from="organizer_id" to="id"/>
+      <orm-attributes>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse"/>
+      </orm-attributes>
+    </association>
+    <association from="Meeting" to="District" owner-alias="meetings" inverse-alias="district" many-owner="true" many-inverse="false" uuid="d519baab-0fd8-42aa-bcd5-e961c40989c8">
+      <association-field from="district_id" to="id"/>
+      <orm-attributes>
+        <attribute name="side-owning"/>
+        <attribute name="side-inverse">
+          <attribute name="order-by">
+            <attribute name="order-by-field">
+              <attribute name="field">date</attribute>
+              <attribute name="direction">ASC</attribute>
+            </attribute>
+          </attribute>
+        </attribute>
+      </orm-attributes>
+    </association>
+    <entity name="User" uuid="e2b2179a-c696-4a1f-bc7b-513109e39cf4">
+      <field name="id" type="integer" size="11" required="true" primary="true" uuid="7a2271cc-ec62-470b-97ba-a1ce423692a7">
+        <orm-attributes>
+          <attribute name="generator">
+            <attribute name="strategy">AUTO</attribute>
+          </attribute>
+        </orm-attributes>
+      </field>
+      <field name="first_name" type="string" size="255" uuid="19fa7654-bd66-4ba9-bd65-dfd6a4845a74"/>
+      <field name="last_name" type="string" size="255" uuid="3e259102-abfb-4977-a371-8d107da60fdf"/>
+      <field name="phone" type="integer" size="11" uuid="590cc2e4-478d-41c5-8d9b-7bd50e45cb2e"/>
+      <orm-attributes>
+        <attribute name="table">fos_user</attribute>
+        <attribute name="export-file-name">User.php</attribute>
+      </orm-attributes>
+    </entity>
+    <orm-attributes>
+      <attribute name="namespace">mmp\rjpBundle\Entity</attribute>
+    </orm-attributes>
+  </module>
+  <visual-data>
+    <entity uuid="0a7e7682-d116-49b2-8d2c-8568d6357210" bg-color="4294967295" hdr-color="4292006610" position-x="246" position-y="307" size-x="0" size-x2="68" size-y="0" size-y2="45"/>
+    <association uuid="0d28dbe6-638f-4434-8599-825b7d1ed671" color="4291674923"/>
+    <entity uuid="0d4ccc5d-e385-4c4e-9aa3-d2c248562dd6" bg-color="4294967295" hdr-color="4292006610" position-x="422" position-y="307" size-x="0" size-x2="90" size-y="0" size-y2="59"/>
+    <association uuid="1f99fef5-a3c7-4f68-a8d4-ce429f27892e" color="4289928996"/>
+    <entity uuid="39facf6f-7344-491e-9ca8-ddacb91daee1" bg-color="4294967295" hdr-color="4292006610" position-x="239" position-y="40" size-x="0" size-x2="82" size-y="0" size-y2="59"/>
+    <many-to-many-association uuid="3b10610a-0602-4d2e-bbc3-7177397354df" color="4281230255"/>
+    <module uuid="4836ca98-9b3d-4a51-812e-cde39e628c22" bg-color="4293391335" position-x="50" position-y="50" size-x="0" size-x2="561" size-y="0" size-y2="821"/>
+    <association uuid="5c1c8b21-178d-4dd3-9b7f-1ac97f624b82" color="4284601169"/>
+    <association uuid="7a66131d-50de-43cd-9225-15bc61f47320" color="4291261615"/>
+    <entity uuid="8026538f-689c-484f-9a3d-3ef132cecf90" bg-color="4294967295" hdr-color="4292006610" position-x="28" position-y="574" size-x="0" size-x2="130" size-y="0" size-y2="115"/>
+    <entity uuid="b8bbecd6-22a5-4080-9a1c-3413370df31e" bg-color="4294967295" hdr-color="4292006610" position-x="45" position-y="40" size-x="0" size-x2="97" size-y="0" size-y2="87"/>
+    <entity uuid="be065b38-6ce4-4422-8070-f87a53261dc5" bg-color="4294967295" hdr-color="4292006610" position-x="43" position-y="307" size-x="0" size-x2="100" size-y="0" size-y2="73"/>
+    <association uuid="cf2cad5c-222d-4547-bbcd-193435e494ab" color="4278876221"/>
+    <association uuid="d519baab-0fd8-42aa-bcd5-e961c40989c8" color="4287255714"/>
+    <association uuid="dc20b56f-dfef-4014-bbac-0facc429ec29" color="4278236368"/>
+    <entity uuid="e2b2179a-c696-4a1f-bc7b-513109e39cf4" bg-color="4294967295" hdr-color="4292006610" position-x="222" position-y="574" size-x="0" size-x2="117" size-y="0" size-y2="73"/>
+    <entity uuid="e3a8d6da-9a28-4fc0-839c-d7c984ed7f74" bg-color="4294967295" hdr-color="4292006610" position-x="394" position-y="40" size-x="0" size-x2="147" size-y="0" size-y2="227"/>
+    <association uuid="eb3ce920-9eec-40aa-9b42-e6b73ab640ab" color="4294218527"/>
+    <project uuid="ecbc9a14-2892-49d1-b899-87963fbe9326" size-x="0" size-x2="661" size-y="0" size-y2="921"/>
+    <association uuid="fad00814-867d-4a34-92cd-09cc4987fb9e" color="4289243304"/>
+  </visual-data>
+</skipper>

@@ -143,8 +143,8 @@ class District
     }
     
     /**
-     * 
-     * 
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
      */
     public function preUpload()
     {
@@ -156,8 +156,8 @@ class District
 
 
     /**
-     * 
-     * 
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
      */
     public function upload()
     {
@@ -182,7 +182,7 @@ class District
     }
 
     /**
-     * 
+     * @ORM\PostRemove()
      */
     public function removeUpload()
     {
