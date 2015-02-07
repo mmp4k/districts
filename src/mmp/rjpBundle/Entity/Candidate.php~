@@ -12,6 +12,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
  *         @ORM\Index(name="ElectionIndex", columns={"election_id"})
  *     }
  * )
+ * @ORM\HasLifecycleCallbacks
  * 
  */
 class Candidate
@@ -27,6 +28,21 @@ class Candidate
      * @ORM\Column(type="integer", length=11, nullable=true)
      */
     private $votes;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $occupation;
+
+    /**
+     * @ORM\Column(type="string", length=1, nullable=true)
+     */
+    private $sex;
+
+    /**
+     * @ORM\Column(type="integer", length=11, nullable=true)
+     */
+    private $age;
 
     /**
      * @ORM\OneToOne(targetEntity="mmp\rjpBundle\Entity\Councilor", mappedBy="candidate")
@@ -168,8 +184,8 @@ class Candidate
     }
 
     /**
-     *      
-     * 
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
      */
     public function appendCouncilorIfNeeded(LifecycleEventArgs $args) {
         if(!$this->isCouncilor) {

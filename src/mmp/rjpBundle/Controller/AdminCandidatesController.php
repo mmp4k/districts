@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use mmp\rjpBundle\Form\ConfirmType;
 use mmp\rjpBundle\Form\CandidateType;
+use mmp\rjpBundle\Form\DistrictWithCandidatesType;
 use mmp\rjpBundle\Entity\Candidate;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -23,6 +24,38 @@ class AdminCandidatesController extends Controller
 
         return [
             'candidates' => $candidates
+        ];
+    }
+
+    /**
+     * @Route("/admin/candidates/{id}", name="mmp_rjp_admin_candidates_from_district")
+     * @Template()
+     */
+    public function candidatesByDistrictAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $district   = $em->getRepository('mmpRjpBundle:District')->find($id);
+        $candidates = $em->getRepository('mmpRjpBundle:Candidate')->findBy([
+            'district' => $id
+        ]);
+
+        $form = $this->createForm(new DistrictWithCandidatesType, $district);
+        
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {            
+            $em->persist($district);
+            $em->flush();
+            return $this->redirect($this->generateUrl('mmp_rjp_admin_candidates_from_district', [
+                'id' => $id
+            ]));
+        }
+
+        return [
+            'district'   => $district,
+            'candidates' => $candidates,
+            'form'       => $form->createView()
         ];
     }
 

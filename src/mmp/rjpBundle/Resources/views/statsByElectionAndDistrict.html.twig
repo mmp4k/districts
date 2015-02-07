@@ -1,0 +1,53 @@
+{% if district.getStatsOnElection(election).numberOfMaleCandidates %}
+<div id="piechart_sex_candidates_{{ election.id }}_{{ district.id }}" style="height: 400px;" class="col-sm-6"></div>
+<div id="piechart_age_candidates_{{ election.id }}_{{ district.id }}" style="height: 400px;" class="col-sm-6"></div>
+
+    
+<script type="text/javascript">  
+    chartsDrawFunctions['el_{{ election.id }}_{{ district.id }}'] = function drawChart(keyElection) {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Płeć', 'Liczba kandydatów'],
+            ['Mężczyźni', {{ district.getStatsOnElection(election).numberOfMaleCandidates }}],
+            ['Kobiety',   {{ district.getStatsOnElection(election).numberOfFemaleCandidates }}]
+        ]);
+
+        var options = {
+            title: 'Płeć kandydatów',       
+            is3D: true,     
+            pieSliceText: 'percentage',
+            legend : {
+                position : 'bottom'
+            },
+            chartArea: {'width': '80%', 'height': '80%'},
+        };
+        
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_sex_candidates_{{ election.id }}_{{ district.id }}'));
+        var diffData = chart.computeDiff(google.visualization.arrayToDataTable(dataForElection[keyElection]['sex']), data);
+        chart.draw(diffData, options);
+
+        var data = google.visualization.arrayToDataTable([
+            ['Wiek', 'Liczba kandydatów'],
+            {% for key, numberOfPeople in district.getStatsOnElection(election).getRangeAge %}
+            ['{{ key | raw }}', {{ numberOfPeople }}],
+            {% endfor %}
+        ]);
+
+        var options = {
+            title: 'Wiek kandydatów',
+            pieSliceText: 'percentage',
+            legend : {
+                position : 'bottom',
+                maxLines : 2                
+            },
+            chartArea: {'width': '80%', 'height': '80%'},
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_age_candidates_{{ election.id }}_{{ district.id }}'));
+
+        var diffData = chart.computeDiff(google.visualization.arrayToDataTable(dataForElection[keyElection]['age']), data);
+        chart.draw(diffData, options);
+        
+    };
+</script>
+{% endif %}

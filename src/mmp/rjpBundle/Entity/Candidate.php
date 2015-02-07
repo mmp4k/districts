@@ -30,6 +30,21 @@ class Candidate
     private $votes;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $occupation;
+
+    /**
+     * @ORM\Column(type="string", length=1, nullable=true)
+     */
+    private $sex;
+
+    /**
+     * @ORM\Column(type="integer", length=11, nullable=true)
+     */
+    private $age;
+
+    /**
      * @ORM\OneToOne(targetEntity="mmp\rjpBundle\Entity\Councilor", mappedBy="candidate")
      */
     private $councilor;
@@ -209,5 +224,74 @@ class Candidate
     public function getVotes()
     {
         return $this->votes;
+    }
+
+    /**
+     * Set occupation
+     *
+     * @param string $occupation
+     * @return Candidate
+     */
+    public function setOccupation($occupation)
+    {
+        $this->occupation = $occupation;
+
+        return $this;
+    }
+
+    /**
+     * Get occupation
+     *
+     * @return string 
+     */
+    public function getOccupation()
+    {
+        return $this->occupation;
+    }
+
+    /**
+     * Set sex
+     *
+     * @param string $sex
+     * @return Candidate
+     */
+    public function setSex($sex)
+    {
+        $this->sex = $sex;
+
+        return $this;
+    }
+
+    /**
+     * Get sex
+     *
+     * @return string 
+     */
+    public function getSex()
+    {
+        return $this->sex;
+    }
+
+    /**
+     * Set age
+     *
+     * @param integer $age
+     * @return Candidate
+     */
+    public function setAge($age)
+    {
+        $this->age = $age;
+
+        return $this;
+    }
+
+    /**
+     * Get age
+     *
+     * @return integer 
+     */
+    public function getAge()
+    {
+        return $this->age;
     }
 }

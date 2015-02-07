@@ -1,0 +1,14 @@
+<script type="text/javascript">
+dataForElection['el_{{ election.id }}'] = [];
+dataForElection['el_{{ election.id }}']['sex'] = [
+            ['Płeć', 'Liczba kandydatów'],
+            ['Mężczyźni', {{ election.statistics.numberOfMaleCandidates }}],
+            ['Kobiety',   {{ election.statistics.numberOfFemaleCandidates }}]
+        ];    
+dataForElection['el_{{ election.id }}']['age'] = [
+            ['Wiek', 'Liczba kandydatów'],
+            {% for key, numberOfPeople in election.statistics.getRangeAge %}
+            ['{{ key | raw }}', {{ numberOfPeople }}],
+            {% endfor %}
+        ];
+</script>

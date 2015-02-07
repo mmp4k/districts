@@ -33,8 +33,13 @@ class Election
      *     inverseJoinColumns={@ORM\JoinColumn(name="district_id", referencedColumnName="id", nullable=false)}
      * )
      */
-
     private $districts;    
+
+
+    /**
+     * @var mmp\rjpBundle\Library\Statistics\Election
+     */
+    protected $statistics;
 
     /**
      * Constructor
@@ -42,7 +47,7 @@ class Election
     public function __construct()
     {
         $this->candidates = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->districts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->districts  = new \Doctrine\Common\Collections\ArrayCollection();        
     }
 
     /**
@@ -157,5 +162,19 @@ class Election
     public function getDistricts()
     {
         return $this->districts;
+    }
+
+    /**
+     * Get statistcs
+     *
+     * @return mmp\rjpBundle\Library\Statistics\Election
+     */
+    public function getStatistics() {
+        if($this->statistics) {
+            return $this->statistics;
+        }
+
+        $this->statistics = new \mmp\rjpBundle\Library\Statistics\Election($this);
+        return $this->statistics;
     }
 }

@@ -2,7 +2,11 @@
 {% set activePage = 'elections' %}
 
 {% block container %}
-<div class="container entry meetings">
+<script type="text/javascript">
+var dataForElection = [];
+var chartsDrawFunctions = [];
+</script>
+<div class="container entry elections">
     <div class="row">
         <div class="col-sm-12">
             <div class="white padding">
@@ -10,8 +14,8 @@
                     <div class="col-sm-3">
                         <ul class="nav nav-pills nav-stacked" role="tablist">
                             {% for election in elections %}
-                            <li class="{% if loop.first %}active{% endif %}" role="election-{{ election.id }}">
-                                <a href="#election-{{ election.id }}" aria-controls="election-{{ election.id }}" role="tab" data-toggle="tab">
+                            <li class="{% if loop.first %}active{% endif %}" role="el_{{ election.id }}">
+                                <a href="#el_{{ election.id }}" aria-controls="el_{{ election.id }}" role="tab" data-toggle="tab">
                                    {{ election.date | localizeddate('full', 'none', null, null, 'd MMMM Y') }}
                                    <span class="badge" style="float:right;">
                                     {{ election.districts|length }}
@@ -24,27 +28,36 @@
                     <div class="col-sm-9">
                         <div class="tab-content">
                             {% for election in elections %}
-                            <div role="tabpanel" class="tab-pane {% if loop.first %}active{% endif %}" id="election-{{ election.id }}">
+                            <div role="tabpanel" class="tab-pane tab-election {% if loop.first %}active{% endif %}" id="el_{{ election.id }}">
+                                {% include 'mmpRjpBundle::statsByElections.html.twig' %}
                                 <ul class="nav nav-tabs nav-condensed" role="tablist">                            
                                     {% for district in election.districts %}
                                     <li role="presentation" {% if loop.first %}class="active"{% endif %}>
-                                        <a href="#el{{ district.id }}" aria-controls="el{{ district.id }}" role="tab" data-toggle="tab">
+                                        <a href="#el_{{ election.id }}_{{ district.id }}" aria-controls="el_{{ election.id }}_{{ district.id }}" role="tab" data-toggle="tab">
                                             {{ district.name }}
                                         </a>                                   
                                     </li>
                                     {% endfor %}
+                                    <li role="presentation" class="right" style="float:right">
+                                        <a href="#el_{{ election.id }}_stat" aria-controls="el_{{ election.id }}_stat" role="tab" data-toggle="tab">
+                                            Statystyka
+                                        </a>                                   
+                                    </li>
                                 </ul>      
                                 <div class="tab-content">
-                                    {% for district in election.districts %}
-                                    <div role="tabpanel" class="tab-pane {% if loop.first %}active{% endif %}" id="el{{ district.id }}">
+                                    {% for district in election.districts %}                                        
+                                    <div role="tabpanel" class="tab-table-election tab-pane {% if loop.first %}active{% endif %}" id="el_{{ election.id }}_{{ district.id }}">
+                                        {% include 'mmpRjpBundle::statsByElectionAndDistrict.html.twig' %}
                                         <table class="table table-striped table-condensed">
                                             <thead>
                                                 <tr>
-                                                    <th>Lp</th>
-                                                    <th>Imię</th>
-                                                    <th>Nazwisko</th>
-                                                    <th>Liczba głosów</th>
-                                                    <th>Radny</th>
+                                                    <th class="th-lp">Lp</th>
+                                                    <th class="th-name">Imię</th>
+                                                    <th class="th-surname">Nazwisko</th>
+                                                    <th class="th-age">Wiek</th>
+                                                    <th class="th-occupation">Zawód</th>
+                                                    <th class="th-votes">Liczba głosów</th>
+                                                    <th class="th-councilor">Radny</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -53,6 +66,8 @@
                                                         <td>{{ loop.index }}</td>
                                                         <td>{{ candidate.user.firstName }}</td>
                                                         <td>{{ candidate.user.lastName }}</td>
+                                                        <td>{{ candidate.age }}</td>
+                                                        <td>{{ candidate.occupation }}</td>
                                                         <td>{{ candidate.votes }}</td>
                                                         <td>{% if candidate.isCouncilor %}TAK{% else %}NIE{% endif %}</td>
                                                     </tr>
@@ -61,6 +76,8 @@
                                         </table>
                                     </div>
                                     {% endfor %}
+                                    <div role="tabpanel" class="tab-table-election tab-pane" id="el_{{ election.id }}_stat">
+                                    </div>
                                 </div>
                             </div>
                             {% endfor %}
@@ -71,4 +88,21 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+function loadCharts() {
+    var keyElection = $('.tab-election.active').attr('id');
+    var key = $('.tab-election.active .tab-table-election.active').attr('id');
+    obj = chartsDrawFunctions[key];    
+    obj ? obj(keyElection) : null;
+}
+$('a[role=tab]').on('shown.bs.tab', function (e) {
+    loadCharts();    
+})
+
+google.load("visualization", "1", {packages:["corechart"]});
+google.setOnLoadCallback(loadCharts);    
+
+</script>
 {% endblock %}

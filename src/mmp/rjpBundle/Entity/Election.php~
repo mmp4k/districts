@@ -44,12 +44,7 @@ class Election
         $this->candidates = new \Doctrine\Common\Collections\ArrayCollection();
         $this->districts = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    /**
-     * 
-     */
-    public function init() {
-        $this->districts = new \Doctrine\Common\Collections\ArrayCollection();        
-    }
+
     /**
      * Get id
      *

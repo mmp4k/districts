@@ -1,0 +1,32 @@
+{% extends 'MopaBootstrapBundle::base_less.html.twig' %}
+{% block body %}
+    {{ form_start(form) }}
+    {# render the task's only field: description #}
+    
+
+    <h3>Candidates</h3>
+    <table class="table">
+        <thead>
+            <th>Name</th>
+            <th>Voices</th>
+            <th>Age</th>
+            <th>Occupation</th>
+            <th>Sex</th>
+        </thead>
+        <tbody>
+        {% for candidate in form.candidates %}
+            <tr>
+                <td>
+                    
+                    {{ form_widget(candidate.user) }}
+                </td>
+                <td>{{ form_widget(candidate.votes) }}</td>
+                <td>{{ form_widget(candidate.age) }}</td>
+                <td>{{ form_widget(candidate.occupation) }}</td>
+                <td>{{ form_widget(candidate.sex) }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{{ form_end(form) }}
+{% endblock %}

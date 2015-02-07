@@ -130,6 +130,7 @@ class District
 
     private $file;
     private $temp;
+    private $statsOnElection;
 
     public function __toString() {
         return $this->getName();
@@ -797,8 +798,6 @@ class District
         return $this->elections;
     } 
 
-
-
     /**
      * Add candidates
      *
@@ -825,4 +824,20 @@ class District
     {
         return $this->candidatesOnElection->get($election->getId());
     }    
+
+    /**
+     * Get statistics from election-district
+     * @param \mmp\rjpBundle\Entity\Election $election
+     * @return \mmp\rjpBundle\Library\Statistics\ElectionDistrict
+     */
+    public function getStatsOnElection(\mmp\rjpBundle\Entity\Election $election)
+    {
+        if($this->statsOnElection) {
+            return $this->statsOnElection;
+        }
+        
+        $this->statsOnElection = new \mmp\rjpBundle\Library\Statistics\ElectionDistrict($election, $this);
+        
+        return $this->statsOnElection;
+    }
 }

@@ -13,6 +13,9 @@
       <field name="election_id" required="true" uuid="c65610f7-23f0-47cd-999d-b51ca38de8ef"/>
       <field name="district_id" required="true" uuid="3cfb01e1-1e6c-4429-9a75-f81b65a1646a"/>
       <field name="user_id" required="true" uuid="fa467307-a394-4024-822a-fe840882c430"/>
+      <field name="age" type="integer" size="11" uuid="388e67ec-d047-470f-9c26-4bd7711e84c5"/>
+      <field name="occupation" type="string" size="255" uuid="c24783ae-6af6-45c5-a6fb-e0d4d10af9ab"/>
+      <field name="sex" type="string" size="1" enum-values="m,s" uuid="f7b71cd8-1afd-43a7-838e-35ee3da30988"/>
       <index name="UserIndex">
         <index-field name="user_id"/>
       </index>
