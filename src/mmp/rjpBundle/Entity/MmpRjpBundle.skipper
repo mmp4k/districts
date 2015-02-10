@@ -283,30 +283,128 @@
         <attribute name="export-file-name">User.php</attribute>
       </orm-attributes>
     </entity>
+    <entity name="ElectoralCommission" uuid="1cd7b3fa-7411-483f-b1f8-8b909a805123">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="f16bfdc2-1d46-4cd7-93d7-b3894e278004"/>
+      <field name="name" type="string" size="255" uuid="d54daf93-93ae-4918-a74c-272bc470fca2"/>
+      <field name="point" type="string" size="255" uuid="d3ad882a-2037-449c-b31d-4cb69c624531"/>
+      <field name="polygon" type="text" uuid="2a0c9f8f-0d6c-46b7-97f2-ad57e8ba8e27"/>
+      <orm-attributes>
+        <attribute name="export-file-name">ElectoralCommission.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="ElectionHasElectoralCommission" uuid="fc263760-187c-4472-810f-613847fdd225">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="f596c7de-c552-41f6-9fe1-b501b21ab52c"/>
+      <field name="election_id" type="integer" uuid="59a26b1c-b558-4ae3-939f-c0e9f0e0497a"/>
+      <field name="electoral_commission_id" type="integer" uuid="3ecfcfd5-159a-4cce-94ff-39f34d57ae1c"/>
+      <field name="district_id" type="integer" size="11" uuid="50d8ef1c-4775-4c93-8178-792c519d4a5c"/>
+      <field name="votes" description="Liczba g&#x142;os&#xF3;w w wyborach w obwodowej komisji wyborczej" type="integer" size="11" uuid="4e664edc-ada0-4beb-9c0c-5c21e62f5fb4"/>
+      <field name="authorized" description="Liczba upowa&#x17C;nionych do g&#x142;osowania" type="integer" size="11" uuid="d87e9e08-cf25-42d8-bed2-dccd10da1c15"/>
+      <orm-attributes>
+        <attribute name="export-file-name">ElectionHasElectoralCommission.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="ElectionHasElectoralCommission" to="Election" caption="Election ElectionHasElectoralCommission" owner-alias="electoralCommissions" inverse-alias="election" many-owner="true" many-inverse="false" uuid="1bd18f80-583a-4aaf-be32-7802330dcfad">
+      <association-field from="election_id" to="id"/>
+    </association>
+    <association from="ElectionHasElectoralCommission" to="ElectoralCommission" caption="ElectoralCommission ElectionHasElectoralCommission" owner-alias="elections" inverse-alias="electoralCommission" many-owner="true" many-inverse="false" uuid="0a37bd72-337a-47c8-a775-fc8063958ec6">
+      <association-field from="electoral_commission_id" to="id"/>
+    </association>
+    <association from="ElectionHasElectoralCommission" to="District" caption="District ElectionHasElectoralCommission" inverse-alias="district" many-owner="true" many-inverse="false" uuid="f78581be-9503-4045-8dd2-ccf95898dcca">
+      <association-field from="district_id" to="id"/>
+    </association>
+    <entity name="Street" uuid="f8928f9f-386e-4405-82f0-ad446caf3b60">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="4175a7d8-b885-46a8-bcaf-014cc8ff1523"/>
+      <field name="name" type="string" size="255" uuid="b7df13fc-69bc-43c8-9ddd-1fabde2474e4"/>
+      <orm-attributes>
+        <attribute name="export-file-name">Street.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="HouseNumber" uuid="22748b26-53e2-44d5-848b-5feff36b6b29">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="3c58ad89-9dfe-4e79-bb4d-49d12944d541"/>
+      <field name="number" type="string" size="11" uuid="b3987b04-4492-4809-ac7e-0273f6e7390f"/>
+      <field name="street_id" type="integer" uuid="08e04131-b3ed-4f4c-ae54-31d8d7333a11"/>
+      <field name="district_id" type="integer" size="11" uuid="5e2fe4a0-68d6-4d8a-8514-e22ee4e64864"/>
+      <orm-attributes>
+        <attribute name="export-file-name">HouseNumber.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="HouseNumber" to="Street" caption="Street HouseNumber" owner-alias="houseNumbers" inverse-alias="street" many-owner="true" many-inverse="false" uuid="ab4896b5-7c69-43a1-8817-8fefbab2dc32">
+      <association-field from="street_id" to="id"/>
+      <orm-attributes>
+        <attribute name="side-inverse">
+          <attribute name="cascade">
+            <attribute name="cascade-persist">true</attribute>
+          </attribute>
+        </attribute>
+      </orm-attributes>
+    </association>
+    <association from="HouseNumber" to="District" caption="District HouseNumber" owner-alias="houseNumbersWithStreets" inverse-alias="district" many-owner="true" many-inverse="false" uuid="6596ec49-db34-46f7-a68f-f3bf0b96c0bc">
+      <association-field from="district_id" to="id"/>
+      <orm-attributes>
+        <attribute name="side-inverse">
+          <attribute name="cascade">
+            <attribute name="cascade-persist">true</attribute>
+          </attribute>
+          <attribute name="order-by">
+            <attribute name="order-by-field">
+              <attribute name="direction">ASC</attribute>
+              <attribute name="field">street</attribute>
+            </attribute>
+            <attribute name="order-by-field">
+              <attribute name="direction">ASC</attribute>
+              <attribute name="field">number</attribute>
+            </attribute>
+          </attribute>
+        </attribute>
+      </orm-attributes>
+    </association>
+    <entity name="ElectionHasElectoralCommissionHasHouseNumber" uuid="d75f8d92-b68a-4ff5-93cf-80411230abfa">
+      <field name="election_has_electoral_commission_id" type="integer" required="true" primary="true" uuid="4cd9b5e9-19d9-4faa-8857-cfa5d4992524"/>
+      <field name="house_number_id" type="integer" required="true" primary="true" uuid="42dbdb65-efeb-40f9-94c4-1a02d50c9a14"/>
+    </entity>
+    <many-to-many mn-entity="ElectionHasElectoralCommissionHasHouseNumber" caption="ElectionHasElectoralCommission to HouseNumber" uuid="47203118-bbfc-4771-b352-fd329c11a295">
+      <many-to-many-entity name="HouseNumber" owning-side="true" alias="houseNumbersWithStreets" uuid="091aca8d-fde3-4d62-b880-24aef46e9e9c">
+        <many-to-many-field from="house_number_id" to="id"/>
+      </many-to-many-entity>
+      <many-to-many-entity name="ElectionHasElectoralCommission" owning-side="false" uuid="f9a18ced-cfb7-4af9-9a94-5998067e622c">
+        <many-to-many-field from="election_has_electoral_commission_id" to="id"/>
+      </many-to-many-entity>
+    </many-to-many>
     <orm-attributes>
       <attribute name="namespace">mmp\rjpBundle\Entity</attribute>
     </orm-attributes>
   </module>
   <visual-data>
+    <association uuid="0a37bd72-337a-47c8-a775-fc8063958ec6" caption1-position-x="0" caption1-position-y="0" center-position-x="0" center-position-y="0" color="4288059030"/>
     <entity uuid="0a7e7682-d116-49b2-8d2c-8568d6357210" bg-color="4294967295" hdr-color="4292006610" position-x="246" position-y="307" size-x="0" size-x2="68" size-y="0" size-y2="45"/>
     <association uuid="0d28dbe6-638f-4434-8599-825b7d1ed671" color="4291674923"/>
-    <entity uuid="0d4ccc5d-e385-4c4e-9aa3-d2c248562dd6" bg-color="4294967295" hdr-color="4292006610" position-x="422" position-y="307" size-x="0" size-x2="90" size-y="0" size-y2="59"/>
+    <entity uuid="0d4ccc5d-e385-4c4e-9aa3-d2c248562dd6" bg-color="4294967295" hdr-color="4292006610" position-x="375" position-y="317" size-x="0" size-x2="106" size-y="0" size-y2="74"/>
+    <association uuid="1bd18f80-583a-4aaf-be32-7802330dcfad" color="4288059030"/>
+    <entity uuid="1cd7b3fa-7411-483f-b1f8-8b909a805123" bg-color="4294967295" hdr-color="4292006610" position-x="488" position-y="723" size-x="0" size-x2="100" size-y="0" size-y2="73"/>
     <association uuid="1f99fef5-a3c7-4f68-a8d4-ce429f27892e" color="4289928996"/>
+    <entity uuid="22748b26-53e2-44d5-848b-5feff36b6b29" bg-color="4294967295" hdr-color="4292006610" position-x="1046" position-y="385" size-x="0" size-x2="113" size-y="0" size-y2="73"/>
     <entity uuid="39facf6f-7344-491e-9ca8-ddacb91daee1" bg-color="4294967295" hdr-color="4292006610" position-x="239" position-y="40" size-x="0" size-x2="82" size-y="0" size-y2="59"/>
     <many-to-many-association uuid="3b10610a-0602-4d2e-bbc3-7177397354df" color="4281230255"/>
-    <module uuid="4836ca98-9b3d-4a51-812e-cde39e628c22" bg-color="4293391335" position-x="50" position-y="50" size-x="0" size-x2="561" size-y="0" size-y2="821"/>
+    <many-to-many-association uuid="47203118-bbfc-4771-b352-fd329c11a295" color="4288059030"/>
+    <module uuid="4836ca98-9b3d-4a51-812e-cde39e628c22" bg-color="4293391335" position-x="50" position-y="50" size-x="0" size-x2="1190" size-y="0" size-y2="821"/>
     <association uuid="5c1c8b21-178d-4dd3-9b7f-1ac97f624b82" color="4284601169"/>
+    <association uuid="6596ec49-db34-46f7-a68f-f3bf0b96c0bc" color="4288059030"/>
     <association uuid="7a66131d-50de-43cd-9225-15bc61f47320" color="4291261615"/>
     <entity uuid="8026538f-689c-484f-9a3d-3ef132cecf90" bg-color="4294967295" hdr-color="4292006610" position-x="28" position-y="574" size-x="0" size-x2="130" size-y="0" size-y2="115"/>
+    <association uuid="ab4896b5-7c69-43a1-8817-8fefbab2dc32" color="4288059030"/>
     <entity uuid="b8bbecd6-22a5-4080-9a1c-3413370df31e" bg-color="4294967295" hdr-color="4292006610" position-x="45" position-y="40" size-x="0" size-x2="97" size-y="0" size-y2="87"/>
     <entity uuid="be065b38-6ce4-4422-8070-f87a53261dc5" bg-color="4294967295" hdr-color="4292006610" position-x="43" position-y="307" size-x="0" size-x2="100" size-y="0" size-y2="73"/>
     <association uuid="cf2cad5c-222d-4547-bbcd-193435e494ab" color="4278876221"/>
     <association uuid="d519baab-0fd8-42aa-bcd5-e961c40989c8" color="4287255714"/>
+    <entity uuid="d75f8d92-b68a-4ff5-93cf-80411230abfa" bg-color="4294967295" hdr-color="4292006610" position-x="673" position-y="387" size-x="0" size-x2="237" size-y="0" size-y2="60"/>
     <association uuid="dc20b56f-dfef-4014-bbac-0facc429ec29" color="4278236368"/>
     <entity uuid="e2b2179a-c696-4a1f-bc7b-513109e39cf4" bg-color="4294967295" hdr-color="4292006610" position-x="222" position-y="574" size-x="0" size-x2="117" size-y="0" size-y2="73"/>
     <entity uuid="e3a8d6da-9a28-4fc0-839c-d7c984ed7f74" bg-color="4294967295" hdr-color="4292006610" position-x="394" position-y="40" size-x="0" size-x2="147" size-y="0" size-y2="227"/>
     <association uuid="eb3ce920-9eec-40aa-9b42-e6b73ab640ab" color="4294218527"/>
-    <project uuid="ecbc9a14-2892-49d1-b899-87963fbe9326" size-x="0" size-x2="661" size-y="0" size-y2="921"/>
+    <project uuid="ecbc9a14-2892-49d1-b899-87963fbe9326" size-x="0" size-x2="1290" size-y="0" size-y2="921"/>
+    <association uuid="f78581be-9503-4045-8dd2-ccf95898dcca" color="4288059030"/>
+    <entity uuid="f8928f9f-386e-4405-82f0-ad446caf3b60" bg-color="4294967295" hdr-color="4292006610" position-x="968" position-y="663" size-x="0" size-x2="98" size-y="0" size-y2="45"/>
     <association uuid="fad00814-867d-4a34-92cd-09cc4987fb9e" color="4289243304"/>
+    <entity uuid="fc263760-187c-4472-810f-613847fdd225" bg-color="4294967295" hdr-color="4292006610" position-x="479" position-y="510" size-x="0" size-x2="158" size-y="0" size-y2="101"/>
   </visual-data>
 </skipper>

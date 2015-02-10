@@ -1,0 +1,49 @@
+<?php
+namespace mmp\rjpBundle\Entity;
+use Doctrine\ORM\Mapping AS ORM;
+
+/**
+ * @ORM\Entity
+ */
+class ElectionHasElectoralCommission
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="integer", length=11, nullable=true)
+     */
+    private $votes;
+
+    /**
+     * @ORM\Column(type="integer", length=11, nullable=true)
+     */
+    private $authorized;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="mmp\rjpBundle\Entity\Election", inversedBy="electoralCommissions")
+     * @ORM\JoinColumn(name="election_id", referencedColumnName="id")
+     */
+    private $election;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="mmp\rjpBundle\Entity\ElectoralCommission", inversedBy="elections")
+     * @ORM\JoinColumn(name="electoral_commission_id", referencedColumnName="id")
+     */
+    private $electoralCommission;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="mmp\rjpBundle\Entity\District")
+     * @ORM\JoinColumn(name="district_id", referencedColumnName="id")
+     */
+    private $district;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="mmp\rjpBundle\Entity\HouseNumber", mappedBy="")
+     */
+    private $houseNumbersWithStreets;
+}

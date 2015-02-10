@@ -1,0 +1,33 @@
+<?php
+namespace mmp\rjpBundle\Entity;
+use Doctrine\ORM\Mapping AS ORM;
+
+/**
+ * @ORM\Entity
+ */
+class HouseNumber
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=11, nullable=true)
+     */
+    private $number;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="mmp\rjpBundle\Entity\Street", inversedBy="houseNumbers")
+     * @ORM\JoinColumn(name="street_id", referencedColumnName="id")
+     */
+    private $street;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="mmp\rjpBundle\Entity\District", inversedBy="houseNumbersWithStreets")
+     * @ORM\JoinColumn(name="district_id", referencedColumnName="id")
+     */
+    private $district;
+}

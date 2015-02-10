@@ -26,6 +26,11 @@ class Election
     private $candidates;
 
     /**
+     * @ORM\OneToMany(targetEntity="mmp\rjpBundle\Entity\ElectionHasElectoralCommission", mappedBy="election")
+     */
+    private $electoralCommissions;
+
+    /**
      * @ORM\ManyToMany(targetEntity="mmp\rjpBundle\Entity\District", inversedBy="elections")
      * @ORM\JoinTable(
      *     name="DistrictHasElection",
@@ -33,7 +38,12 @@ class Election
      *     inverseJoinColumns={@ORM\JoinColumn(name="district_id", referencedColumnName="id", nullable=false)}
      * )
      */
-    private $districts;    
+    private $districts;
+
+    /**
+     * 
+     */
+    private $electoralCommission;    
 
 
     /**
@@ -176,5 +186,38 @@ class Election
 
         $this->statistics = new \mmp\rjpBundle\Library\Statistics\Election($this);
         return $this->statistics;
+    }
+
+    /**
+     * Add electoralCommissions
+     *
+     * @param \mmp\rjpBundle\Entity\ElectionHasElectoralCommission $electoralCommissions
+     * @return Election
+     */
+    public function addElectoralCommission(\mmp\rjpBundle\Entity\ElectionHasElectoralCommission $electoralCommissions)
+    {
+        $this->electoralCommissions[] = $electoralCommissions;
+
+        return $this;
+    }
+
+    /**
+     * Remove electoralCommissions
+     *
+     * @param \mmp\rjpBundle\Entity\ElectionHasElectoralCommission $electoralCommissions
+     */
+    public function removeElectoralCommission(\mmp\rjpBundle\Entity\ElectionHasElectoralCommission $electoralCommissions)
+    {
+        $this->electoralCommissions->removeElement($electoralCommissions);
+    }
+
+    /**
+     * Get electoralCommissions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getElectoralCommissions()
+    {
+        return $this->electoralCommissions;
     }
 }

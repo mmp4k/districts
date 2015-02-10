@@ -1,0 +1,44 @@
+<?php
+namespace mmp\rjpBundle\Entity;
+use Doctrine\ORM\Mapping AS ORM;
+
+/**
+ * @ORM\Entity
+ */
+class ElectoralCommission
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $name;
+
+    /**
+     * 
+     */
+    private $streets;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $point;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $polygon;
+
+    /**
+     * @ORM\OneToMany(
+     *     targetEntity="mmp\rjpBundle\Entity\ElectionHasElectoralCommission",
+     *     mappedBy="electoralCommission"
+     * )
+     */
+    private $elections;
+}

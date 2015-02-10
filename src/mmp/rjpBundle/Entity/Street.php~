@@ -1,0 +1,26 @@
+<?php
+namespace mmp\rjpBundle\Entity;
+use Doctrine\ORM\Mapping AS ORM;
+
+/**
+ * @ORM\Entity
+ */
+class Street
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $name;
+
+    /**
+     * @ORM\OneToMany(targetEntity="mmp\rjpBundle\Entity\HouseNumber", mappedBy="street")
+     */
+    private $houseNumbers;
+}

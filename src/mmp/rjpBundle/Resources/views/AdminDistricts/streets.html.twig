@@ -1,0 +1,24 @@
+{% extends 'MopaBootstrapBundle::base_less.html.twig' %}
+{% block body %}
+    <h2>{{ district.name }}</h2>
+    {{ form(form) }}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>LP</th>
+                <th>Ulica</th>
+                <th>Nr budynku</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for houseNumber in district.houseNumbersWithStreets %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ houseNumber.street.name }}</td>
+                <td>{{ houseNumber.number }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
