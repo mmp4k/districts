@@ -109,4 +109,8 @@ class HouseNumber
     {
         return $this->district;
     }
+
+    public function __toString() {
+        return $this->getStreet()->getName() . ' ' . $this->getNumber();
+    }
 }

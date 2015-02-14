@@ -35,9 +35,20 @@ class ElectoralCommission
     private $polygon;
 
     /**
-     * @ORM\OneToMany(
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $point_name;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $point_street;
+
+    /**
+     * @ORM\OneToMany( 
      *     targetEntity="mmp\rjpBundle\Entity\ElectionHasElectoralCommission",
-     *     mappedBy="electoralCommission"
+     *     mappedBy="electoralCommission",
+     *     cascade={"persist","remove"}
      * )
      */
     private $elections;
@@ -159,5 +170,51 @@ class ElectoralCommission
     public function getElections()
     {
         return $this->elections;
+    }
+
+    /**
+     * Set point_name
+     *
+     * @param string $pointName
+     * @return ElectoralCommission
+     */
+    public function setPointName($pointName)
+    {
+        $this->point_name = $pointName;
+
+        return $this;
+    }
+
+    /**
+     * Get point_name
+     *
+     * @return string 
+     */
+    public function getPointName()
+    {
+        return $this->point_name;
+    }
+
+    /**
+     * Set point_street
+     *
+     * @param string $pointStreet
+     * @return ElectoralCommission
+     */
+    public function setPointStreet($pointStreet)
+    {
+        $this->point_street = $pointStreet;
+
+        return $this;
+    }
+
+    /**
+     * Get point_street
+     *
+     * @return string 
+     */
+    public function getPointStreet()
+    {
+        return $this->point_street;
     }
 }

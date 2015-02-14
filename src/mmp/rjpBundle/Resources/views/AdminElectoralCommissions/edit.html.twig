@@ -1,0 +1,24 @@
+{% extends 'mmpRjpBundle::layoutAdmin.html.twig' %}
+{% block body %}
+{{ form(form) }}
+
+<script type="text/javascript">
+$('#mmp_rjpbundle_electoralcommission_point_street').change(function() {    
+    console.log("Event");
+    var street = $(this).val();
+    jQuery.get('https://maps.googleapis.com/maps/api/geocode/json', 
+        {
+            'address' : 'Katowice, ' + street,
+            'key' : 'AIzaSyAmxMrDbyvewosRBCpQY5atsn_7uN8dz7g'
+        },
+        function(r) {            
+            var lat = r.results[0].geometry.location.lat;
+            var lng = r.results[0].geometry.location.lng;
+            if(confirm('Chcesz zaktualizowa punkt na mapie?')) {
+                $('#mmp_rjpbundle_electoralcommission_point').val(lat + ',' + lng);
+            }
+        }
+    );
+});
+</script>
+{% endblock %}

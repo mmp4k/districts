@@ -100,7 +100,7 @@ class District
 
     /**
      * @ORM\OneToMany(targetEntity="mmp\rjpBundle\Entity\HouseNumber", mappedBy="district", cascade={"persist"})
-     * @ORM\OrderBy({"street"="asc", "number"="asc"})
+     * @ORM\OrderBy({"street"="ASC","number"="ASC"})
      */
     private $houseNumbersWithStreets;
 

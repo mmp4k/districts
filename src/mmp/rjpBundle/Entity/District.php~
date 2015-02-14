@@ -99,7 +99,8 @@ class District
     private $meetings;
 
     /**
-     * @ORM\OneToMany(targetEntity="mmp\rjpBundle\Entity\HouseNumber", mappedBy="district")
+     * @ORM\OneToMany(targetEntity="mmp\rjpBundle\Entity\HouseNumber", mappedBy="district", cascade={"persist"})
+     * @ORM\OrderBy({"street"="ASC","number"="ASC"})
      */
     private $houseNumbersWithStreets;
 
@@ -130,6 +131,11 @@ class District
      * @ORM\OrderBy({"date"="desc"})
      */
     private $elections;
+
+    /**
+     * Vars for handle import files with streets
+     */
+    private $streetsXmlFile;
 
     private $candidatesOnElection;
 
@@ -844,5 +850,89 @@ class District
         $this->statsOnElection = new \mmp\rjpBundle\Library\Statistics\ElectionDistrict($election, $this);
         
         return $this->statsOnElection;
+    }
+
+    /**
+     * Add houseNumbersWithStreets
+     *
+     * @param \mmp\rjpBundle\Entity\HouseNumber $houseNumbersWithStreets
+     * @return District
+     */
+    public function addHouseNumbersWithStreet(\mmp\rjpBundle\Entity\HouseNumber $houseNumbersWithStreets)
+    {
+        $this->houseNumbersWithStreets[] = $houseNumbersWithStreets;
+
+        return $this;
+    }
+
+    /**
+     * Remove houseNumbersWithStreets
+     *
+     * @param \mmp\rjpBundle\Entity\HouseNumber $houseNumbersWithStreets
+     */
+    public function removeHouseNumbersWithStreet(\mmp\rjpBundle\Entity\HouseNumber $houseNumbersWithStreets)
+    {
+        $this->houseNumbersWithStreets->removeElement($houseNumbersWithStreets);
+    }
+
+    /**
+     * Get houseNumbersWithStreets
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getHouseNumbersWithStreets()
+    {
+        return $this->houseNumbersWithStreets;
+    }
+
+    public function getStreetsXmlFile() {
+        return $this->streetsXmlFile;
+    }
+
+    public function setStreetsXmlFile(UploadedFile $file = null) {
+        if(!$file->isValid()) {
+            return;
+        }
+        echo '<pre>';
+        $xml = simplexml_load_file($file->getRealPath());
+        $streetsModels = array();
+
+        foreach($xml->way as $way) {
+            $streetName = null;
+            $houseNumber = null;            
+
+            foreach($way->tag as $tag) {                
+
+                switch($tag['k']) {
+                    case 'addr:street' :
+                        $streetName = (string)$tag['v'];
+                    break;
+                    case 'addr:housenumber' :
+                        $houseNumber = (string)$tag['v'];
+                    break;
+                }
+            }    
+
+            if($streetName === null) {
+                continue;
+            }
+            
+            if($houseNumber === null) {
+                $houseNumber = 0;
+            }
+
+            $streetModel = isset($streetsModels[$streetName]) ? $streetsModels[$streetName] : new Street;
+            $streetModel->setName($streetName);
+            $streetsModels[$streetName] = $streetModel;
+
+            $houseNumberModel = new HouseNumber;
+            $houseNumberModel->setStreet($streetModel);
+            $houseNumberModel->setNumber($houseNumber);
+            $houseNumberModel->setDistrict($this);
+
+            $this->addHouseNumbersWithStreet($houseNumberModel);        
+        }                
+
+        $this->streetsXmlFile = $file;
     }
 }

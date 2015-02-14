@@ -1,0 +1,53 @@
+<h2>Komisje wyborcze</h2>
+<a href="{{ path('mmp_rjp_admin_electoral_commissions_add') }}">Dodaj</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Lp</th>
+            <th>Nazwa</th>
+            <th>Wybory + Dzielnica</th>            
+            <th>Punkt + adres</th>
+            <th>Akcja</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for electoralCommission in electoralCommissions %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ electoralCommission.name }}</td>
+                <td>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Dzielnica</th>
+                                <th>Wybory</th>
+                                <th>Akcja</th>
+                            </tr>
+                        </thead>
+                        {% for election in electoralCommission.elections %}
+                            <tbody>
+                                <tr>
+                                    <td>{{ election.district }}</td>
+                                    <td>{{ election.election }}</td>
+                                    <td>
+                                        <a href="{{ path('mmp_rjp_admin_electoral_commission_streets', {'electionHasElectoralId' : election.id}) }}">Ulice ({{ election.houseNumbersWithStreets.count }})</a>
+                                        <a href="{{ path('mmp_rjp_admin_electoral_commission_map', {'electionHasElectoralId' : election.id}) }}">Mapa</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        {% endfor %}
+                    </table>
+                </td>
+                <td>
+                    {{ electoralCommission.pointName }} <br />
+                    <small>{{ electoralCommission.pointStreet }}</small>
+                </td>
+                <td>
+                    <a href="{{ path('mmp_rjp_admin_electoral_commission_edit', { 'id' : electoralCommission.id }) }}">Edytuj</a>
+                    <a href="{{ path('mmp_rjp_admin_electoral_commission_delete', { 'id' : electoralCommission.id }) }}">Usuń</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

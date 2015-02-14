@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8">
+    <title>Drawing Tools</title>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript"
+      src="http://maps.google.com/maps/api/js?sensor=false&libraries=drawing"></script>
+    <style type="text/css">
+      #map, html, body {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+      }
+
+      #panel {
+        width: 200px;
+        font-family: Arial, sans-serif;
+        font-size: 13px;
+        float: right;
+        margin: 10px;
+      }
+
+      #color-palette {
+        clear: both;
+      }
+
+      .color-button {
+        width: 14px;
+        height: 14px;
+        font-size: 0;
+        margin: 2px;
+        float: left;
+        cursor: pointer;
+      }
+
+      #delete-button {
+        margin-top: 5px;
+      }
+    </style>
+    <script type="text/javascript">
+      var drawingManager;
+      var selectedShape;
+      var colors = ['#1E90FF', '#FF1493', '#32CD32', '#FF8C00', '#4B0082'];
+      var selectedColor;
+      var colorButtons = {};
+
+      function clearSelection() {        
+        if (selectedShape) {
+          selectedShape.setEditable(false);
+          selectedShape = null;
+        }
+      }
+
+      function setSelection(shape) {
+        clearSelection();
+        selectedShape = shape;
+        shape.setEditable(true);
+        selectColor(shape.get('fillColor') || shape.get('strokeColor'));
+      }
+
+      function getCodeSelectedShape() {
+        var len = selectedShape.getPath().getLength();
+        var htmlStr = "";
+        for (var i = 0; i < len; i++) {
+          var latLng = selectedShape.getPath().getAt(i).lng() + ',' + selectedShape.getPath().getAt(i).lat();
+          htmlStr += latLng + ",0 ";
+        }
+        alert(htmlStr);
+      }
+
+      function deleteSelectedShape() {
+        if (selectedShape) {
+          selectedShape.setMap(null);
+        }
+      }
+
+      function selectColor(color) {
+        selectedColor = color;
+        for (var i = 0; i < colors.length; ++i) {
+          var currColor = colors[i];
+          colorButtons[currColor].style.border = currColor == color ? '2px solid #789' : '2px solid #fff';
+        }
+
+        // Retrieves the current options from the drawing manager and replaces the
+        // stroke or fill color as appropriate.
+        var polylineOptions = drawingManager.get('polylineOptions');
+        polylineOptions.strokeColor = color;
+        drawingManager.set('polylineOptions', polylineOptions);
+
+        var rectangleOptions = drawingManager.get('rectangleOptions');
+        rectangleOptions.fillColor = color;
+        drawingManager.set('rectangleOptions', rectangleOptions);
+
+        var circleOptions = drawingManager.get('circleOptions');
+        circleOptions.fillColor = color;
+        drawingManager.set('circleOptions', circleOptions);
+
+        var polygonOptions = drawingManager.get('polygonOptions');
+        polygonOptions.fillColor = color;
+        drawingManager.set('polygonOptions', polygonOptions);
+      }
+
+      function setSelectedShapeColor(color) {
+        if (selectedShape) {
+          if (selectedShape.type == google.maps.drawing.OverlayType.POLYLINE) {
+            selectedShape.set('strokeColor', color);
+          } else {
+            selectedShape.set('fillColor', color);
+          }
+        }
+      }
+
+      function makeColorButton(color) {
+        var button = document.createElement('span');
+        button.className = 'color-button';
+        button.style.backgroundColor = color;
+        google.maps.event.addDomListener(button, 'click', function() {
+          selectColor(color);
+          setSelectedShapeColor(color);
+        });
+
+        return button;
+      }
+
+       function buildColorPalette() {
+         var colorPalette = document.getElementById('color-palette');
+         for (var i = 0; i < colors.length; ++i) {
+           var currColor = colors[i];
+           var colorButton = makeColorButton(currColor);
+           colorPalette.appendChild(colorButton);
+           colorButtons[currColor] = colorButton;
+         }
+         selectColor(colors[0]);
+      }
+      var poly = [];
+      function initialize() {
+        var osmMapTypeOptions = {
+          getTileUrl: function(coord, zoom) {
+              return "http://tile.openstreetmap.org/" +
+              zoom + "/" + coord.x + "/" + coord.y + ".png";
+          },
+          tileSize: new google.maps.Size(256, 256),
+          isPng: true,
+          maxZoom: 19,
+          minZoom: 0,
+          name: "OSM"
+        };
+
+        var osmMapType = new google.maps.ImageMapType(osmMapTypeOptions); 
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 10,
+          center: new google.maps.LatLng(22.344, 114.048),
+          // mapTypeId: google.maps.MapTypeId.ROADMAP,
+          disableDefaultUI: true,
+          zoomControl: true,
+          mapTypeControlOptions: {
+            mapTypeIds: ['OSM',google.maps.MapTypeId.ROADMAP],            
+          }
+        });
+
+        map.mapTypes.set('OSM', osmMapType);
+        map.setMapTypeId('OSM');
+
+        var ctaLayer = new google.maps.KmlLayer({
+            url: 'http://radydzielnic.pl/kml/koszutka.kml',            
+            suppressInfoWindows : true
+        });
+        ctaLayer.setMap(map);
+
+        google.maps.event.addListener(ctaLayer, 'status_changed', function () {
+            google.maps.event.addListenerOnce(map, 'zoom_changed', function () {
+                map.setZoom(14);
+                var bounds = ctaLayer.getDefaultViewport();
+                map.setCenter(bounds.getCenter());
+            });
+        });   
+
+        var polyOptions = {
+          strokeWeight: 0,
+          fillOpacity: 0.45,
+          editable: true
+        };
+        // Creates a drawing manager attached to the map that allows the user to draw
+        // markers, lines, and shapes.
+        drawingManager = new google.maps.drawing.DrawingManager({
+          drawingMode: google.maps.drawing.OverlayType.POLYGON,
+          markerOptions: {
+            draggable: true
+          },
+          polylineOptions: {
+            editable: true
+          },
+          rectangleOptions: polyOptions,
+          circleOptions: polyOptions,
+          polygonOptions: polyOptions,
+          map: map
+        });
+
+        google.maps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
+            if (e.type != google.maps.drawing.OverlayType.MARKER) {
+            // Switch back to non-drawing mode after drawing a shape.
+            drawingManager.setDrawingMode(null);
+
+            // Add an event listener that selects the newly-drawn shape when the user
+            // mouses down on it.
+            var newShape = e.overlay;
+            newShape.type = e.type;
+            
+            google.maps.event.addListener(newShape, 'click', function() {
+              setSelection(newShape);
+            });
+            setSelection(newShape);
+          }
+        });
+
+        // Clear the current selection when the drawing mode is changed, or when the
+        // map is clicked.
+        google.maps.event.addListener(drawingManager, 'drawingmode_changed', clearSelection);
+        google.maps.event.addListener(map, 'click', clearSelection);
+        google.maps.event.addDomListener(document.getElementById('delete-button'), 'click', deleteSelectedShape);
+        google.maps.event.addDomListener(document.getElementById('display-kml'), 'click', getCodeSelectedShape);
+
+        buildColorPalette();
+
+                         
+            var coords = [ 
+  new google.maps.LatLng(50.2683144,19.0239295),
+  new google.maps.LatLng(50.2704643,19.0242862),
+  new google.maps.LatLng(50.2704643,19.0242862),
+  new google.maps.LatLng(50.2704643,19.0242862),
+  new google.maps.LatLng(50.2708757,19.0243506),
+  new google.maps.LatLng(50.2714792,19.0244458),
+  new google.maps.LatLng(50.2714792,19.0244458),
+  new google.maps.LatLng(50.2714792,19.0244458),
+  new google.maps.LatLng(50.2723595,19.0245209),
+  new google.maps.LatLng(50.2730259,19.0243539),
+  new google.maps.LatLng(50.2737540,19.0239831),
+  new google.maps.LatLng(50.2746754,19.0235044),
+  new google.maps.LatLng(50.2755763,19.0230792),
+  new google.maps.LatLng(50.2751889,19.0207457),
+  new google.maps.LatLng(50.2756208,19.0188038),
+  new google.maps.LatLng(50.2721923,19.0167546),
+  new google.maps.LatLng(50.2720009,19.0176833),
+  new google.maps.LatLng(50.2710141,19.0171530),
+  new google.maps.LatLng(50.2709125,19.0176479),
+  new google.maps.LatLng(50.2716783,19.0181536),
+  new google.maps.LatLng(50.2716350,19.0185198),
+  new google.maps.LatLng(50.2712559,19.0189547),
+  new google.maps.LatLng(50.2707446,19.0210475),
+  new google.maps.LatLng(50.2699075,19.0208335),
+  new google.maps.LatLng(50.2682487,19.0204319),
+  new google.maps.LatLng(50.2677396,19.0226481),
+  new google.maps.LatLng(50.2687336,19.0228204),
+  new google.maps.LatLng(50.2691785,19.0229076),
+  new google.maps.LatLng(50.2692055,19.0234232),
+  new google.maps.LatLng(50.2691502,19.0237672),
+  new google.maps.LatLng(50.2684156,19.0236291),
+]
+
+            poly[2] = new google.maps.Polygon({
+              paths: coords,
+              strokeColor: '#FF0000',
+              strokeOpacity: 0.8,
+              strokeWeight: 3,
+              fillColor: '#FF0000',
+              fillOpacity: 0.35
+            });
+
+            poly[2].setMap(map);               
+                    
+                         
+            var coords = [ 
+  new google.maps.LatLng(50.2659175,19.0191686),
+  new google.maps.LatLng(50.2657289,19.0190559),
+  new google.maps.LatLng(50.2653963,19.0188534),
+  new google.maps.LatLng(50.2650911,19.0200886),
+  new google.maps.LatLng(50.2645493,19.0227520),
+  new google.maps.LatLng(50.2641803,19.0226796),
+  new google.maps.LatLng(50.2637831,19.0233193),
+  new google.maps.LatLng(50.2652717,19.0238752),
+  new google.maps.LatLng(50.2655669,19.0237230),
+  new google.maps.LatLng(50.2683144,19.0239295),
+  new google.maps.LatLng(50.2684181,19.0236237),
+  new google.maps.LatLng(50.2691463,19.0237659),
+  new google.maps.LatLng(50.2692075,19.0234199),
+  new google.maps.LatLng(50.2691778,19.0229129),
+  new google.maps.LatLng(50.2688104,19.0228378),
+  new google.maps.LatLng(50.2684205,19.0227714),
+  new google.maps.LatLng(50.2677443,19.0226487),
+  new google.maps.LatLng(50.2682487,19.0204319),
+  new google.maps.LatLng(50.2669974,19.0197519),
+]
+
+
+            poly[3] = new google.maps.Polygon({
+              paths: coords,
+              strokeColor: '#FF0000',
+              strokeOpacity: 0.8,
+              strokeWeight: 3,
+              fillColor: '#FF0000',
+              fillOpacity: 0.35
+            });
+
+            poly[3].setMap(map);               
+                    
+                         
+            var coords = [ 
+  new google.maps.LatLng(50.2675155,19.0120661),
+  new google.maps.LatLng(50.2671417,19.0116664),
+  new google.maps.LatLng(50.2662330,19.0157300),
+  new google.maps.LatLng(50.2654032,19.0188789),
+  new google.maps.LatLng(50.2682355,19.0204238),
+  new google.maps.LatLng(50.2707523,19.0210461),
+  new google.maps.LatLng(50.2712563,19.0189272),
+  new google.maps.LatLng(50.2716352,19.0185168),
+  new google.maps.LatLng(50.2716943,19.0181721),
+  new google.maps.LatLng(50.2709169,19.0176665),
+  new google.maps.LatLng(50.2710129,19.0171301),
+  new google.maps.LatLng(50.2719866,19.0176665),
+  new google.maps.LatLng(50.2721855,19.0167546),
+  new google.maps.LatLng(50.2699122,19.0148824),
+]
+            poly[4] = new google.maps.Polygon({
+              paths: coords,
+              strokeColor: '#FF0000',
+              strokeOpacity: 0.8,
+              strokeWeight: 3,
+              fillColor: '#FF0000',
+              fillOpacity: 0.35
+            });
+
+            poly[4].setMap(map);               
+                    
+                         
+var coords = [ 
+  new google.maps.LatLng(50.2655746,19.0237390),
+  new google.maps.LatLng(50.2637983,19.0234386),
+  new google.maps.LatLng(50.2637949,19.0240341),
+  new google.maps.LatLng(50.2641070,19.0245652),
+  new google.maps.LatLng(50.2637092,19.0266680),
+  new google.maps.LatLng(50.2639629,19.0268933),
+  new google.maps.LatLng(50.2645459,19.0271937),
+  new google.maps.LatLng(50.2651289,19.0281701),
+  new google.maps.LatLng(50.2667199,19.0290176),
+  new google.maps.LatLng(50.2672549,19.0288352),
+  new google.maps.LatLng(50.2675703,19.0282452),
+  new google.maps.LatLng(50.2676561,19.0277516),
+  new google.maps.LatLng(50.2682424,19.0280199),
+  new google.maps.LatLng(50.2676389,19.0307825),
+  new google.maps.LatLng(50.2682904,19.0311446),
+  new google.maps.LatLng(50.2685270,19.0300811),
+  new google.maps.LatLng(50.2689745,19.0303004),
+  new google.maps.LatLng(50.2694931,19.0306032),
+  new google.maps.LatLng(50.2695987,19.0301263),
+  new google.maps.LatLng(50.2701090,19.0303790),
+  new google.maps.LatLng(50.2702749,19.0297624),
+  new google.maps.LatLng(50.2702749,19.0297624),
+  new google.maps.LatLng(50.2700720,19.0292748),
+  new google.maps.LatLng(50.2697607,19.0290926),
+  new google.maps.LatLng(50.2700233,19.0278857),
+  new google.maps.LatLng(50.2702129,19.0270462),
+  new google.maps.LatLng(50.2716432,19.0272165),
+  new google.maps.LatLng(50.2714792,19.0244458),
+  new google.maps.LatLng(50.2714792,19.0244458),
+  new google.maps.LatLng(50.2711157,19.0244016),
+  new google.maps.LatLng(50.2704437,19.0243023),
+  new google.maps.LatLng(50.2685304,19.0239858),
+  new google.maps.LatLng(50.2669394,19.0238410),
+]
+            poly[5] = new google.maps.Polygon({
+              paths: coords,
+              strokeColor: '#FF0000',
+              strokeOpacity: 0.8,
+              strokeWeight: 3,
+              fillColor: '#FF0000',
+              fillOpacity: 0.35
+            });
+
+            poly[5].setMap(map);               
+                    
+                         
+var coords = [   
+  new google.maps.LatLng(50.2696139,19.0301227),
+  new google.maps.LatLng(50.2695042,19.0306162),
+  new google.maps.LatLng(50.2706151,19.0312278),
+  new google.maps.LatLng(50.2720483,19.0316033),
+  new google.maps.LatLng(50.2722609,19.0316569),
+  new google.maps.LatLng(50.2743112,19.0317267),
+  new google.maps.LatLng(50.2762139,19.0315684),
+  new google.maps.LatLng(50.2761985,19.0337531),
+  new google.maps.LatLng(50.2783369,19.0331503),
+  new google.maps.LatLng(50.2776028,19.0297053),
+  new google.maps.LatLng(50.2770918,19.0286051),
+  new google.maps.LatLng(50.2769666,19.0278404),
+  new google.maps.LatLng(50.2767805,19.0274473),
+  new google.maps.LatLng(50.2762898,19.0249656),
+  new google.maps.LatLng(50.2761062,19.0245186),
+  new google.maps.LatLng(50.2755783,19.0231020),
+  new google.maps.LatLng(50.2755783,19.0231020),
+  new google.maps.LatLng(50.2732634,19.0242692),
+  new google.maps.LatLng(50.2723644,19.0245567),
+  new google.maps.LatLng(50.2717572,19.0244268),
+  new google.maps.LatLng(50.2716575,19.0271937),
+  new google.maps.LatLng(50.2702378,19.0270526),
+  new google.maps.LatLng(50.2697644,19.0290572),
+  new google.maps.LatLng(50.2700794,19.0292684),
+  new google.maps.LatLng(50.2700374,19.0295836),
+  new google.maps.LatLng(50.2700374,19.0295836),
+  new google.maps.LatLng(50.2701008,19.0303909),
+]
+
+
+
+
+            poly[7] = new google.maps.Polygon({
+              paths: coords,
+              strokeColor: '#FF0000',
+              strokeOpacity: 0.8,
+              strokeWeight: 3,
+              fillColor: '#FF0000',
+              fillOpacity: 0.35
+            });
+
+            poly[7].setMap(map);               
+                    
+        
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+      $(function() {
+        $('button.electoral-commission').click(function() {
+          $('button.electoral-commission').css('color', 'black');
+          $(this).css('color', 'red');
+          var key = parseInt($(this).attr('data-id'));
+          setSelection(poly[key]);          
+        })        
+      })
+    </script>
+  </head>
+  <body>
+    <div id="panel">
+      <div id="color-palette"></div>
+      <div>
+        <button id="delete-button">Delete Selected Shape</button>
+        <button id="display-kml">Display KML Selected Shape</button>        
+                              <button class="electoral-commission" data-id="2">Połączone w 1 obwód Obwody nr 127/128</button>          <br />
+                    
+                              <button class="electoral-commission" data-id="3">Obwód nr 129</button>          <br />
+                    
+                              <button class="electoral-commission" data-id="4">Obwód nr 130</button>          <br />
+                    
+                              <button class="electoral-commission" data-id="5">Obwód nr 131</button>          <br />
+                    
+                              <button class="electoral-commission" data-id="7">Obwód nr 132</button>          <br />
+                    
+                
+      </div>
+    </div>
+    <div id="map"></div>
+  
+<div id="sfwdtcdbddb" class="sf-toolbar" style="display: none"></div><script>/*<![CDATA[*/    Sfjs = (function() {        "use strict";        var noop = function() {},            profilerStorageKey = 'sf2/profiler/',            request = function(url, onSuccess, onError, payload, options) {                var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');                options = options || {};                options.maxTries = options.maxTries || 0;                xhr.open(options.method || 'GET', url, true);                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');                xhr.onreadystatechange = function(state) {                    if (4 !== xhr.readyState) {                        return null;                    }                    if (xhr.status == 404 && options.maxTries > 1) {                        setTimeout(function(){                            options.maxTries--;                            request(url, onSuccess, onError, payload, options);                        }, 500);                        return null;                    }                    if (200 === xhr.status) {                        (onSuccess || noop)(xhr);                    } else {                        (onError || noop)(xhr);                    }                };                xhr.send(payload || '');            },            hasClass = function(el, klass) {                return el.className && el.className.match(new RegExp('\\b' + klass + '\\b'));            },            removeClass = function(el, klass) {                if (el.className) {                    el.className = el.className.replace(new RegExp('\\b' + klass + '\\b'), ' ');                }            },            addClass = function(el, klass) {                if (!hasClass(el, klass)) {                    el.className += " " + klass;                }            },            getPreference = function(name) {                if (!window.localStorage) {                    return null;                }                return localStorage.getItem(profilerStorageKey + name);            },            setPreference = function(name, value) {                if (!window.localStorage) {                    return null;                }                localStorage.setItem(profilerStorageKey + name, value);            };        return {            hasClass: hasClass,            removeClass: removeClass,            addClass: addClass,            getPreference: getPreference,            setPreference: setPreference,            request: request,            load: function(selector, url, onSuccess, onError, options) {                var el = document.getElementById(selector);                if (el && el.getAttribute('data-sfurl') !== url) {                    request(                        url,                        function(xhr) {                            el.innerHTML = xhr.responseText;                            el.setAttribute('data-sfurl', url);                            removeClass(el, 'loading');                            (onSuccess || noop)(xhr, el);                        },                        function(xhr) { (onError || noop)(xhr, el); },                        '',                        options                    );                }                return this;            },            toggle: function(selector, elOn, elOff) {                var i,                    style,                    tmp = elOn.style.display,                    el = document.getElementById(selector);                elOn.style.display = elOff.style.display;                elOff.style.display = tmp;                if (el) {                    el.style.display = 'none' === tmp ? 'none' : 'block';                }                return this;            }        }    })();/*]]>*/</script><script>/*<![CDATA[*/    (function () {                Sfjs.load(            'sfwdtcdbddb',            '/_wdt/cdbddb',            function(xhr, el) {                el.style.display = -1 !== xhr.responseText.indexOf('sf-toolbarreset') ? 'block' : 'none';                if (el.style.display == 'none') {                    return;                }                if (Sfjs.getPreference('toolbar/displayState') == 'none') {                    document.getElementById('sfToolbarMainContent-cdbddb').style.display = 'none';                    document.getElementById('sfToolbarClearer-cdbddb').style.display = 'none';                    document.getElementById('sfMiniToolbar-cdbddb').style.display = 'block';                } else {                    document.getElementById('sfToolbarMainContent-cdbddb').style.display = 'block';                    document.getElementById('sfToolbarClearer-cdbddb').style.display = 'block';                    document.getElementById('sfMiniToolbar-cdbddb').style.display = 'none';                }            },            function(xhr) {                if (xhr.status !== 0) {                    confirm('An error occurred while loading the web debug toolbar (' + xhr.status + ': ' + xhr.statusText + ').\n\nDo you want to open the profiler?') && (window.location = '/_profiler/cdbddb');                }            },            {'maxTries': 5}        );    })();/*]]>*/</script>
+</body>
+</html>

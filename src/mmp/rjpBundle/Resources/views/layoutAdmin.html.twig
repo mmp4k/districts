@@ -1,0 +1,10 @@
+{% extends 'MopaBootstrapBundle::base_less.html.twig' %}
+
+{% block head_script %}
+{% javascripts
+    '//code.jquery.com/jquery-1.11.0.min.js'
+    '@mmpRjpBundle/Resources/public/js/common.js'
+%}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+{% endblock head_script %}
