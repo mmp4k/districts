@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<skipper version="3.0.2.1162" name="mmpRjpBundle" mvc="Symfony2" orm="Doctrine2" uuid="ecbc9a14-2892-49d1-b899-87963fbe9326">
+<skipper version="3.1.0.1174" name="mmpRjpBundle" mvc="Symfony2" orm="Doctrine2" uuid="ecbc9a14-2892-49d1-b899-87963fbe9326">
   <module name="mmp\rjpBundle\Entity" import-format="Doctrine2Php" import-path="." uuid="4836ca98-9b3d-4a51-812e-cde39e628c22">
     <entity name="Candidate" uuid="b8bbecd6-22a5-4080-9a1c-3413370df31e">
       <field name="id" type="integer" required="true" primary="true" uuid="efd97769-db30-4c0b-818b-12d230095286">
@@ -290,6 +290,8 @@
       <field name="polygon" type="text" uuid="2a0c9f8f-0d6c-46b7-97f2-ad57e8ba8e27"/>
       <field name="point_street" type="string" size="255" uuid="219c83d2-a42a-44d2-a096-59cd3af3fd1a"/>
       <field name="point_name" type="string" size="255" uuid="2c6778d7-7ec6-46ce-aaed-8c28b40afeb7"/>
+      <field name="image_url" type="string" size="255" uuid="6c4fe47c-d5dd-4026-b7a1-95598464f05e"/>
+      <field name="image_url_min" type="string" size="255" uuid="320cbe78-2245-46c0-908c-c4861a864ca9"/>
       <orm-attributes>
         <attribute name="export-file-name">ElectoralCommission.php</attribute>
       </orm-attributes>
@@ -316,6 +318,9 @@
             <attribute name="cascade-persist">true</attribute>
             <attribute name="cascade-remove">true</attribute>
           </attribute>
+        </attribute>
+        <attribute name="side-owning">
+          <attribute name="fetch">EAGER</attribute>
         </attribute>
       </orm-attributes>
     </association>
@@ -396,7 +401,7 @@
     <entity uuid="39facf6f-7344-491e-9ca8-ddacb91daee1" bg-color="4294967295" hdr-color="4292006610" position-x="239" position-y="40" size-x="0" size-x2="82" size-y="0" size-y2="59"/>
     <many-to-many-association uuid="3b10610a-0602-4d2e-bbc3-7177397354df" color="4281230255"/>
     <many-to-many-association uuid="47203118-bbfc-4771-b352-fd329c11a295" color="4288059030"/>
-    <module uuid="4836ca98-9b3d-4a51-812e-cde39e628c22" bg-color="4293391335" position-x="50" position-y="50" size-x="0" size-x2="1190" size-y="0" size-y2="844"/>
+    <module uuid="4836ca98-9b3d-4a51-812e-cde39e628c22" bg-color="4293391335" position-x="50" position-y="50" size-x="0" size-x2="1190" size-y="0" size-y2="872"/>
     <association uuid="5c1c8b21-178d-4dd3-9b7f-1ac97f624b82" color="4284601169"/>
     <association uuid="6596ec49-db34-46f7-a68f-f3bf0b96c0bc" color="4288059030"/>
     <association uuid="7a66131d-50de-43cd-9225-15bc61f47320" color="4291261615"/>
@@ -411,7 +416,7 @@
     <entity uuid="e2b2179a-c696-4a1f-bc7b-513109e39cf4" bg-color="4294967295" hdr-color="4292006610" position-x="222" position-y="574" size-x="0" size-x2="117" size-y="0" size-y2="73"/>
     <entity uuid="e3a8d6da-9a28-4fc0-839c-d7c984ed7f74" bg-color="4294967295" hdr-color="4292006610" position-x="394" position-y="40" size-x="0" size-x2="147" size-y="0" size-y2="227"/>
     <association uuid="eb3ce920-9eec-40aa-9b42-e6b73ab640ab" color="4294218527"/>
-    <project uuid="ecbc9a14-2892-49d1-b899-87963fbe9326" size-x="0" size-x2="1290" size-y="0" size-y2="921"/>
+    <project uuid="ecbc9a14-2892-49d1-b899-87963fbe9326" size-x="0" size-x2="1290" size-y="0" size-y2="972"/>
     <association uuid="f78581be-9503-4045-8dd2-ccf95898dcca" color="4288059030"/>
     <entity uuid="f8928f9f-386e-4405-82f0-ad446caf3b60" bg-color="4294967295" hdr-color="4292006610" position-x="968" position-y="663" size-x="0" size-x2="98" size-y="0" size-y2="45"/>
     <association uuid="fad00814-867d-4a34-92cd-09cc4987fb9e" color="4289243304"/>

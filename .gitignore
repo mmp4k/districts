@@ -9,3 +9,9 @@
 /vendor/
 /bin/
 /composer.phar
+/web/css/
+/web/images/
+/web/js/
+/web/uploads/
+!/web/uploads/.gitkeep
+!/web/uploads/avatars/.gitkeep

@@ -1,7 +1,16 @@
 {% extends 'mmpRjpBundle::layout.html.twig' %}
 
+{% block one_page_script %}
+    {% javascripts
+        '//maps.googleapis.com/maps/api/js?v=3.exp'
+        '@mmpRjpBundle/Resources/public/js/district.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 {% block container %}
-<div class="container district">
+<div class="container district" data-kml="{{ district.linkKml }}">
     <div class="row">
         <div class="col-sm-12">
             <div class="white">
@@ -49,7 +58,7 @@
                                 <dt class="col-sm-9 col-md-4 pull-left">Liczba brakujących podpisów:</dt>
                                 <dd class="pull-left bkg-grey">{{ district.getSignatureNeeded - district.getSignatureGained }}</dd>
                             </dl>
-                        {% endif %}                        
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -72,12 +81,12 @@
                             {% if meeting.linkFacebook %}
                                 <li>
                                     <a href="{{ meeting.linkFacebook }}">
-                                        <strong>{{ meeting.date | localizeddate('full', 'none', null, null, 'd MMMM Y HH:mm') }}</strong> - {{ meeting.place }}</a> 
+                                        <strong>{{ meeting.date | localizeddate('full', 'none', null, null, 'd MMMM Y HH:mm') }}</strong> - {{ meeting.place }}</a>
                                     <i class="fa fa-external-link"></i>
                                 </li>
                             {% else %}
                                 <li><strong>{{ meeting.date | localizeddate('full', 'none', null, null, 'd MMMM Y HH:mm') }}</strong> - {{ meeting.place }}</li>
-                            {% endif %}                            
+                            {% endif %}
                         {% endfor %}
                     </ul>
                 </div>
@@ -93,12 +102,12 @@
                     E-mail: <strong>kontakt@radydzielnic.pl</strong>
                 </div>
             </div>
-            {% if district.councilors.count %}
+            {% if councilors[district.id] %}
             <div class="white margin-bottom">
                 <div class="padding">
                     <h2>Radni Dzielnicowi</h2>
                     <ol>
-                        {% for councilor in district.councilors %}
+                        {% for councilor in councilors[district.id] %}
                             <li>{{ councilor.candidate.user.firstName }} {{ councilor.candidate.user.lastName }}</li>
                         {% endfor %}
                     </ol>
@@ -117,18 +126,18 @@
                 </div>
             </div>
         </div>
-        {% if district.elections %}
+        {% if district.elections|length %}
         <div class="col-sm-12">
             <div class="white">
                 <div class="padding">
                     <h2>Wyniki wyborów</h2>
                     <div role="tabpanel">
-                        <ul class="nav nav-tabs" role="tablist">                            
+                        <ul class="nav nav-tabs" role="tablist">
                             {% for election in district.elections %}
                             <li role="presentation" {% if loop.first %}class="active"{% endif %}>
                                 <a href="#el{{ election.id }}" aria-controls="el{{ election.id }}" role="tab" data-toggle="tab">
                                     {{ election.date | localizeddate('full', 'none', null, null, 'd MMMM Y') }}
-                                </a>                                   
+                                </a>
                             </li>
                             {% endfor %}
                         </ul>
@@ -168,31 +177,6 @@
     </div>
 </div>
 
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-
 <script type="text/javascript">
-    function initialize() {
-        var chicago = new google.maps.LatLng(41.875696,-87.624207);
-        var mapOptions = {
-            zoom: 13,
-            center: chicago
-        }
-
-        var map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-        var ctaLayer = new google.maps.KmlLayer({
-            url: '{{ district.linkKml }}',            
-        });
-        ctaLayer.setMap(map);
-
-        google.maps.event.addListener(ctaLayer, 'status_changed', function () {
-            google.maps.event.addListenerOnce(map, 'zoom_changed', function () {
-                map.setZoom(14);
-                var bounds = ctaLayer.getDefaultViewport();
-                map.setCenter(bounds.getCenter());
-            });
-        });        
-    }
-    google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 {% endblock container %}

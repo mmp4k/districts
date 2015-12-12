@@ -2,9 +2,9 @@
 
 namespace mmp\rjpBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class IndexController extends Controller
 {
@@ -15,11 +15,14 @@ class IndexController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        
-        $districts = $em->getRepository('mmpRjpBundle:District')->findAllDistrictsWithDetails();  
+
+        $districts = $em->getRepository('mmpRjpBundle:District')->findBy([], ['slug' => 'ASC']);
+
+        $councilors = $em->getRepository('mmpRjpBundle:Election')->findLastlyCouncilorsByDistricts($districts);
 
         return array(
-            'districts' => $districts
+            'districts'  => $districts,
+            'councilors' => $councilors
         );
     }
 
@@ -31,9 +34,11 @@ class IndexController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $district = $em->getRepository('mmpRjpBundle:District')->findOneByElections(['slug' => $slug]);
+        $councilors = $em->getRepository('mmpRjpBundle:Election')->findLastlyCouncilorsByDistricts([$district]);
 
         return [
-            'district'  =>  $district
+            'district'   => $district,
+            'councilors' => $councilors
         ];
     }
 
@@ -42,9 +47,9 @@ class IndexController extends Controller
      * @Template()
      */
     public function mapAction()
-    {        
+    {
         return [
-            
+
         ];
     }
 

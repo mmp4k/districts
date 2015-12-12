@@ -11,7 +11,7 @@
                         <div class="row padding">
                             <div class="col-sm-3">
                                 {% image "@mmpRjpBundle/Resources/public/images/no_avatar.png" %}
-                                    {% if district.getAvatar %}
+                                    {% if district.avatar %}
                                     <img src="/{{ district.getWebPath }}" class="avatar" />
                                     {% else %}
                                     <img src="{{ asset_url }}" class="avatar" />
@@ -19,7 +19,7 @@
                                 {% endimage %}
                             </div>
                             <div class="col-sm-9">
-                                <h2><a href="{{ url('mmp_rjp_district', {'slug' : district.getSlug}) }}">{{ district.getName }}</a></h2>
+                                <h2><a href="{{ url('mmp_rjp_district', {'slug' : district.slug}) }}">{{ district.name }}</a></h2>
                                 <p>
                                     {% if district.statusIsExists %}
                                         Rada Dzielnicy już tutaj istnieje.
@@ -35,7 +35,7 @@
                                 </p>
                                 <ul>
                                     {% if district.getLinkFacebook %}
-                                    <li><i class="fa fa-facebook"></i> 
+                                    <li><i class="fa fa-facebook"></i>
                                         <a href="{{ district.linkFacebook }}"> {{ district.getName }} na Facebooku</a></li>
                                     {% endif %}
                                     {% if (district.statusIsCollecting or district.statusIsNeedCoordinator) %}
@@ -43,7 +43,7 @@
                                         <i class="glyphicon glyphicon-sort-by-alphabet"></i> Pobierz listę podpisów</a></li>
                                     {% endif %}
                                     {% if district.getLinkPoster %}
-                                    <li><a href="">
+                                    <li><a href="{{ district.getLinkPoster }}">
                                         <i class="glyphicon glyphicon-picture"></i> Pobierz materiały graficzne</a></li>
                                     {% endif %}
                                 </ul>
@@ -56,7 +56,7 @@
                         <div class="row">
                             <div class="padding councilors">
                                 <p><strong>Radni Dzielnicowi:</strong></p>
-                                {% for councilor in district.getCouncilors %}
+                                {% for councilor in councilors[district.id] %}
                                     <a href="{{ url('mmp_rjp_district', {'slug' : district.getSlug}) }}#c{{ councilor.getCandidate.getUser.getId }}">{{ councilor.getCandidate.getUser.getFirstName }} {{ councilor.getCandidate.getUser.getLastName }}</a>
                                 {% endfor %}
                             </div>
@@ -79,10 +79,10 @@
                                 </dl>
                                 {% endif %}
                             </div>
-                        </div>    
+                        </div>
                         <div class="row">
-                            <div class="col-sm-6 padding"> 
-                                {% if district.meetings.count %}               
+                            <div class="col-sm-6 padding">
+                                {% if district.meetings.count %}
                                 {% if "now"|date('Y-m-d') > district.meetings.last.date|date('Y-m-d') %}
                                     <p>Ostatnie spotkanie mieszkańców:</p>
                                 {% else %}
@@ -90,17 +90,17 @@
                                 {% endif %}
                                 <p><strong>{{ district.meetings.last.date | localizeddate('full', 'none', null, null, 'd MMMM Y') }}</strong></p>
                                 {% endif %}
-                            </div>        
-                            <div class="col-sm-6 padding">                       
+                            </div>
+                            <div class="col-sm-6 padding">
                                 {% if district.getCoordinator %}
                                 <p>Koordynator: <strong>{{ district.getCoordinator.getFirstName }} {{ district.getCoordinator.getLastName }}</strong></p>
                                 <p><strong>tel. {{ district.getCoordinator.getPhone | number_format(0, ' ', ' ') }}</strong></p>
                                 {% endif %}
-                            </div>                        
-                        </div>   
-                        {% endif %}              
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
-                </div>                
+                </div>
             </div>
             <!-- end entry -->
         {% endfor %}

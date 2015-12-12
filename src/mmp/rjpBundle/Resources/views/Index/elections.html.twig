@@ -1,10 +1,22 @@
 {% extends 'mmpRjpBundle::layout.html.twig' %}
 {% set activePage = 'elections' %}
 
+{% block one_page_script %}
+    {% javascripts
+        '//maps.google.com/maps/api/js?sensor=false'
+        '//www.google.com/jsapi'
+        '@mmpRjpBundle/Resources/public/js/elections.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 {% block container %}
 <script type="text/javascript">
 var dataForElection = [];
 var chartsDrawFunctions = [];
+var polygons = [];
+var markers = []
 </script>
 <div class="container entry elections">
     <div class="row">
@@ -28,24 +40,29 @@ var chartsDrawFunctions = [];
                     <div class="col-sm-9">
                         <div class="tab-content">
                             {% for election in elections %}
-                            <div role="tabpanel" class="tab-pane tab-election {% if loop.first %}active{% endif %}" id="el_{{ election.id }}">
+                            <div style="position:relative" role="tabpanel" class="tab-pane tab-election {% if loop.first %}active{% endif %}" id="el_{{ election.id }}">
                                 {% include 'mmpRjpBundle::statsByElections.html.twig' %}
-                                <ul class="nav nav-tabs nav-condensed" role="tablist">                            
+                                <ul class="nav nav-tabs nav-condensed navbar-fixed-top-to-parent" role="tablist">
                                     {% for district in election.districts %}
                                     <li role="presentation" {% if loop.first %}class="active"{% endif %}>
                                         <a href="#el_{{ election.id }}_{{ district.id }}" aria-controls="el_{{ election.id }}_{{ district.id }}" role="tab" data-toggle="tab">
                                             {{ district.name }}
-                                        </a>                                   
+                                        </a>
                                     </li>
                                     {% endfor %}
                                     <li role="presentation" class="right" style="float:right">
+                                        <a href="#el_{{ election.id }}_obwody" aria-controls="el_{{ election.id }}_obwody" role="tab" data-toggle="tab">
+                                            Obwody
+                                        </a>
+                                    </li>
+                                    <li role="presentation" class="right" style="float:right">
                                         <a href="#el_{{ election.id }}_stat" aria-controls="el_{{ election.id }}_stat" role="tab" data-toggle="tab">
                                             Statystyka
-                                        </a>                                   
+                                        </a>
                                     </li>
-                                </ul>      
+                                </ul>
                                 <div class="tab-content">
-                                    {% for district in election.districts %}                                        
+                                    {% for district in election.districts %}
                                     <div role="tabpanel" class="tab-table-election tab-pane {% if loop.first %}active{% endif %}" id="el_{{ election.id }}_{{ district.id }}">
                                         {% include 'mmpRjpBundle::statsByElectionAndDistrict.html.twig' %}
                                         <table class="table table-striped table-condensed">
@@ -74,9 +91,36 @@ var chartsDrawFunctions = [];
                                                 {% endfor %}
                                             </tbody>
                                         </table>
+                                        {% include 'mmpRjpBundle:Index:ElectionBlocks/whereVote.html.twig' %}
                                     </div>
                                     {% endfor %}
                                     <div role="tabpanel" class="tab-table-election tab-pane" id="el_{{ election.id }}_stat">
+                                    </div>
+                                    <div role="tabpanel" class="tab-table-election tab-pane" id="el_{{ election.id }}_obwody">
+                                        <div class="map"></div>
+                                        <script type="text/javascript">
+                                        polygons['el_{{ election.id }}_obwody'] = [];
+                                        {% for commissionContainer in election.electoralCommissions %}
+                                            var coords = [];
+                                            {% for point in commissionContainer.electoralCommission.getPolygonArray %}
+                                            coords.push(new google.maps.LatLng({{ point.lng }},{{ point.lat }}));
+                                            {% endfor %}
+                                            if(!polygons['el_{{ election.id }}_obwody'][{{ commissionContainer.district.id }}]) {
+                                                polygons['el_{{ election.id }}_obwody'][{{ commissionContainer.district.id }}] = [];
+                                            }
+                                            polygons['el_{{ election.id }}_obwody'][{{ commissionContainer.district.id }}].push(new google.maps.Polygon({
+                                                paths: coords,
+                                                strokeColor: '#FF0000',
+                                                strokeOpacity: 0.8,
+                                                strokeWeight: 0.5,
+                                                fillColor: '#FF0000',
+                                                fillOpacity: 0.35
+                                            }));
+                                            {% if commissionContainer.electoralCommission.point %}
+                                            markers.push(new google.maps.LatLng( {{ commissionContainer.electoralCommission.point }} ));
+                                            {% endif %}
+                                        {% endfor %}
+                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -90,19 +134,66 @@ var chartsDrawFunctions = [];
 </div>
 
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+<style type="text/css">
+    .map {
+        width: 100%;
+        height: 400px;
+        margin-top: 15px;
+    }
+</style>
 <script type="text/javascript">
+
+
+function initMap(key) {
+    var par = $('#' + key);
+    var colors = ['#f1c40f', '#e67e22', '#e74c3c', '#2980b9', '#8e44ad'];
+    var map = new google.maps.Map($('.map', par)[0], {
+        zoom: 12,
+        center: new google.maps.LatLng(50.254892, 19.023782),
+        disableDefaultUI: false,
+        zoomControl: true,
+    });
+
+    for(k in polygons[key]) {
+        var polygonsInDistrict = polygons[key][k];
+        var i = 0;
+        for(district in polygonsInDistrict) {
+            var polygon = polygonsInDistrict[district];
+            polygon.setOptions({
+                fillColor: colors[i],
+                strokeColor: colors[i]
+            });
+            polygon.setMap(map);
+            i++;
+        }
+    }
+
+    for(k in markers) {
+        var marker = markers[k];
+        new google.maps.Marker({
+            position: marker,
+            map: map
+        });
+    }
+}
+
 function loadCharts() {
     var keyElection = $('.tab-election.active').attr('id');
     var key = $('.tab-election.active .tab-table-election.active').attr('id');
-    obj = chartsDrawFunctions[key];    
+    if(key.indexOf('obwody') > 0) {
+        initMap(key);
+        return;
+    }
+    obj = chartsDrawFunctions[key];
     obj ? obj(keyElection) : null;
 }
 $('a[role=tab]').on('shown.bs.tab', function (e) {
-    loadCharts();    
-})
+    loadCharts();
+});
 
 google.load("visualization", "1", {packages:["corechart"]});
-google.setOnLoadCallback(loadCharts);    
+google.setOnLoadCallback(loadCharts);
 
 </script>
 {% endblock %}

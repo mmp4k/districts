@@ -2,13 +2,12 @@
 
 namespace mmp\rjpBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use mmp\rjpBundle\Form\ConfirmType;
+use mmp\rjpBundle\Form\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use mmp\rjpBundle\Form\UserType;
-use mmp\rjpBundle\Form\ConfirmType;
-use mmp\rjpBundle\Entity\User;
 
 class AdminUsersController extends Controller
 {
@@ -37,9 +36,9 @@ class AdminUsersController extends Controller
         $user = $um->createUser();//Original FOSUser line
 
         $form = $this->createForm(new UserType, $user);
-        
+
         $form->handleRequest($request);
-        
+
         if ($form->isValid()) {
             if($form->get('username')->isEmpty()) {
                $user->setUsername(uniqid("u", true));
@@ -65,21 +64,21 @@ class AdminUsersController extends Controller
         $em = $this->getDoctrine()->getManager();
         $um = $this->get('fos_user.user_manager');
 
-        $user = $um->findUserBy(['id' => $id]);       
-        if($user->getCouncilor()) {         
-           $user->setDistrict($user->getCouncilor()->getDistrict());
-        }
+        $user = $um->findUserBy(['id' => $id]);
+        // if($user->getCouncilor()) {
+        //    $user->setDistrict($user->getCouncilor()->getDistrict());
+        // }
 
         $form = $this->createForm(new UserType, $user);
-        
-        $form->handleRequest($request);
-        
-        if ($form->isValid()) {            
-            if(!$form->getData()->getDistrict() && $form->getData()->getCouncilor()) {
-                $em->remove($form->getData()->getCouncilor());
-            }
 
-            $um->updateUser($user, true);            
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+        //     if(!$form->getData()->getDistrict() && $form->getData()->getCouncilor()) {
+        //         $em->remove($form->getData()->getCouncilor());
+        //     }
+
+            $um->updateUser($user, true);
 
             return $this->redirect($this->generateUrl('mmp_rjp_admin_users'));
         }
@@ -101,10 +100,10 @@ class AdminUsersController extends Controller
         $user = $um->findUserBy(['id' => $id]);
 
         $form = $this->createForm(new ConfirmType, null);
-        
+
         $form->handleRequest($request);
-        
-        if ($form->isValid()) {            
+
+        if ($form->isValid()) {
             $um->deleteUser($user);
 
             return $this->redirect($this->generateUrl('mmp_rjp_admin_users'));

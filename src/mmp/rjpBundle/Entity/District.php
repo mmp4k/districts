@@ -1,10 +1,10 @@
 <?php
 namespace mmp\rjpBundle\Entity;
 
-use Gedmo\Mapping\Annotation AS Gedmo;
-use Doctrine\ORM\Mapping AS ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * 
@@ -843,13 +843,14 @@ class District
      */
     public function getStatsOnElection(\mmp\rjpBundle\Entity\Election $election)
     {
-        if($this->statsOnElection) {
-            return $this->statsOnElection;
+        $electionKey = (string)$election;
+        if(isset($this->statsOnElection[$electionKey])) {
+            return $this->statsOnElection[$electionKey];
         }
         
-        $this->statsOnElection = new \mmp\rjpBundle\Library\Statistics\ElectionDistrict($election, $this);
+        $this->statsOnElection[$electionKey] = new \mmp\rjpBundle\Library\Statistics\ElectionDistrict($election, $this);
         
-        return $this->statsOnElection;
+        return $this->statsOnElection[$electionKey];
     }
 
     /**

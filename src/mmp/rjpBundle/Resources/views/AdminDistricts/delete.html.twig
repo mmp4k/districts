@@ -1,3 +1,11 @@
+{% extends 'mmpRjpBundle::layoutAdmin.html.twig' %}
+
+{% block headline %}
+    Usuń dzielnicę
+{% endblock %}
+
+{% block content_row %}
 Czy na pewno chcesz usunąć <b>{{ district.name }}</b>?
 
 {{ form(form) }}
+{% endblock %}

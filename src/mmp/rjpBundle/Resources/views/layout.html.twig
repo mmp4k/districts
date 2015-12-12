@@ -5,8 +5,8 @@
 {% block head_style %}
 
 {% stylesheets filter="cssrewrite"
-       'bundles/mopabootstrap/bootstrap/docs/assets/css/docs.min.css'       
-       'bundles/mmprjp/less/rjp.less' 
+       'bundles/mopabootstrap/bootstrap/docs/assets/css/docs.min.css'
+       'bundles/mmprjp/less/rjp.less'
 %}
 <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
 {% endstylesheets %}
@@ -14,12 +14,18 @@
 {% endblock head_style %}
 
 {% block head_script %}
-{% javascripts
-    '//code.jquery.com/jquery-1.11.0.min.js'
-    '@mmpRjpBundle/Resources/public/js/common.js'
-%}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-{% endjavascripts %}
+    {% javascripts
+        '//code.jquery.com/jquery-1.11.0.min.js'
+        'bundles/mopabootstrap/bootstrap/js/tab.js'
+        '@mmpRjpBundle/Resources/public/js/common.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    {% block one_page_script %}
+
+    {% endblock %}
+
 {% endblock head_script %}
 
 {% block title %}
@@ -34,19 +40,19 @@ Rady Dzielnic Katowice
                 <a href="{{ url('_default') }}" class="logo">
                     {% image "@mmpRjpBundle/Resources/public/images/logo.png" %}
                     <img src="{{ asset_url }}" />
-                    {% endimage %}                
+                    {% endimage %}
                 </a>
             </div>
             <div class="col-sm-1 text-center">
                 {% image "@mmpRjpBundle/Resources/public/images/top-dots.png" %}
                 <img src="{{ asset_url }}" />
                 {% endimage %}
-            </div>        
+            </div>
             <div class="col-sm-7 col-md-6">
                 <p>
                     Ponieważ samorządność nie zaczyna się w budynkach Urzędu Miasta, a w lokalnej społeczności.
                 </p>
-            </div>    
+            </div>
         </div>
     </div>
 </div>
@@ -100,3 +106,5 @@ Rady Dzielnic Katowice
     </div>
 </div>
 {% endblock %}
+
+{% block foot_script %} {% endblock %}

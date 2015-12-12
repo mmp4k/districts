@@ -1,13 +1,13 @@
 <?php
 namespace mmp\rjpBundle\Entity;
-use Doctrine\ORM\Mapping AS ORM;
-use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Model\User as BaseUser;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="fos_user")
- * 
+ *
  */
 class User extends BaseUser
 {
@@ -25,7 +25,7 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="mmp\rjpBundle\Entity\Candidate", mappedBy="user")
      */
     private $candidates;
-    
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer", length=11)
@@ -57,7 +57,7 @@ class User extends BaseUser
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -90,7 +90,7 @@ class User extends BaseUser
     /**
      * Get districts
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDistricts()
     {
@@ -123,35 +123,35 @@ class User extends BaseUser
     /**
      * Get meetings
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getMeetings()
     {
         return $this->meetings;
     }
 
-    /**
-     * Set councilor
-     *
-     * @param \mmp\rjpBundle\Entity\Councilor $councilor
-     * @return User
-     */
-    public function setCouncilor(\mmp\rjpBundle\Entity\Councilor $councilor = null)
-    {
-        $this->councilor = $councilor;
+    // /**
+    //  * Set councilor
+    //  *
+    //  * @param \mmp\rjpBundle\Entity\Councilor $councilor
+    //  * @return User
+    //  */
+    // public function setCouncilor(\mmp\rjpBundle\Entity\Councilor $councilor = null)
+    // {
+    //     $this->councilor = $councilor;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    /**
-     * Get councilor
-     *
-     * @return \mmp\rjpBundle\Entity\Councilor 
-     */
-    public function getCouncilor()
-    {
-        return $this->councilor;
-    }
+    // /**
+    //  * Get councilor
+    //  *
+    //  * @return \mmp\rjpBundle\Entity\Councilor
+    //  */
+    // public function getCouncilor()
+    // {
+    //     return $this->councilor;
+    // }
 
     /**
      * Set first_name
@@ -169,7 +169,7 @@ class User extends BaseUser
     /**
      * Get first_name
      *
-     * @return string 
+     * @return string
      */
     public function getFirstName()
     {
@@ -192,7 +192,7 @@ class User extends BaseUser
     /**
      * Get last_name
      *
-     * @return string 
+     * @return string
      */
     public function getLastName()
     {
@@ -215,7 +215,7 @@ class User extends BaseUser
     /**
      * Get phone
      *
-     * @return integer 
+     * @return integer
      */
     public function getPhone()
     {
@@ -248,7 +248,7 @@ class User extends BaseUser
     /**
      * Get candidates
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCandidates()
     {

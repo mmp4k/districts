@@ -1,13 +1,36 @@
-{% extends 'MopaBootstrapBundle::base_less.html.twig' %}
-{% block body %}
+{% extends 'mmpRjpBundle::layoutAdmin.html.twig' %}
+{% block page_header %} {% endblock %}
+
+{% block content_row %}
     {{ form(form) }}
 <script>
 var input = document.getElementById('mmp_rjpbundle_candidate_votes');
 input.onchange = function() {
-    if(input.value >= 23) {
+    if(input.value >= 9) {
         var checkbox = document.getElementById('mmp_rjpbundle_candidate_is_councilor');
         checkbox.checked = true;
     }
-}
+};
+
+$('#mmp_rjpbundle_candidate_user_new_first_name, #mmp_rjpbundle_candidate_user_new_last_name').keyup(function() {
+    var firstName = $('#mmp_rjpbundle_candidate_user_new_first_name').val();
+    var lastName = $('#mmp_rjpbundle_candidate_user_new_last_name').val();
+    $('#mmp_rjpbundle_candidate_user').val('');
+    var stop = 0;
+
+    $('#mmp_rjpbundle_candidate_user option').each(function() {
+        if(stop) {
+            return;
+        }
+        var name = $(this).text();
+        // console.log(lastName + ': ' + name + ' /// ' + name.indexOf(lastName));
+        if(name.indexOf(lastName) === 0) {
+            $('#mmp_rjpbundle_candidate_user').val($(this).attr('value'));
+            stop = 1;
+        }
+    });
+});
+
+$('#mmp_rjpbundle_candidate_user_new_last_name').focus();
 </script>
 {% endblock %}

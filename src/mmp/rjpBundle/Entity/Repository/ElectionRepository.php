@@ -12,7 +12,46 @@ use Doctrine\ORM\EntityRepository;
  */
 class ElectionRepository extends EntityRepository
 {
-    public function findAllWithDistricts() {        
+    /**
+     * @param District[] $districts
+     * @return array
+     */
+    public function findLastlyCouncilorsByDistricts($districts)
+    {
+        $em = $this->getEntityManager();
+        $councilors = [];
+
+        foreach ($districts as $district) {
+            $councilors[$district->getId()] = [];
+
+            // find last election in this district
+            $election = $em->getRepository('mmpRjpBundle:Election')->createQueryBuilder('e')
+                ->join('e.districts', 'd')
+                ->where('d.id = :district')->setParameter(':district', $district)
+                ->orderBy('e.date', ' DESC')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            if (null === $election) {
+                continue;
+            }
+
+            // find candidates who are councilor in the district in this election
+            $councilors[$district->getId()] = $em->getRepository('mmpRjpBundle:Councilor')->createQueryBuilder('co')
+                ->join('co.candidate', 'ca')->addSelect('ca')
+                ->join('ca.user', 'u')->addSelect('u')
+                ->where('co.district = :district')->setParameter(':district', $district)
+                ->andWhere('ca.election = :election')->setParameter(':election', $election)
+                ->orderBy('u.last_name', 'ASC')
+                ->getQuery()
+                ->getResult();
+        }
+
+        return $councilors;
+    }
+
+    public function findAllWithDistricts() {
         $em = $this->getEntityManager();
         $elections = $this->findBy([], [
             'date' => 'desc'
@@ -30,12 +69,13 @@ class ElectionRepository extends EntityRepository
                     'district' => $district->getId(),
                     'election' => $election->getId()
                 ]);
+                $qdb->orderBy('u.last_name', 'ASC');
                 $qdb->groupBy('c.id');
 
                 $candidates = $qdb->getQuery()->getResult();
-                
+
                 $district->addCandidatesOnElection(new \Doctrine\Common\Collections\ArrayCollection($candidates), $election);
-                
+
             }
         }
         return $elections;

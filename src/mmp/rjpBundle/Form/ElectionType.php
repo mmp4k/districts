@@ -15,7 +15,9 @@ class ElectionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('date')
+            ->add('date', 'date', [
+                'years' => range(1990, date('Y') + 1),
+            ])
             ->add('submit', 'submit')
         ;
     }

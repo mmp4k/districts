@@ -1,6 +1,16 @@
-<a href="{{ url('mmp_rjp_admin') }}">Menu</a> |
-<a href="{{ url('mmp_rjp_admin_candidate_add') }}">Dodaj</a>
-<table style="width:100%">
+{% extends 'mmpRjpBundle::layoutAdmin.html.twig' %}
+
+{% block headline %}
+    Kandydaci:
+{% endblock %}
+
+{% block content_row %}
+<a href="{{ url('mmp_rjp_admin_candidate_add') }}">Dodaj</a><br />
+Wybierz dzielnicę:
+{% for district in districts %}
+    <a href="{{ path('mmp_rjp_admin_candidates_from_district', {'id' : district.id}) }}">{{ district.name }}</a>
+{% endfor %}
+<table class="table">
     <thead>
         <tr>
             <th>Id</th>
@@ -8,7 +18,7 @@
             <th>Imię</th>
             <th>Nazwisko</th>
             <th>Dzielnica</th>
-            <th>Radny</th>            
+            <th>Radny</th>
             <th>Operacje</th>
         </tr>
     </thead>
@@ -33,3 +43,4 @@
         </tr>
     {% endfor %}
 </table>
+{% endblock %}

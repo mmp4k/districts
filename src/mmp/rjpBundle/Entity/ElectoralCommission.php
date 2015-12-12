@@ -1,6 +1,6 @@
 <?php
 namespace mmp\rjpBundle\Entity;
-use Doctrine\ORM\Mapping AS ORM;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
@@ -42,10 +42,20 @@ class ElectoralCommission
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    private $image_url_min;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image_url;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
     private $point_street;
 
     /**
-     * @ORM\OneToMany( 
+     * @ORM\OneToMany(
      *     targetEntity="mmp\rjpBundle\Entity\ElectionHasElectoralCommission",
      *     mappedBy="electoralCommission",
      *     cascade={"persist","remove"}
@@ -216,5 +226,67 @@ class ElectoralCommission
     public function getPointStreet()
     {
         return $this->point_street;
+    }
+
+    public function getPolygonArray() {
+        $polygonArray = array();
+        foreach(preg_split('/\n|\s/', $this->getPolygon()) as $pointLine) {
+            if(!trim($pointLine)) {
+                continue;
+            }
+            list($lat, $lng) = explode(',', $pointLine);
+            $polygonArray[] = [
+                'lat'   =>  $lat,
+                'lng'   =>  $lng
+            ];
+        }
+
+        return $polygonArray;
+    }
+
+    /**
+     * Set image_url_min
+     *
+     * @param string $imageUrlMin
+     * @return ElectoralCommission
+     */
+    public function setImageUrlMin($imageUrlMin)
+    {
+        $this->image_url_min = $imageUrlMin;
+
+        return $this;
+    }
+
+    /**
+     * Get image_url_min
+     *
+     * @return string 
+     */
+    public function getImageUrlMin()
+    {
+        return $this->image_url_min;
+    }
+
+    /**
+     * Set image_url
+     *
+     * @param string $imageUrl
+     * @return ElectoralCommission
+     */
+    public function setImageUrl($imageUrl)
+    {
+        $this->image_url = $imageUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get image_url
+     *
+     * @return string 
+     */
+    public function getImageUrl()
+    {
+        return $this->image_url;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 namespace mmp\rjpBundle\Entity;
-use Doctrine\ORM\Mapping AS ORM;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="mmp\rjpBundle\Entity\Repository\ElectionRepository")
@@ -39,12 +39,6 @@ class Election
      * )
      */
     private $districts;
-
-    /**
-     * 
-     */
-    private $electoralCommission;    
-
 
     /**
      * @var mmp\rjpBundle\Library\Statistics\Election

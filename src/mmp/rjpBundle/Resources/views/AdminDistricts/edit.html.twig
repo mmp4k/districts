@@ -1,11 +1,15 @@
-{% extends 'MopaBootstrapBundle::base_less.html.twig' %}
+{% extends 'mmpRjpBundle::layoutAdmin.html.twig' %}
 
-{% block body %}
-    <div class="container">
+{% block headline %}
+    Edytuj dzielnicę
+{% endblock %}
+
+{% block content_row %}
+
 {% if district.avatar is not null %}
     <img src="{{ asset(district.getWebPath()) }}" />
 {% endif %}
 
 {{ form(form) }}
-</div>
-{% endblock body %}
+
+{% endblock %}

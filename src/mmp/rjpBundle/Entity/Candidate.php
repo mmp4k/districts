@@ -1,7 +1,7 @@
 <?php
 namespace mmp\rjpBundle\Entity;
-use Doctrine\ORM\Mapping AS ORM;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
@@ -63,7 +63,7 @@ class Candidate
     private $district;
 
     /**
-     * @ORM\ManyToOne(targetEntity="mmp\rjpBundle\Entity\User", inversedBy="candidates")
+     * @ORM\ManyToOne(targetEntity="mmp\rjpBundle\Entity\User", inversedBy="candidates", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     private $user;

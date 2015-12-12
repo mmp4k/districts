@@ -35,10 +35,10 @@ assetic:
     use_controller: false
     bundles:        [ "mmpRjpBundle", "MopaBootstrapBundle"]
     #java: /usr/bin/java
-    filters:        
+    filters:
         less:
             node: /usr/local/bin/node
-            node_paths: [/usr/local/lib/node_modules/]
+            node_paths: [/Users/marcin/.npm-packages/lib/node_modules/]
             apply_to: "\.less$"
         cssrewrite: ~
         # cssembed:
@@ -90,7 +90,7 @@ stof_doctrine_extensions:
     default_locale: pl_PL
 
     orm:
-        default: 
+        default:
             sluggable:   true
 
 # mopa bootstrap
@@ -105,4 +105,3 @@ services:
             - { name: twig.extension }
 
 
-    

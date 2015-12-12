@@ -1,8 +1,11 @@
-{% extends 'MopaBootstrapBundle::base_less.html.twig' %}
-{% block body %}
+{% extends 'mmpRjpBundle::layoutAdmin.html.twig' %}
+
+{% block headline %}
+    Kandydaci z dzielnicy {{ district.name }}
+{% endblock %}
+
+{% block content_row %}
     {{ form_start(form) }}
-    {# render the task's only field: description #}
-    
 
     <h3>Candidates</h3>
     <table class="table">
@@ -17,7 +20,6 @@
         {% for candidate in form.candidates %}
             <tr>
                 <td>
-                    
                     {{ form_widget(candidate.user) }}
                 </td>
                 <td>{{ form_widget(candidate.votes) }}</td>

@@ -1,29 +1,36 @@
-<a href="{{ path('mmp_rjp_admin') }}">Menu</a> | <a href="{{ path('mmp_rjp_admin_districts_add') }}">Dodaj dzielnicę</a>
-<table style="width:100%">
-    <thead>        
+{% extends 'mmpRjpBundle::layoutAdmin.html.twig' %}
+
+{% block headline %}
+    Dzielnice
+{% endblock %}
+
+{% block content_row %}
+<a href="{{ path('mmp_rjp_admin_districts_add') }}">Dodaj dzielnicę</a>
+<table style="width:100%" class="table">
+    <thead>
         <th colspan="2">ID</th>
         <th>Nazwa</th>
         <th>Stan</th>
         <th>Koordynator</th>
-        <th>Opcje</th>        
+        <th>Opcje</th>
     </thead>
     {% for district in districts %}
         <tr>
-            <td style="width:60px"> 
+            <td style="width:60px">
                 {% if district.avatar %}
                     <img src="/{{ district.getWebPath() }}" width="50" />
                 {% else %}
                     {% image '@mmpRjpBundle/Resources/public/images/no_avatar.png' %}
                         <img src="{{ asset_url }}" width="50" />
-                    {% endimage %}                
+                    {% endimage %}
                 {% endif %}
             </td>
             <td >
-                {{ district.id }}                
+                {{ district.id }}
             </td>
             <td>{{ district.name }}</td>
             <td>{{ district.status }}</td>
-            <td>{% if district.coordinator %} 
+            <td>{% if district.coordinator %}
                 {{ district.coordinator.username }}
                 {% endif %}
             </td>
@@ -36,3 +43,4 @@
         </tr>
     {% endfor %}
 </table>
+{% endblock %}

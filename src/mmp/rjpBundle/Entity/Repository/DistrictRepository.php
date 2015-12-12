@@ -2,9 +2,8 @@
 
 namespace mmp\rjpBundle\Entity\Repository;
 
-use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use mmp\rjpBundle\Entity\Election;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * DistrictRepository
@@ -27,6 +26,7 @@ class DistrictRepository extends EntityRepository
                 'district' => $district->getId(),
                 'election' => $election->getId()
             ]);
+            $qdb->orderBy('u.last_name', 'ASC');
             $qdb->groupBy('c.id');
 
             $candidates = $qdb->getQuery()->getResult();
