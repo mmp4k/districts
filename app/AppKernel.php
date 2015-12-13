@@ -1,7 +1,7 @@
 <?php
 
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 class AppKernel extends Kernel
 {
@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new mmp\rjpBundle\mmpRjpBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle(),
+            new mmp\UserBundle\mmpUserBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

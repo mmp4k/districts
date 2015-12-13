@@ -1,3 +1,7 @@
+mmp_user:
+    resource: "@mmpUserBundle/Resources/config/routing.xml"
+    prefix:   /
+
 mmp_rjp:
     resource: "@mmpRjpBundle/Resources/config/routing.yml"
     prefix:   /

@@ -36,6 +36,7 @@
     '@mmpRjpBundle/Resources/public/js/jquery-1.11.js'
     '@mmpRjpBundle/Resources/public/js/common.js'
 %}
+    {{ parent() }}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 {% endblock head_script %}
