@@ -2,8 +2,8 @@
 
 namespace mmp\rjpBundle\Controller;
 
-use mmp\rjpBundle\Form\ConfirmType;
-use mmp\rjpBundle\Form\UserType;
+use mmp\rjpBundle\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -17,101 +17,92 @@ class AdminUsersController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $users = $em->getRepository('mmpRjpBundle:User')->findAll();
-
-        return array(
-            'users' =>  $users
-        );
+        return [
+            'users' => $this->getUserManager()->findUsers(),
+        ];
     }
 
     /**
      * @Route("/admin/users/add", name="mmp_rjp_admin_user_add")
      * @Template()
+     * @param Request $request
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function addAction(Request $request)
     {
-        $em   = $this->getDoctrine()->getManager();
-        $um   = $this->get('fos_user.user_manager');
-        $user = $um->createUser();//Original FOSUser line
-
-        $form = $this->createForm(new UserType, $user);
-
+        $user = $this->getUserManager()->createUser();
+        $form = $this->createForm('mmp_rjpbundle_user', $user);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            if($form->get('username')->isEmpty()) {
+            if (!$user->getUsername()) {
                $user->setUsername(uniqid("u", true));
                $user->setEmail(uniqid("e", true));
                $user->setPassword(uniqid("e", true));
             }
-            $um->updateUser($user);
+            $this->getUserManager()->updateUser($user);
 
             return $this->redirect($this->generateUrl('mmp_rjp_admin_users'));
         }
 
-        return array(
+        return [
             'form'  =>  $form->createView()
-        );
+        ];
     }
 
     /**
      * @Route("/admin/users/edit/{id}", name="mmp_rjp_admin_user_edit")
      * @Template()
+     * @ParamConverter("id", class="mmpRjpBundle:User")
+     * @param Request $request
+     * @param User    $user
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function editAction(Request $request, $id)
+    public function editAction(Request $request, User $user)
     {
-        $em = $this->getDoctrine()->getManager();
-        $um = $this->get('fos_user.user_manager');
-
-        $user = $um->findUserBy(['id' => $id]);
-        // if($user->getCouncilor()) {
-        //    $user->setDistrict($user->getCouncilor()->getDistrict());
-        // }
-
-        $form = $this->createForm(new UserType, $user);
-
+        $form = $this->createForm('mmp_rjpbundle_user', $user);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-        //     if(!$form->getData()->getDistrict() && $form->getData()->getCouncilor()) {
-        //         $em->remove($form->getData()->getCouncilor());
-        //     }
-
-            $um->updateUser($user, true);
+            $this->getUserManager()->updateUser($user);
 
             return $this->redirect($this->generateUrl('mmp_rjp_admin_users'));
         }
 
-        return array(
-            'form' => $form->createView()
-        );
+        return [
+            'form' => $form->createView(),
+        ];
     }
 
     /**
      * @Route("/admin/users/delete/{id}", name="mmp_rjp_admin_user_delete")
      * @Template()
+     * @ParamConverter("id", class="mmpRjpBundle:User")
+     * @param Request $request
+     * @param User    $user
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request, User $user)
     {
-        $em = $this->getDoctrine()->getManager();
-        $um = $this->get('fos_user.user_manager');
-
-        $user = $um->findUserBy(['id' => $id]);
-
-        $form = $this->createForm(new ConfirmType, null);
-
+        $form = $this->createForm('confirm');
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $um->deleteUser($user);
+            $this->getUserManager()->deleteUser($user);
 
             return $this->redirect($this->generateUrl('mmp_rjp_admin_users'));
         }
 
-        return array(
+        return [
             'form' => $form->createView(),
-            'user' => $user,
-        );
+        ];
+    }
+
+    /**
+     * @return \FOS\UserBundle\Doctrine\UserManager
+     */
+    protected function getUserManager()
+    {
+        return $this->get('fos_user.user_manager');
     }
 }

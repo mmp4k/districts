@@ -1,3 +1,12 @@
-Czy na pewno chcesz usuną: {{ user.username }} / {{ user.getFirstName() }}?
+{% extends 'mmpRjpBundle::layoutAdmin.html.twig' %}
 
-{{ form(form) }}
+{% block headline %}
+    Usuń użytkownika
+{% endblock %}
+
+{% block content_row %}
+    Czy na pewno chcesz usunąć: {{ app.request.get('user').username }} / {{ app.request.get('user').getFirstName() }}?
+
+    {{ form(form) }}
+
+{% endblock %}

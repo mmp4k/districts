@@ -35,5 +35,13 @@
         <service class="mmp\rjpBundle\Service\ElectionManager" id="rjp.manager.election">
             <argument type="service" id="rjp.repository.election"/>
         </service>
+
+        <!-- Form -->
+        <service class="mmp\rjpBundle\Form\UserType" id="rjp.form.type.user">
+            <tag name="form.type" alias="mmp_rjpbundle_user"/>
+        </service>
+        <service class="mmp\rjpBundle\Form\ConfirmType" id="rjp.form.type.confirm">
+            <tag name="form.type" alias="confirm"/>
+        </service>
     </services>
 </container>

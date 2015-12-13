@@ -1,5 +1,12 @@
-<a href="{{ path('mmp_rjp_admin') }}">Menu</a> | <a href="{{ path('mmp_rjp_admin_user_add') }}">Dodaj</a>
-<table style="width:100%">
+{% extends 'mmpRjpBundle::layoutAdmin.html.twig' %}
+
+{% block headline %}
+    Użytkownicy
+{% endblock %}
+
+{% block content_row %}
+    <a href="{{ path('mmp_rjp_admin_user_add') }}">Dodaj</a>
+    <table style="width:100%" class="table">
     <thead>
         <tr>
             <th>Id</th>
@@ -38,3 +45,4 @@
         </tr>
     {% endfor %}
 </table>
+{% endblock %}
