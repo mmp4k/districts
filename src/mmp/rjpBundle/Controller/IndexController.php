@@ -83,14 +83,6 @@ class IndexController extends Controller
     }
 
     /**
-     * @return \mmp\rjpBundle\Service\MeetingManager
-     */
-    protected function getMeetingManager()
-    {
-        return $this->get('rjp.manager.meeting');
-    }
-
-    /**
      * @return \mmp\rjpBundle\Service\DistrictManager
      */
     protected function getDistrictManager()
@@ -104,5 +96,13 @@ class IndexController extends Controller
     protected function getElectionManager()
     {
         return $this->get('rjp.manager.election');
+    }
+
+    /**
+     * @return \mmp\rjpBundle\Service\MeetingManager
+     */
+    protected function getMeetingManager()
+    {
+        return $this->get('rjp.manager.meeting');
     }
 }
