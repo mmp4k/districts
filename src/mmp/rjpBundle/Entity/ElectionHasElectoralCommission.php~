@@ -31,7 +31,7 @@ class ElectionHasElectoralCommission
     private $election;
 
     /**
-     * @ORM\ManyToOne(targetEntity="mmp\rjpBundle\Entity\ElectoralCommission", inversedBy="elections")
+     * @ORM\ManyToOne(targetEntity="mmp\rjpBundle\Entity\ElectoralCommission", inversedBy="elections", fetch="EAGER")
      * @ORM\JoinColumn(name="electoral_commission_id", referencedColumnName="id")
      */
     private $electoralCommission;

@@ -41,12 +41,6 @@ class Election
     private $districts;
 
     /**
-     * 
-     */
-    private $electoralCommission;    
-
-
-    /**
      * @var mmp\rjpBundle\Library\Statistics\Election
      */
     protected $statistics;
