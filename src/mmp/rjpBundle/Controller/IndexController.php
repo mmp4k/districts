@@ -23,22 +23,6 @@ class IndexController extends Controller
     }
 
     /**
-     * @return \mmp\rjpBundle\Service\DistrictManager
-     */
-    protected function getDistrictManager()
-    {
-        return $this->get('rjp.manager.district');
-    }
-
-    /**
-     * @return \mmp\rjpBundle\Service\ElectionManager
-     */
-    protected function getElectionManager()
-    {
-        return $this->get('rjp.manager.election');
-    }
-
-    /**
      * @Route("/katowice/{slug}", name="mmp_rjp_district")
      * @Template()
      * @param string $slug
@@ -88,14 +72,6 @@ class IndexController extends Controller
     }
 
     /**
-     * @return \mmp\rjpBundle\Service\MeetingManager
-     */
-    protected function getMeetingManager()
-    {
-        return $this->get('rjp.manager.meeting');
-    }
-
-    /**
      * @Route("/wybory", name="mmp_rjp_elections")
      * @Template()
      */
@@ -104,5 +80,29 @@ class IndexController extends Controller
         return [
             'elections' => $this->getElectionManager()->findWithDistrict(),
         ];
+    }
+
+    /**
+     * @return \mmp\rjpBundle\Service\MeetingManager
+     */
+    protected function getMeetingManager()
+    {
+        return $this->get('rjp.manager.meeting');
+    }
+
+    /**
+     * @return \mmp\rjpBundle\Service\DistrictManager
+     */
+    protected function getDistrictManager()
+    {
+        return $this->get('rjp.manager.district');
+    }
+
+    /**
+     * @return \mmp\rjpBundle\Service\ElectionManager
+     */
+    protected function getElectionManager()
+    {
+        return $this->get('rjp.manager.election');
     }
 }
