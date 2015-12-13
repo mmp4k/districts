@@ -14,31 +14,43 @@ class IndexController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $districts = $this->getDistrictManager()->findOrderedBySlug();
 
-        $districts = $em->getRepository('mmpRjpBundle:District')->findBy([], ['slug' => 'ASC']);
-
-        $councilors = $em->getRepository('mmpRjpBundle:Election')->findLastlyCouncilorsByDistricts($districts);
-
-        return array(
+        return [
             'districts'  => $districts,
-            'councilors' => $councilors
-        );
+            'councilors' => $this->getElectionManager()->findLastlyCouncilorsByDistricts($districts),
+        ];
+    }
+
+    /**
+     * @return \mmp\rjpBundle\Service\DistrictManager
+     */
+    protected function getDistrictManager()
+    {
+        return $this->get('rjp.manager.district');
+    }
+
+    /**
+     * @return \mmp\rjpBundle\Service\ElectionManager
+     */
+    protected function getElectionManager()
+    {
+        return $this->get('rjp.manager.election');
     }
 
     /**
      * @Route("/katowice/{slug}", name="mmp_rjp_district")
      * @Template()
+     * @param string $slug
+     * @return array
      */
     public function districtAction($slug)
     {
-        $em = $this->getDoctrine()->getManager();
-        $district = $em->getRepository('mmpRjpBundle:District')->findOneByElections(['slug' => $slug]);
-        $councilors = $em->getRepository('mmpRjpBundle:Election')->findLastlyCouncilorsByDistricts([$district]);
+        $district = $this->getDistrictManager()->findOneByElection($slug);
 
         return [
             'district'   => $district,
-            'councilors' => $councilors
+            'councilors' => $this->getElectionManager()->findLastlyCouncilorsByDistricts([$district]),
         ];
     }
 
@@ -59,11 +71,8 @@ class IndexController extends Controller
      */
     public function leadersAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $districts = $em->getRepository('mmpRjpBundle:District')->findAllWithLeaders();
-
         return [
-            'districts'  =>  $districts
+            'districts' => $this->getDistrictManager()->findWithLeaders(),
         ];
     }
 
@@ -73,14 +82,17 @@ class IndexController extends Controller
      */
     public function meetingsAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $meetings = $em->getRepository('mmpRjpBundle:Meeting')->findBy([], [
-            'date' => 'desc'
-        ]);
-
         return [
-            'meetings' => $meetings
+            'meetings' => $this->getMeetingManager()->newestFirst(),
         ];
+    }
+
+    /**
+     * @return \mmp\rjpBundle\Service\MeetingManager
+     */
+    protected function getMeetingManager()
+    {
+        return $this->get('rjp.manager.meeting');
     }
 
     /**
@@ -89,11 +101,8 @@ class IndexController extends Controller
      */
     public function electionsAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $elections = $em->getRepository('mmpRjpBundle:Election')->findAllWithDistricts();
-
         return [
-            'elections' => $elections
+            'elections' => $this->getElectionManager()->findWithDistrict(),
         ];
     }
 }

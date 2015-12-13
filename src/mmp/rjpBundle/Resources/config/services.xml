@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!-- Repository -->
+        <service class="mmp\rjpBundle\Entity\Repository\DistrictRepository"
+                 id="rjp.repository.district"
+                 factory-service="doctrine.orm.entity_manager"
+                 factory-method="getRepository">
+            <argument>mmpRjpBundle:District</argument>
+        </service>
+        <service class="Doctrine\ORM\EntityRepository"
+                 id="rjp.repository.meeting"
+                 factory-service="doctrine.orm.entity_manager"
+                 factory-method="getRepository">
+            <argument>mmpRjpBundle:Meeting</argument>
+        </service>
+        <service class="mmp\rjpBundle\Entity\Repository\ElectionRepository"
+                 id="rjp.repository.election"
+                 factory-service="doctrine.orm.entity_manager"
+                 factory-method="getRepository">
+            <argument>mmpRjpBundle:Election</argument>
+        </service>
+
+        <!-- Manager -->
+        <service class="mmp\rjpBundle\Service\DistrictManager" id="rjp.manager.district">
+            <argument type="service" id="rjp.repository.district"/>
+        </service>
+        <service class="mmp\rjpBundle\Service\MeetingManager" id="rjp.manager.meeting">
+            <argument type="service" id="rjp.repository.meeting"/>
+        </service>
+        <service class="mmp\rjpBundle\Service\ElectionManager" id="rjp.manager.election">
+            <argument type="service" id="rjp.repository.election"/>
+        </service>
+    </services>
+</container>
