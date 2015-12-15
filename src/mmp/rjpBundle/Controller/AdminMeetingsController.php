@@ -2,13 +2,12 @@
 
 namespace mmp\rjpBundle\Controller;
 
+use mmp\rjpBundle\Entity\Meeting;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use mmp\rjpBundle\Form\ConfirmType;
 use Symfony\Component\HttpFoundation\Request;
-use mmp\rjpBundle\Entity\Meeting;
-use mmp\rjpBundle\Form\MeetingType;
 
 class AdminMeetingsController extends Controller
 {
@@ -18,90 +17,89 @@ class AdminMeetingsController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $meetings = $em->getRepository('mmpRjpBundle:meeting')->findAll();
-        return array(
-            'meetings'  =>  $meetings
-        );
+        return [
+            'meetings' => $this->getMeetingManager()->findAll(),
+        ];
     }
 
     /**
      * @Route("/admin/meetings/add", name="mmp_rjp_admin_meeting_add")
      * @Template()
+     * @param Request $request
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function addAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
         $meeting = new Meeting;
-
-        $form = $this->createForm(new MeetingType, $meeting);
-        
+        $form = $this->createForm('mmp_rjpbundle_meeting', $meeting);
         $form->handleRequest($request);
         
         if ($form->isValid()) {
-            $em->persist($meeting);
-            $em->flush();
+            $this->getMeetingManager()->save($meeting);
 
             return $this->redirect($this->generateUrl('mmp_rjp_admin_meetings'));
         }
 
-        return array(
+        return [
             'form'  =>  $form->createView()
-        );
+        ];
     }
 
     /**
      * @Route("/admin/meetings/edit/{id}", name="mmp_rjp_admin_meeting_edit")
      * @Template()
+     * @ParamConverter("id", class="mmpRjpBundle:Meeting")
+     * @param Request $request
+     * @param Meeting $meeting
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function editAction($id, Request $request)
+    public function editAction(Request $request, Meeting $meeting)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $meeting = $em->getRepository('mmpRjpBundle:Meeting')->find($id);
-
-        $form = $this->createForm(new MeetingType, $meeting);
-        
+        $form = $this->createForm('mmp_rjpbundle_meeting', $meeting);
         $form->handleRequest($request);
         
         if ($form->isValid()) {
-            $em->persist($meeting);
-            $em->flush();
+            $this->getMeetingManager()->save($meeting);
 
             return $this->redirect($this->generateUrl('mmp_rjp_admin_meetings'));
         }
-        return array(
+
+        return [
             'form'  =>  $form->createView()
-        );
+        ];
     }
 
     /**
      * @Route("/admin/meetings/delete/{id}", name="mmp_rjp_admin_meeting_delete")
      * @Template()
+     * @ParamConverter("id", class="mmpRjpBundle:Meeting")
+     * @param Request $request
+     * @param Meeting $meeting
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction($id, Request $request)
+    public function deleteAction(Request $request, Meeting $meeting)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $meeting = $em->getRepository('mmpRjpBundle:Meeting')->find($id);
-
-        $form = $this->createForm(new ConfirmType, null);
-        
+        $form = $this->createForm('confirm');
         $form->handleRequest($request);
         
         if ($form->isValid()) {
             if($form->get('yes')->isClicked()) {
-                $em->remove($meeting);
-                $em->flush();
+                $this->getMeetingManager()->delete($meeting);
             }
             return $this->redirect($this->generateUrl('mmp_rjp_admin_meetings'));
         }
 
-
-        return array(
+        return [
             'meeting' =>  $meeting,
             'form'    =>  $form->createView()
-        );
+        ];
+    }
+
+    /**
+     * @return \mmp\rjpBundle\Service\MeetingManager
+     */
+    protected function getMeetingManager()
+    {
+        return $this->get('rjp.manager.meeting');
     }
 }

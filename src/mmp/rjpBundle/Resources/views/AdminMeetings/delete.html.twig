@@ -1,3 +1,11 @@
-Czy na pewno chcesz usuną wydarzenie z dnia: {{ meeting.date.format('d.m.Y') }} z dzielnicy {{ meeting.district.name }}?
+{% extends 'mmpRjpBundle::layoutAdmin.html.twig' %}
 
-{{ form(form) }}
+{% block headline %}
+    Usuń wydarzenie
+{% endblock %}
+
+{% block content_row %}
+    Czy na pewno chcesz usuną wydarzenie z dnia: {{ meeting.date.format('d.m.Y') }} z dzielnicy {{ meeting.district.name }}?
+
+    {{ form(form) }}
+{% endblock %}

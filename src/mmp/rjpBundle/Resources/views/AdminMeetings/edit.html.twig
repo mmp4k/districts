@@ -1,1 +1,9 @@
-{{ form(form) }}
+{% extends 'mmpRjpBundle::layoutAdmin.html.twig' %}
+
+{% block headline %}
+    Edytuj wydarzenie
+{% endblock %}
+
+{% block content_row %}
+    {{ form(form) }}
+{% endblock %}

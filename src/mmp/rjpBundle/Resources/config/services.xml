@@ -31,6 +31,7 @@
         </service>
         <service class="mmp\rjpBundle\Service\MeetingManager" id="rjp.manager.meeting">
             <argument type="service" id="rjp.repository.meeting"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
         <service class="mmp\rjpBundle\Service\ElectionManager" id="rjp.manager.election">
             <argument type="service" id="rjp.repository.election"/>
@@ -42,6 +43,9 @@
         </service>
         <service class="mmp\rjpBundle\Form\ConfirmType" id="rjp.form.type.confirm">
             <tag name="form.type" alias="confirm"/>
+        </service>
+        <service class="mmp\rjpBundle\Form\MeetingType" id="rjp.form.type.meeting">
+            <tag name="form.type" alias="mmp_rjpbundle_meeting"/>
         </service>
     </services>
 </container>
