@@ -2,100 +2,90 @@
 
 namespace mmp\rjpBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use mmp\rjpBundle\Entity\ElectionHasElectoralCommission;
+use mmp\rjpBundle\Entity\ElectoralCommission;
+use mmp\rjpBundle\Form\ElectoralCommissionType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use mmp\rjpBundle\Entity\ElectoralCommission;
-use mmp\rjpBundle\Entity\ElectionHasElectoralCommission;
-use mmp\rjpBundle\Form\ElectionHasElectoralCommissionStreetsType;
-use mmp\rjpBundle\Form\ElectoralCommissionType;
-use mmp\rjpBundle\Form\ConfirmType;
 
 class AdminElectoralCommissionsController extends Controller
 {
     /**
      * @Route("/admin/electoral-commissions", name="mmp_rjp_admin_electoral_commissions")
      * @Template()
+     * @return array
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $electoralCommissions = $em->getRepository('mmpRjpBundle:ElectoralCommission')->findAll();
-
         return [
-            'electoralCommissions' => $electoralCommissions
+            'electoralCommissions' => $this->getElectoralCommissionManager()->findAll(),
         ];
     }
 
     /**
      * @Route("/admin/electoral-commission/map/{electionHasElectoralId}", name="mmp_rjp_admin_electoral_commission_map")
      * @Template()
+     * @ParamConverter("electionHasElectoralId", class="mmpRjpBundle:ElectionHasElectoralCommission")
+     * @param ElectionHasElectoralCommission $electionHasElectoralCommission
+     * @return array
      */
-    public function mapAction($electionHasElectoralId, Request $request)
+    public function mapAction(ElectionHasElectoralCommission $electionHasElectoralCommission)
     {
-        $em = $this->getDoctrine()->getManager();
-        $electionHasElectoralCommission = $em->getRepository('mmpRjpBundle:ElectionHasElectoralCommission')->find($electionHasElectoralId);
-        $electionHasElectoralCommissions = $em->getRepository('mmpRjpBundle:ElectionHasElectoralCommission')->findBy([
-            'district' => $electionHasElectoralCommission->getDistrict(),
-            'election' => $electionHasElectoralCommission->getElection()
-        ]);
-
         return [
-            'electionHasElectoralCommission'  =>  $electionHasElectoralCommission,
-            'electionHasElectoralCommissions' => $electionHasElectoralCommissions,
+            'electionHasElectoralCommission'  => $electionHasElectoralCommission,
+            'electionHasElectoralCommissions' => $this->getElectoralCommissionManager()->findRelated($electionHasElectoralCommission),
         ];
     }
 
     /**
      * @Route("/admin/electoral-commission/streets/{electionHasElectoralId}", name="mmp_rjp_admin_electoral_commission_streets")
      * @Template()
+     * @ParamConverter("electionHasElectoralId", class="mmpRjpBundle:ElectionHasElectoralCommission")
+     * @param Request                        $request
+     * @param ElectionHasElectoralCommission $electionHasElectoralCommission
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function streetsAction($electionHasElectoralId, Request $request)
+    public function streetsAction(Request $request, ElectionHasElectoralCommission $electionHasElectoralCommission)
     {
-        $em = $this->getDoctrine()->getManager();
-        $electionHasElectoralComission = $em->getRepository('mmpRjpBundle:ElectionHasElectoralCommission')->find($electionHasElectoralId);
-
-        $form = $this->createForm(new ElectionHasElectoralCommissionStreetsType, $electionHasElectoralComission);
-        
+        $form = $this->createForm('mmp_rjpbundle_electionhaselectoralcommission', $electionHasElectoralCommission);
         $form->handleRequest($request);
         
         if ($form->isValid()) {
-            $em->persist($electionHasElectoralComission);
-            $em->flush();
+            $this->getElectoralCommissionManager()->saveElectionHasElectoralCommission($electionHasElectoralCommission);
 
             return $this->redirect($this->generateUrl('mmp_rjp_admin_electoral_commission_streets', [
-                'electionHasElectoralId' => $electionHasElectoralId
+                'electionHasElectoralId' => $electionHasElectoralCommission->getId(),
             ]));
         }
 
         return [
-            'form'  =>  $form->createView()
+            'form' => $form->createView(),
         ];
     }
 
     /**
      * @Route("/admin/electoral-commssion/delete/{id}", name="mmp_rjp_admin_electoral_commission_delete")
      * @Template()
+     * @ParamConverter("id", class="mmpRjpBundle:ElectoralCommission")
+     * @param Request             $request
+     * @param ElectoralCommission $electoralCommission
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction($id, Request $request)
+    public function deleteAction(Request $request, ElectoralCommission $electoralCommission)
     {
-        $em = $this->getDoctrine()->getManager();
-        $electoralCommission = $em->getRepository('mmpRjpBundle:ElectoralCommission')->find($id);
-
-        $form = $this->createForm(new ConfirmType, null);
-        
+        $form = $this->createForm('confirm');
         $form->handleRequest($request);
         
         if ($form->isValid()) {
-            $em->remove($electoralCommission);
-            $em->flush();
+            $this->getElectoralCommissionManager()->delete($electoralCommission);
             return $this->redirect($this->generateUrl('mmp_rjp_admin_electoral_commissions'));
         }
 
         return [
-            'form'                =>  $form->createView(),
+            'form'                => $form->createView(),
             'electoralCommission' => $electoralCommission
         ];  
     }
@@ -103,55 +93,56 @@ class AdminElectoralCommissionsController extends Controller
     /**
      * @Route("/admin/electoral-commission/edit/{id}", name="mmp_rjp_admin_electoral_commission_edit")
      * @Template()
+     * @ParamConverter("id", class="mmpRjpBundle:ElectoralCommission")
+     * @param Request             $request
+     * @param ElectoralCommission $electoralCommission
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function editAction($id, Request $request)
+    public function editAction(Request $request, ElectoralCommission $electoralCommission)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $electoralCommission = $em->getRepository('mmpRjpBundle:ElectoralCommission')->find($id);
-
-        $form = $this->createForm(new ElectoralCommissionType, $electoralCommission);
-        
+        $form = $this->createForm('mmp_rjpbundle_electoralcommission', $electoralCommission);
         $form->handleRequest($request);
         
         if ($form->isValid()) {
-            $em->persist($electoralCommission);
-            $em->flush();
+            $this->getElectoralCommissionManager()->save($electoralCommission);
 
             return $this->redirect($this->generateUrl('mmp_rjp_admin_electoral_commissions'));
         }
 
         return [
-            'form'  =>  $form->createView()
+            'form' => $form->createView(),
         ];
     }
 
     /**
      * @Route("/admin/electoral-commissions/add", name="mmp_rjp_admin_electoral_commissions_add")
      * @Template()
+     * @param Request $request
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function addAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
         $electoralCommission = new ElectoralCommission;
-        $electionHasElectoralComission = new ElectionHasElectoralCommission;
-        $electoralCommission->addElection($electionHasElectoralComission);
+        $electionHasElectoralCommission = new ElectionHasElectoralCommission;
+        $electoralCommission->addElection($electionHasElectoralCommission);
 
         $form = $this->createForm(new ElectoralCommissionType, $electoralCommission);
         
         $form->handleRequest($request);
         
         if ($form->isValid()) {
-            $electionHasElectoralComission->setElectoralCommission($electoralCommission);
-            $em->persist($electionHasElectoralComission);
-            $em->persist($electoralCommission);
-            $em->flush();
+            $this->getElectoralCommissionManager()->save($electoralCommission, $electionHasElectoralCommission);
+
             return $this->redirect($this->generateUrl('mmp_rjp_admin_electoral_commissions'));
         }
 
         return [
             'form' => $form->createView()
         ];
+    }
+
+    protected function getElectoralCommissionManager()
+    {
+        return $this->get('rjp.manager.electoral_commission');
     }
 }

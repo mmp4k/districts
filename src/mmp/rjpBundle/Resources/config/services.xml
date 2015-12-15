@@ -24,6 +24,18 @@
                  factory-method="getRepository">
             <argument>mmpRjpBundle:Election</argument>
         </service>
+        <service class="Doctrine\ORM\EntityRepository"
+                 id="rjp.repository.electoral_commission"
+                 factory-service="doctrine.orm.entity_manager"
+                 factory-method="getRepository">
+            <argument>mmpRjpBundle:ElectoralCommission</argument>
+        </service>
+        <service class="Doctrine\ORM\EntityRepository"
+                 id="rjp.repository.election_has_electoral_commission"
+                 factory-service="doctrine.orm.entity_manager"
+                 factory-method="getRepository">
+            <argument>mmpRjpBundle:ElectionHasElectoralCommission</argument>
+        </service>
 
         <!-- Manager -->
         <service class="mmp\rjpBundle\Service\DistrictManager" id="rjp.manager.district">
@@ -36,6 +48,11 @@
         <service class="mmp\rjpBundle\Service\ElectionManager" id="rjp.manager.election">
             <argument type="service" id="rjp.repository.election"/>
         </service>
+        <service class="mmp\rjpBundle\Service\ElectoralCommissionManager" id="rjp.manager.electoral_commission">
+            <argument type="service" id="rjp.repository.electoral_commission"/>
+            <argument type="service" id="rjp.repository.election_has_electoral_commission"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+        </service>
 
         <!-- Form -->
         <service class="mmp\rjpBundle\Form\UserType" id="rjp.form.type.user">
@@ -46,6 +63,13 @@
         </service>
         <service class="mmp\rjpBundle\Form\MeetingType" id="rjp.form.type.meeting">
             <tag name="form.type" alias="mmp_rjpbundle_meeting"/>
+        </service>
+        <service class="mmp\rjpBundle\Form\ElectionHasElectoralCommissionStreetsType"
+                 id="rjp.form.type.election_has_electoral_commission_streets">
+            <tag name="form.type" alias="mmp_rjpbundle_electionhaselectoralcommission"/>
+        </service>
+        <service class="mmp\rjpBundle\Form\ElectoralCommissionType" id="rjp.form.type.electoral_commission">
+            <tag name="form.type" alias="mmp_rjpbundle_electoralcommission"/>
         </service>
     </services>
 </container>
