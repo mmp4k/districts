@@ -3,10 +3,8 @@
 namespace mmp\rjpBundle\Controller;
 
 use mmp\rjpBundle\Entity\Candidate;
-use mmp\rjpBundle\Entity\User;
-use mmp\rjpBundle\Form\CandidateType;
-use mmp\rjpBundle\Form\ConfirmType;
-use mmp\rjpBundle\Form\DistrictWithCandidatesType;
+use mmp\rjpBundle\Entity\District;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -20,133 +18,134 @@ class AdminCandidatesController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $candidates = $em->getRepository('mmpRjpBundle:Candidate')->findAll();
-        $districts = $em->getRepository('mmpRjpBundle:District')->findBy([], ['slug' => 'asc']);
-
         return [
-            'candidates' => $candidates,
-            'districts'  => $districts
+            'candidates' => $this->getCandidateManager()->findAll(),
+            'districts'  => $this->getDistrictManager()->findOrderedBySlug(),
         ];
     }
 
     /**
      * @Route("/admin/candidates/id/{id}", name="mmp_rjp_admin_candidates_from_district")
      * @Template()
+     * @ParamConverter("district", class="mmpRjpBundle:District")
+     * @param Request  $request
+     * @param District $district
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function candidatesByDistrictAction(Request $request, $id)
+    public function candidatesByDistrictAction(Request $request, District $district)
     {
-        $em = $this->getDoctrine()->getManager();
+        $candidates = $this->getCandidateManager()->findByDistrict($district);
 
-        $district   = $em->getRepository('mmpRjpBundle:District')->find($id);
-        $candidates = $em->getRepository('mmpRjpBundle:Candidate')->findBy([
-            'district' => $id
-        ]);
-
-        $form = $this->createForm(new DistrictWithCandidatesType, $district);
-
+        $form = $this->createForm('districtWithCandidates', $district);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em->persist($district);
-            $em->flush();
+            $this->getDistrictManager()->save($district);
+
             return $this->redirect($this->generateUrl('mmp_rjp_admin_candidates_from_district', [
-                'id' => $id
+                'id' => $district->getId(),
             ]));
         }
 
         return [
             'district'   => $district,
             'candidates' => $candidates,
-            'form'       => $form->createView()
+            'form'       => $form->createView(),
         ];
     }
 
     /**
      * @Route("/admin/candidates/add", name="mmp_rjp_admin_candidate_add")
      * @Template()
+     * @param Request $request
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function addAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $candidate = new Candidate;
-        $user = new User;
-        // $candidate->setUser($user);
         $candidate->setElection($em->getRepository('mmpRjpBundle:Election')->find(11));
         $candidate->setDistrict($em->getRepository('mmpRjpBundle:District')->find(15));
 
-        $form = $this->createForm(new CandidateType, $candidate);
+        $form = $this->createForm('mmp_rjpbundle_candidate', $candidate);
 
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            if(!$candidate->getDistrict()->getElections()->contains($candidate->getElection())) {
-                $candidate->getElection()->addDistrict($candidate->getDistrict());
-            }
-            $em->persist($candidate);
-            $em->flush();
+            $this->getCandidateManager()->save($candidate);
 
-            $request->getSession()->getFlashBag()->add(
-                'success',
-                'Kandydat został dodany'
-            );
+            $this->addFlash('success', 'Kandydat został dodany');
 
             return $this->redirect($this->generateUrl('mmp_rjp_admin_candidate_add'));
         }
 
         return [
-            'form'  =>  $form->createView()
+            'form' => $form->createView(),
         ];
     }
 
     /**
      * @Route("/admin/candidates/delete/{id}", name="mmp_rjp_admin_candidate_delete")
      * @Template()
+     * @ParamConverter("candidate", class="mmpRjpBundle:Candidate")
+     * @param Request   $request
+     * @param Candidate $candidate
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request, Candidate $candidate)
     {
-        $em = $this->getDoctrine()->getManager();
-        $candidate = $em->getRepository('mmpRjpBundle:Candidate')->find($id);
-
-        $form = $this->createForm(new ConfirmType, null);
-
+        $form = $this->createForm('confirm');
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em->remove($candidate);
-            $em->flush();
+            $this->getCandidateManager()->delete($candidate);
 
             return $this->redirect($this->generateUrl('mmp_rjp_admin_candidates'));
         }
 
         return [
-            'candidate' =>  $candidate,
-            'form'      =>  $form->createView()
+            'candidate' => $candidate,
+            'form'      => $form->createView(),
         ];
     }
 
     /**
      * @Route("/admin/candidates/edit/{id}", name="mmp_rjp_admin_candidate_edit")
      * @Template()
+     * @ParamConverter("candidate", class="mmpRjpBundle:Candidate")
+     * @param Request   $request
+     * @param Candidate $candidate
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function editAction(Request $request, $id)
+    public function editAction(Request $request, Candidate $candidate)
     {
-        $em = $this->getDoctrine()->getManager();
-        $candidate = $em->getRepository('mmpRjpBundle:Candidate')->find($id);
-
-        $form = $this->createForm(new CandidateType, $candidate);
-
+        $form = $this->createForm('mmp_rjpbundle_candidate', $candidate);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em->persist($candidate);
-            $em->flush();
+            $this->getCandidateManager()->save($candidate);
 
             return $this->redirect($this->generateUrl('mmp_rjp_admin_candidates'));
         }
 
         return [
-            'form'  =>  $form->createView()
+            'form' => $form->createView(),
         ];
+    }
+
+    /**
+     * @return \mmp\rjpBundle\Service\CandidateManager
+     */
+    protected function getCandidateManager()
+    {
+        return $this->get('rjp.manager.candidate');
+    }
+
+    /**
+     * @return \mmp\rjpBundle\Service\DistrictManager
+     */
+    protected function getDistrictManager()
+    {
+        return $this->get('rjp.manager.district');
     }
 }

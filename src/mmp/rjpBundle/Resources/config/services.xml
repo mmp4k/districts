@@ -36,6 +36,12 @@
                  factory-method="getRepository">
             <argument>mmpRjpBundle:ElectionHasElectoralCommission</argument>
         </service>
+        <service class="Doctrine\ORM\EntityRepository"
+                 id="rjp.repository.candidate"
+                 factory-service="doctrine.orm.entity_manager"
+                 factory-method="getRepository">
+            <argument>mmpRjpBundle:Candidate</argument>
+        </service>
 
         <!-- Manager -->
         <service class="mmp\rjpBundle\Service\DistrictManager" id="rjp.manager.district">
@@ -54,6 +60,10 @@
             <argument type="service" id="rjp.repository.electoral_commission"/>
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="rjp.repository.election_has_electoral_commission"/>
+        </service>
+        <service class="mmp\rjpBundle\Service\CandidateManager" id="rjp.manager.candidate">
+            <argument type="service" id="rjp.repository.candidate"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
 
         <!-- Form -->
@@ -81,6 +91,12 @@
         </service>
         <service class="mmp\rjpBundle\Form\DistrictStreetsImportType" id="rjp.form.type.districts_streets_import">
             <tag name="form.type" alias="districtStreetsImport"/>
+        </service>
+        <service class="mmp\rjpBundle\Form\DistrictWithCandidatesType" id="rjp.form.type.district_with_candidates">
+            <tag name="form.type" alias="districtWithCandidates"/>
+        </service>
+        <service class="mmp\rjpBundle\Form\CandidateType" id="rjp.form.type.candidate">
+            <tag name="form.type" alias="mmp_rjpbundle_candidate"/>
         </service>
     </services>
 </container>
