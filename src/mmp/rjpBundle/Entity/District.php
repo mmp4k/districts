@@ -122,7 +122,7 @@ class District
     private $images;
 
     /**
-     * @ORM\ManyToOne(targetEntity="mmp\rjpBundle\Entity\User", inversedBy="districts")
+     * @ORM\ManyToOne(targetEntity="mmp\UserBundle\Entity\User", inversedBy="districts")
      * @ORM\JoinColumn(name="coordinator_id", referencedColumnName="id")
      */
     private $coordinator;
@@ -574,7 +574,7 @@ class District
     /**
      * Get coordinator
      *
-     * @return \mmp\rjpBundle\Entity\User
+     * @return \mmp\UserBundle\Entity\User
      */
     public function getCoordinator()
     {
@@ -584,10 +584,10 @@ class District
     /**
      * Set coordinator
      *
-     * @param \mmp\rjpBundle\Entity\User $coordinator
+     * @param \mmp\UserBundle\Entity\User $coordinator
      * @return District
      */
-    public function setCoordinator(\mmp\rjpBundle\Entity\User $coordinator = null)
+    public function setCoordinator(\mmp\UserBundle\Entity\User $coordinator = null)
     {
         $this->coordinator = $coordinator;
 

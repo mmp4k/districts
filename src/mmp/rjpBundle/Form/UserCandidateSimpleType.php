@@ -2,7 +2,6 @@
 
 namespace mmp\rjpBundle\Form;
 
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -28,7 +27,7 @@ class UserCandidateSimpleType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'mmp\rjpBundle\Entity\User',
+            'data_class'        => 'mmp\UserBundle\Entity\User',
             'validation_groups' => function(FormInterface $form) {
                 $data = $form->getData();
                 $arToReturn = array();

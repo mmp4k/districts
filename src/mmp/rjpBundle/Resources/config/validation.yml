@@ -1,4 +1,4 @@
-mmp\rjpBundle\Entity\User:
+mmp\UserBundle\Entity\User:
     properties:
         email: 
             - NotBlank: { groups: [normal_user] }

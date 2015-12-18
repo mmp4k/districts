@@ -5,8 +5,6 @@ namespace mmp\rjpBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Doctrine\ORM\EntityRepository;
-use Symfony\Component\Form\FormInterface;
 
 class CandidateSimpleType extends AbstractType
 {
@@ -20,7 +18,7 @@ class CandidateSimpleType extends AbstractType
             ->add('user', 'entity', [
                 'disabled'  => true,
                 'read_only' => true,
-                'class'     => 'mmp\rjpBundle\Entity\User'
+                'class'     => 'mmp\UserBundle\Entity\User',
             ])
             ->add('votes')
             ->add('sex', 'choice', [

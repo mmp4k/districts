@@ -83,7 +83,7 @@ swiftmailer:
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
-    user_class: mmp\rjpBundle\Entity\User
+    user_class: mmp\UserBundle\Entity\User
 
 # additions for doctrine
 stof_doctrine_extensions:

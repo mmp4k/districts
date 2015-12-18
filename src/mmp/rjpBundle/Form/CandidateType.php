@@ -2,14 +2,12 @@
 
 namespace mmp\rjpBundle\Form;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use mmp\rjpBundle\Entity\User;
+use mmp\UserBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class CandidateType extends AbstractType
@@ -42,8 +40,8 @@ class CandidateType extends AbstractType
             ])
             ->add('votes')
             ->add('user', 'entity', [
-                'class'    =>  'mmpRjpBundle:User',
-                'required' => false,
+                'class'         => 'mmpUserBundle:User',
+                'required'      => false,
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('u')->orderBy('u.last_name', 'ASC');
             }])
@@ -52,14 +50,14 @@ class CandidateType extends AbstractType
             ->add('submit', 'submit')
             ->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
                 $candidate = $event->getData();
-                $form = $event->getForm();
+//                $form = $event->getForm();
 
                 if($candidate['user_new'] && !$candidate['user']) {
                     $this->userNew = $candidate['user_new'];                
                 } 
             })
             ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($obj) {
-                $candidate = $event->getData();
+//                $candidate = $event->getData();
                 $form = $event->getForm();
 
                 if($this->userNew) {

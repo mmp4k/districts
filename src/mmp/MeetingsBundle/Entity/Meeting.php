@@ -39,7 +39,7 @@ class Meeting
     private $map_coords;
 
     /**
-     * @ORM\ManyToOne(targetEntity="mmp\rjpBundle\Entity\User", inversedBy="meetings")
+     * @ORM\ManyToOne(targetEntity="mmp\UserBundle\Entity\User", inversedBy="meetings")
      * @ORM\JoinColumn(name="organizer_id", referencedColumnName="id")
      */
     private $organizer;
@@ -160,7 +160,7 @@ class Meeting
     /**
      * Get organizer
      *
-     * @return \mmp\rjpBundle\Entity\User
+     * @return \mmp\UserBundle\Entity\User
      */
     public function getOrganizer()
     {
@@ -170,10 +170,10 @@ class Meeting
     /**
      * Set organizer
      *
-     * @param \mmp\rjpBundle\Entity\User $organizer
+     * @param \mmp\UserBundle\Entity\User $organizer
      * @return Meeting
      */
-    public function setOrganizer(\mmp\rjpBundle\Entity\User $organizer = null)
+    public function setOrganizer(\mmp\UserBundle\Entity\User $organizer = null)
     {
         $this->organizer = $organizer;
 

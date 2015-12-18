@@ -1,18 +1,16 @@
 <?php
 
-namespace mmp\rjpBundle\Controller;
+namespace mmp\UserBundle\Controller;
 
-use mmp\rjpBundle\Entity\User;
+use mmp\UserBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-class AdminUsersController extends Controller
+class AdminController extends Controller
 {
     /**
-     * @Route("/admin/users", name="mmp_rjp_admin_users")
      * @Template()
      */
     public function indexAction()
@@ -23,7 +21,6 @@ class AdminUsersController extends Controller
     }
 
     /**
-     * @Route("/admin/users/add", name="mmp_rjp_admin_user_add")
      * @Template()
      * @param Request $request
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
@@ -51,9 +48,8 @@ class AdminUsersController extends Controller
     }
 
     /**
-     * @Route("/admin/users/edit/{id}", name="mmp_rjp_admin_user_edit")
      * @Template()
-     * @ParamConverter("id", class="mmpRjpBundle:User")
+     * @ParamConverter("id", class="mmpUserBundle:User")
      * @param Request $request
      * @param User    $user
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
@@ -75,9 +71,8 @@ class AdminUsersController extends Controller
     }
 
     /**
-     * @Route("/admin/users/delete/{id}", name="mmp_rjp_admin_user_delete")
      * @Template()
-     * @ParamConverter("id", class="mmpRjpBundle:User")
+     * @ParamConverter("id", class="mmpUserBundle:User")
      * @param Request $request
      * @param User    $user
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse

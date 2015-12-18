@@ -63,7 +63,7 @@ class Candidate
     private $district;
 
     /**
-     * @ORM\ManyToOne(targetEntity="mmp\rjpBundle\Entity\User", inversedBy="candidates", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="mmp\UserBundle\Entity\User", inversedBy="candidates", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     private $user;
@@ -82,6 +82,16 @@ class Candidate
     }
 
     /**
+     * Get councilor
+     *
+     * @return \mmp\rjpBundle\Entity\Councilor
+     */
+    public function getCouncilor()
+    {
+        return $this->councilor;
+    }
+
+    /**
      * Set councilor
      *
      * @param \mmp\rjpBundle\Entity\Councilor $councilor
@@ -95,13 +105,13 @@ class Candidate
     }
 
     /**
-     * Get councilor
+     * Get election
      *
-     * @return \mmp\rjpBundle\Entity\Councilor 
+     * @return \mmp\rjpBundle\Entity\Election
      */
-    public function getCouncilor()
+    public function getElection()
     {
-        return $this->councilor;
+        return $this->election;
     }
 
     /**
@@ -118,13 +128,13 @@ class Candidate
     }
 
     /**
-     * Get election
+     * Get district
      *
-     * @return \mmp\rjpBundle\Entity\Election 
+     * @return \mmp\rjpBundle\Entity\District
      */
-    public function getElection()
+    public function getDistrict()
     {
-        return $this->election;
+        return $this->district;
     }
 
     /**
@@ -141,36 +151,26 @@ class Candidate
     }
 
     /**
-     * Get district
+     * Get user
      *
-     * @return \mmp\rjpBundle\Entity\District 
+     * @return \mmp\UserBundle\Entity\User
      */
-    public function getDistrict()
+    public function getUser()
     {
-        return $this->district;
+        return $this->user;
     }
 
     /**
      * Set user
      *
-     * @param \mmp\rjpBundle\Entity\User $user
+     * @param \mmp\UserBundle\Entity\User $user
      * @return Candidate
      */
-    public function setUser(\mmp\rjpBundle\Entity\User $user)
+    public function setUser(\mmp\UserBundle\Entity\User $user)
     {
         $this->user = $user;
 
         return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return \mmp\rjpBundle\Entity\User 
-     */
-    public function getUser()
-    {
-        return $this->user;
     }
 
     public function isCouncilor() {
@@ -204,6 +204,16 @@ class Candidate
     }
 
     /**
+     * Get votes
+     *
+     * @return integer
+     */
+    public function getVotes()
+    {
+        return $this->votes;
+    }
+
+    /**
      * Set votes
      *
      * @param integer $votes
@@ -217,13 +227,13 @@ class Candidate
     }
 
     /**
-     * Get votes
+     * Get occupation
      *
-     * @return integer 
+     * @return string
      */
-    public function getVotes()
+    public function getOccupation()
     {
-        return $this->votes;
+        return $this->occupation;
     }
 
     /**
@@ -240,13 +250,13 @@ class Candidate
     }
 
     /**
-     * Get occupation
+     * Get sex
      *
-     * @return string 
+     * @return string
      */
-    public function getOccupation()
+    public function getSex()
     {
-        return $this->occupation;
+        return $this->sex;
     }
 
     /**
@@ -263,13 +273,13 @@ class Candidate
     }
 
     /**
-     * Get sex
+     * Get age
      *
-     * @return string 
+     * @return integer
      */
-    public function getSex()
+    public function getAge()
     {
-        return $this->sex;
+        return $this->age;
     }
 
     /**
@@ -283,15 +293,5 @@ class Candidate
         $this->age = $age;
 
         return $this;
-    }
-
-    /**
-     * Get age
-     *
-     * @return integer 
-     */
-    public function getAge()
-    {
-        return $this->age;
     }
 }

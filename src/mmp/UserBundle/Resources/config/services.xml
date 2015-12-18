@@ -4,13 +4,11 @@
            xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
     <services>
-        <service id="mmp_user.example" class="mmp\UserBundle\Example">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <!-- Form -->
+        <service class="mmp\UserBundle\Form\UserType" id="rjp.form.type.user">
+            <tag name="form.type" alias="mmp_rjpbundle_user"/>
         </service>
     </services>
-    -->
+
 </container>

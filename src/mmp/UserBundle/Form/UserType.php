@@ -1,12 +1,11 @@
 <?php
 
-namespace mmp\rjpBundle\Form;
+namespace mmp\UserBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class UserType extends AbstractType
 {
@@ -39,7 +38,7 @@ class UserType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'mmp\rjpBundle\Entity\User',
+            'data_class'        => 'mmp\UserBundle\Entity\User',
             'validation_groups' => function(FormInterface $form) {
                 $data = $form->getData();
                 $arToReturn = array();
