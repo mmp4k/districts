@@ -1,6 +1,6 @@
 <?php
 
-namespace mmp\MeetingsBundle\DependencyInjection;
+namespace mmp\MeetingBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

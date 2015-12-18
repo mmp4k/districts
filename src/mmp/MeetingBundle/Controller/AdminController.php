@@ -1,8 +1,8 @@
 <?php
 
-namespace mmp\MeetingsBundle\Controller;
+namespace mmp\MeetingBundle\Controller;
 
-use mmp\MeetingsBundle\Entity\Meeting;
+use mmp\MeetingBundle\Entity\Meeting;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -44,7 +44,7 @@ class AdminController extends Controller
 
     /**
      * @Template()
-     * @ParamConverter("id", class="mmpMeetingsBundle:Meeting")
+     * @ParamConverter("id", class="mmpMeetingBundle:Meeting")
      * @param Request $request
      * @param Meeting $meeting
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
@@ -67,7 +67,7 @@ class AdminController extends Controller
 
     /**
      * @Template()
-     * @ParamConverter("id", class="mmpMeetingsBundle:Meeting")
+     * @ParamConverter("id", class="mmpMeetingBundle:Meeting")
      * @param Request $request
      * @param Meeting $meeting
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
@@ -92,7 +92,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @return \mmp\MeetingsBundle\Service\MeetingManager
+     * @return \mmp\MeetingBundle\Service\MeetingManager
      */
     protected function getMeetingManager()
     {

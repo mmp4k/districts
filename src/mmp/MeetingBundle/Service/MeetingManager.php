@@ -1,10 +1,10 @@
 <?php
 
-namespace mmp\MeetingsBundle\Service;
+namespace mmp\MeetingBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use mmp\MeetingsBundle\Entity\Meeting;
+use mmp\MeetingBundle\Entity\Meeting;
 
 class MeetingManager
 {

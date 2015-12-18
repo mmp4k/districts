@@ -1,9 +1,9 @@
 <?php
 
-namespace mmp\MeetingsBundle\Form;
+namespace mmp\MeetingBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
-use mmp\MeetingsBundle\Entity\Meeting;
+use mmp\MeetingBundle\Entity\Meeting;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;

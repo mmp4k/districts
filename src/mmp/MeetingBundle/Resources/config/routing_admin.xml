@@ -5,18 +5,18 @@
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
     <route id="mmp_rjp_admin_meetings" path="/admin/meetings/">
-        <default key="_controller">mmpMeetingsBundle:Admin:index</default>
+        <default key="_controller">mmpMeetingBundle:Admin:index</default>
     </route>
 
     <route id="mmp_rjp_admin_meeting_add" path="/admin/meetings/add">
-        <default key="_controller">mmpMeetingsBundle:Admin:add</default>
+        <default key="_controller">mmpMeetingBundle:Admin:add</default>
     </route>
 
     <route id="mmp_rjp_admin_meeting_edit" path="/admin/meetings/edit/{id}">
-        <default key="_controller">mmpMeetingsBundle:Admin:edit</default>
+        <default key="_controller">mmpMeetingBundle:Admin:edit</default>
     </route>
 
     <route id="mmp_rjp_admin_meeting_delete" path="/admin/meetings/delete/{id}">
-        <default key="_controller">mmpMeetingsBundle:Admin:delete</default>
+        <default key="_controller">mmpMeetingBundle:Admin:delete</default>
     </route>
 </routes>

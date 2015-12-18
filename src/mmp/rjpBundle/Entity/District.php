@@ -4,7 +4,7 @@ namespace mmp\rjpBundle\Entity;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use mmp\MeetingsBundle\Entity\Meeting;
+use mmp\MeetingBundle\Entity\Meeting;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -95,7 +95,7 @@ class District
     private $link_kml;
 
     /**
-     * @ORM\OneToMany(targetEntity="mmp\MeetingsBundle\Entity\Meeting", mappedBy="district")
+     * @ORM\OneToMany(targetEntity="mmp\MeetingBundle\Entity\Meeting", mappedBy="district")
      * @ORM\OrderBy({"date"="ASC"})
      */
     private $meetings;

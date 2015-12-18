@@ -6,6 +6,6 @@
 
     <import resource="routing_admin.xml"/>
     <route id="mmp_rjp_meetings" path="/spotkania-mieszkancow">
-        <default key="_controller">mmpMeetingsBundle:Default:index</default>
+        <default key="_controller">mmpMeetingBundle:Default:index</default>
     </route>
 </routes>

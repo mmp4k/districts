@@ -1,6 +1,6 @@
 <?php
 
-namespace mmp\MeetingsBundle\Entity;
+namespace mmp\MeetingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 

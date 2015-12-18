@@ -1,6 +1,6 @@
 <?php
 
-namespace mmp\MeetingsBundle\Controller;
+namespace mmp\MeetingBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -18,7 +18,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @return \mmp\MeetingsBundle\Service\MeetingManager
+     * @return \mmp\MeetingBundle\Service\MeetingManager
      */
     protected function getMeetingManager()
     {

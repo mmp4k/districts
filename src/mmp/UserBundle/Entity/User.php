@@ -4,7 +4,7 @@ namespace mmp\UserBundle\Entity;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
-use mmp\MeetingsBundle\Entity\Meeting;
+use mmp\MeetingBundle\Entity\Meeting;
 use mmp\rjpBundle\Entity\Candidate;
 use mmp\rjpBundle\Entity\District;
 
@@ -25,7 +25,7 @@ class User extends BaseUser
     /**
      * @var Collection|Meeting[]
      *
-     * @ORM\OneToMany(targetEntity="mmp\MeetingsBundle\Entity\Meeting", mappedBy="organizer")
+     * @ORM\OneToMany(targetEntity="mmp\MeetingBundle\Entity\Meeting", mappedBy="organizer")
      */
     protected $meetings;
 
@@ -110,10 +110,10 @@ class User extends BaseUser
     /**
      * Add meetings
      *
-     * @param \mmp\MeetingsBundle\Entity\Meeting $meetings
+     * @param \mmp\MeetingBundle\Entity\Meeting $meetings
      * @return User
      */
-    public function addMeeting(\mmp\MeetingsBundle\Entity\Meeting $meetings)
+    public function addMeeting(\mmp\MeetingBundle\Entity\Meeting $meetings)
     {
         $this->meetings[] = $meetings;
 
@@ -123,9 +123,9 @@ class User extends BaseUser
     /**
      * Remove meetings
      *
-     * @param \mmp\MeetingsBundle\Entity\Meeting $meetings
+     * @param \mmp\MeetingBundle\Entity\Meeting $meetings
      */
-    public function removeMeeting(\mmp\MeetingsBundle\Entity\Meeting $meetings)
+    public function removeMeeting(\mmp\MeetingBundle\Entity\Meeting $meetings)
     {
         $this->meetings->removeElement($meetings);
     }
