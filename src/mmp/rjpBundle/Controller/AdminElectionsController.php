@@ -2,13 +2,12 @@
 
 namespace mmp\rjpBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use mmp\rjpBundle\Entity\Election;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use mmp\rjpBundle\Form\ConfirmType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use mmp\rjpBundle\Entity\Election;
-use mmp\rjpBundle\Form\ElectionType;
 
 class AdminElectionsController extends Controller
 {
@@ -18,89 +17,89 @@ class AdminElectionsController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $elections = $em->getRepository('mmpRjpBundle:Election')->findAll();
-
         return [
-            'elections' => $elections
+            'elections' => $this->getElectionManager()->findAll(),
         ];
     }
 
     /**
      * @Route("/admin/elections/add", name="mmp_rjp_admin_election_add")
      * @Template()
+     * @param Request $request
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function addAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
         $election = new Election;
-
-        $form = $this->createForm(new ElectionType, $election);
-        
+        $form = $this->createForm('mmp_rjpbundle_election', $election);
         $form->handleRequest($request);
-        
+
         if ($form->isValid()) {
-            $em->persist($election);
-            $em->flush();
+            $this->getElectionManager()->save($election);
 
             return $this->redirect($this->generateUrl('mmp_rjp_admin_elections'));
         }
 
         return [
-            'form'  =>  $form->createView()
+            'form' => $form->createView(),
         ];
     }
 
     /**
      * @Route("/admin/elections/delete/{id}", name="mmp_rjp_admin_election_delete")
      * @Template()
+     * @ParamConverter("id", class="mmpRjpBundle:Election")
+     * @param Request  $request
+     * @param Election $election
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request, Election $election)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $election = $em->getRepository('mmpRjpBundle:Election')->find($id);
-
-        $form = $this->createForm(new ConfirmType, null);
-        
+        $form = $this->createForm('confirm');
         $form->handleRequest($request);
-        
+
         if ($form->isValid()) {
-            $em->remove($election);
-            $em->flush(); 
+            $this->getElectionManager()->delete($election);
 
             return $this->redirect($this->generateUrl('mmp_rjp_admin_elections'));
         }
 
         return [
-            'form'     =>  $form->createView(),
-            'election' => $election
+            'form'     => $form->createView(),
+            'election' => $election,
         ];
     }
 
     /**
      * @Route("/admin/elections/edit/{id}", name="mmp_rjp_admin_election_edit")
      * @Template()
+     * @ParamConverter("id", class="mmpRjpBundle:Election")
+     * @param Request  $request
+     * @param Election $election
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
+     * @internal param $id
      */
-    public function editAction(Request $request, $id)
+    public function editAction(Request $request, Election $election)
     {
-        $em = $this->getDoctrine()->getManager();
-        $election = $em->getRepository('mmpRjpBundle:Election')->find($id);
-
-        $form = $this->createForm(new ElectionType, $election);
-        
+        $form = $this->createForm('mmp_rjpbundle_election', $election);
         $form->handleRequest($request);
-        
+
         if ($form->isValid()) {
-            $em->persist($election);
-            $em->flush();
-            
+            $this->getElectionManager()->save($election);
+
             return $this->redirect($this->generateUrl('mmp_rjp_admin_elections'));
         }
 
         return [
-            'form'  =>  $form->createView()
+            'form' => $form->createView(),
         ];
+    }
+
+    /**
+     * @return \mmp\rjpBundle\Service\ElectionManager
+     */
+    protected function getElectionManager()
+    {
+        return $this->get('rjp.manager.election');
     }
 }

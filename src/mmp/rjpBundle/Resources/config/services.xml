@@ -47,11 +47,12 @@
         </service>
         <service class="mmp\rjpBundle\Service\ElectionManager" id="rjp.manager.election">
             <argument type="service" id="rjp.repository.election"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
         <service class="mmp\rjpBundle\Service\ElectoralCommissionManager" id="rjp.manager.electoral_commission">
             <argument type="service" id="rjp.repository.electoral_commission"/>
-            <argument type="service" id="rjp.repository.election_has_electoral_commission"/>
             <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="rjp.repository.election_has_electoral_commission"/>
         </service>
 
         <!-- Form -->
@@ -70,6 +71,9 @@
         </service>
         <service class="mmp\rjpBundle\Form\ElectoralCommissionType" id="rjp.form.type.electoral_commission">
             <tag name="form.type" alias="mmp_rjpbundle_electoralcommission"/>
+        </service>
+        <service class="mmp\rjpBundle\Form\ElectionType" id="rjp.form.type.election">
+            <tag name="form.type" alias="mmp_rjpbundle_election"/>
         </service>
     </services>
 </container>
