@@ -23,6 +23,13 @@ class DistrictManager
         return $this->districtRepository->findBy([], ['slug' => 'ASC']);
     }
 
+    public function findOneBySlug($slug)
+    {
+        return $this->districtRepository->findOneBy([
+            'slug' => $slug,
+        ]);
+    }
+
     public function findOneByElection($slug)
     {
         return $this->districtRepository->findOneByElections($slug);

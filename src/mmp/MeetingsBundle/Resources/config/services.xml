@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!-- Repository -->
+        <service class="Doctrine\ORM\EntityRepository"
+                 id="rjp.repository.meeting"
+                 factory-service="doctrine.orm.entity_manager"
+                 factory-method="getRepository">
+            <argument>mmpMeetingsBundle:Meeting</argument>
+        </service>
+
+        <!-- Manager -->
+        <service class="mmp\MeetingsBundle\Service\MeetingManager" id="rjp.manager.meeting">
+            <argument type="service" id="rjp.repository.meeting"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+        </service>
+
+        <!-- Form -->
+        <service class="mmp\MeetingsBundle\Form\MeetingType" id="rjp.form.type.meeting">
+            <tag name="form.type" alias="mmp_rjpbundle_meeting"/>
+        </service>
+    </services>
+
+</container>

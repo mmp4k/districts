@@ -1,3 +1,7 @@
+mmp_meetings:
+    resource: "@mmpMeetingsBundle/Resources/config/routing.xml"
+    prefix:   /
+
 mmp_user:
     resource: "@mmpUserBundle/Resources/config/routing.xml"
     prefix:   /

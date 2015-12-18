@@ -1,11 +1,12 @@
 <?php
 
-namespace mmp\rjpBundle\Form;
+namespace mmp\MeetingsBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
+use mmp\MeetingsBundle\Entity\Meeting;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Doctrine\ORM\EntityRepository;
 
 class MeetingType extends AbstractType
 {
@@ -38,7 +39,7 @@ class MeetingType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'mmp\rjpBundle\Entity\Meeting'
+            'data_class' => Meeting::class,
         ));
     }
 

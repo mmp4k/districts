@@ -12,12 +12,6 @@
                  factory-method="getRepository">
             <argument>mmpRjpBundle:District</argument>
         </service>
-        <service class="Doctrine\ORM\EntityRepository"
-                 id="rjp.repository.meeting"
-                 factory-service="doctrine.orm.entity_manager"
-                 factory-method="getRepository">
-            <argument>mmpRjpBundle:Meeting</argument>
-        </service>
         <service class="mmp\rjpBundle\Entity\Repository\ElectionRepository"
                  id="rjp.repository.election"
                  factory-service="doctrine.orm.entity_manager"
@@ -48,10 +42,6 @@
             <argument type="service" id="rjp.repository.district"/>
             <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
-        <service class="mmp\rjpBundle\Service\MeetingManager" id="rjp.manager.meeting">
-            <argument type="service" id="rjp.repository.meeting"/>
-            <argument type="service" id="doctrine.orm.entity_manager"/>
-        </service>
         <service class="mmp\rjpBundle\Service\ElectionManager" id="rjp.manager.election">
             <argument type="service" id="rjp.repository.election"/>
             <argument type="service" id="doctrine.orm.entity_manager"/>
@@ -72,9 +62,6 @@
         </service>
         <service class="mmp\rjpBundle\Form\ConfirmType" id="rjp.form.type.confirm">
             <tag name="form.type" alias="confirm"/>
-        </service>
-        <service class="mmp\rjpBundle\Form\MeetingType" id="rjp.form.type.meeting">
-            <tag name="form.type" alias="mmp_rjpbundle_meeting"/>
         </service>
         <service class="mmp\rjpBundle\Form\ElectionHasElectoralCommissionStreetsType"
                  id="rjp.form.type.election_has_electoral_commission_streets">

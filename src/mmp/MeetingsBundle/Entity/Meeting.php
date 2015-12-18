@@ -1,6 +1,8 @@
 <?php
-namespace mmp\rjpBundle\Entity;
-use Doctrine\ORM\Mapping AS ORM;
+
+namespace mmp\MeetingsBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
@@ -64,6 +66,16 @@ class Meeting
     }
 
     /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
      * Set date
      *
      * @param \DateTime $date
@@ -77,13 +89,13 @@ class Meeting
     }
 
     /**
-     * Get date
+     * Get place
      *
-     * @return \DateTime 
+     * @return string
      */
-    public function getDate()
+    public function getPlace()
     {
-        return $this->date;
+        return $this->place;
     }
 
     /**
@@ -100,13 +112,13 @@ class Meeting
     }
 
     /**
-     * Get place
+     * Get map_coords
      *
-     * @return string 
+     * @return string
      */
-    public function getPlace()
+    public function getMapCoords()
     {
-        return $this->place;
+        return $this->map_coords;
     }
 
     /**
@@ -123,13 +135,13 @@ class Meeting
     }
 
     /**
-     * Get map_coords
+     * Get link_facebook
      *
-     * @return string 
+     * @return string
      */
-    public function getMapCoords()
+    public function getLinkFacebook()
     {
-        return $this->map_coords;
+        return $this->link_facebook;
     }
 
     /**
@@ -146,13 +158,13 @@ class Meeting
     }
 
     /**
-     * Get link_facebook
+     * Get organizer
      *
-     * @return string 
+     * @return \mmp\rjpBundle\Entity\User
      */
-    public function getLinkFacebook()
+    public function getOrganizer()
     {
-        return $this->link_facebook;
+        return $this->organizer;
     }
 
     /**
@@ -169,13 +181,13 @@ class Meeting
     }
 
     /**
-     * Get organizer
+     * Get district
      *
-     * @return \mmp\rjpBundle\Entity\User 
+     * @return \mmp\rjpBundle\Entity\District
      */
-    public function getOrganizer()
+    public function getDistrict()
     {
-        return $this->organizer;
+        return $this->district;
     }
 
     /**
@@ -189,15 +201,5 @@ class Meeting
         $this->district = $district;
 
         return $this;
-    }
-
-    /**
-     * Get district
-     *
-     * @return \mmp\rjpBundle\Entity\District 
-     */
-    public function getDistrict()
-    {
-        return $this->district;
     }
 }

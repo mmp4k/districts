@@ -30,7 +30,7 @@ class IndexController extends Controller
      */
     public function districtAction($slug)
     {
-        $district = $this->getDistrictManager()->findOneByElection($slug);
+        $district = $this->getDistrictManager()->findOneBySlug($slug);
 
         return [
             'district'   => $district,
@@ -60,16 +60,6 @@ class IndexController extends Controller
         ];
     }
 
-    /**
-     * @Route("/spotkania-mieszkancow", name="mmp_rjp_meetings")
-     * @Template()
-     */
-    public function meetingsAction()
-    {
-        return [
-            'meetings' => $this->getMeetingManager()->newestFirst(),
-        ];
-    }
 
     /**
      * @Route("/wybory", name="mmp_rjp_elections")
@@ -96,13 +86,5 @@ class IndexController extends Controller
     protected function getElectionManager()
     {
         return $this->get('rjp.manager.election');
-    }
-
-    /**
-     * @return \mmp\rjpBundle\Service\MeetingManager
-     */
-    protected function getMeetingManager()
-    {
-        return $this->get('rjp.manager.meeting');
     }
 }

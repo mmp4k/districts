@@ -1,8 +1,10 @@
 <?php
 namespace mmp\rjpBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use mmp\MeetingsBundle\Entity\Meeting;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -93,7 +95,7 @@ class District
     private $link_kml;
 
     /**
-     * @ORM\OneToMany(targetEntity="mmp\rjpBundle\Entity\Meeting", mappedBy="district")
+     * @ORM\OneToMany(targetEntity="mmp\MeetingsBundle\Entity\Meeting", mappedBy="district")
      * @ORM\OrderBy({"date"="ASC"})
      */
     private $meetings;
@@ -143,6 +145,18 @@ class District
     private $temp;
     private $statsOnElection;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->meetings = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->councilors = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->images = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->elections = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->candidatesOnElection = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     public function __toString() {
         return $this->getName();
     }
@@ -153,7 +167,7 @@ class District
     public function init() {
         $this->candidatesOnElection = new \Doctrine\Common\Collections\ArrayCollection();;
     }
-    
+
     /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
@@ -161,11 +175,10 @@ class District
     public function preUpload()
     {
         if (null !== $this->getFile()) {
-            // do whatever you want to generate a unique name            
+            // do whatever you want to generate a unique name
             $this->avatar = filter_var($this->getName(), FILTER_SANITIZE_URL) .'.'.$this->getFile()->guessExtension();
         }
     }
-
 
     /**
      * @ORM\PostPersist()
@@ -214,16 +227,14 @@ class District
         return null === $this->avatar ? null : $this->getUploadDir().'/'.$this->avatar;
     }
 
-    protected function getUploadRootDir()
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
     {
-        // the absolute directory path where uploaded documents should be saved
-        return __DIR__.'/../../../../web/'.$this->getUploadDir();
-    }
-
-    protected function getUploadDir()
-    {
-        // get rid of the __DIR__ so it doesn't screw when displaying uploaded doc/image in the view.
-        return 'uploads/avatars';
+        return $this->file;
     }
 
     /**
@@ -245,35 +256,23 @@ class District
     }
 
     /**
-     * Get file.
-     *
-     * @return UploadedFile
-     */
-    public function getFile()
-    {
-        return $this->file;
-    }
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->meetings             = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->councilors           = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->images               = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->elections            = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->candidatesOnElection = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 
     /**
@@ -290,13 +289,13 @@ class District
     }
 
     /**
-     * Get slug
+     * Get name
      *
-     * @return string 
+     * @return string
      */
-    public function getSlug()
+    public function getName()
     {
-        return $this->slug;
+        return $this->name;
     }
 
     /**
@@ -313,13 +312,13 @@ class District
     }
 
     /**
-     * Get name
+     * Get status
      *
-     * @return string 
+     * @return string
      */
-    public function getName()
+    public function getStatus()
     {
-        return $this->name;
+        return $this->status;
     }
 
     /**
@@ -336,13 +335,13 @@ class District
     }
 
     /**
-     * Get status
+     * Get signature_needed
      *
-     * @return string 
+     * @return integer
      */
-    public function getStatus()
+    public function getSignatureNeeded()
     {
-        return $this->status;
+        return $this->signature_needed;
     }
 
     /**
@@ -359,13 +358,13 @@ class District
     }
 
     /**
-     * Get signature_needed
+     * Get signature_gained
      *
-     * @return integer 
+     * @return integer
      */
-    public function getSignatureNeeded()
+    public function getSignatureGained()
     {
-        return $this->signature_needed;
+        return $this->signature_gained;
     }
 
     /**
@@ -382,13 +381,13 @@ class District
     }
 
     /**
-     * Get signature_gained
+     * Get avatar
      *
-     * @return integer 
+     * @return string
      */
-    public function getSignatureGained()
+    public function getAvatar()
     {
-        return $this->signature_gained;
+        return $this->avatar;
     }
 
     /**
@@ -405,13 +404,13 @@ class District
     }
 
     /**
-     * Get avatar
+     * Get link_facebook
      *
-     * @return string 
+     * @return string
      */
-    public function getAvatar()
+    public function getLinkFacebook()
     {
-        return $this->avatar;
+        return $this->link_facebook;
     }
 
     /**
@@ -428,13 +427,13 @@ class District
     }
 
     /**
-     * Get link_facebook
+     * Get link_poster
      *
-     * @return string 
+     * @return string
      */
-    public function getLinkFacebook()
+    public function getLinkPoster()
     {
-        return $this->link_facebook;
+        return $this->link_poster;
     }
 
     /**
@@ -451,13 +450,13 @@ class District
     }
 
     /**
-     * Get link_poster
+     * Get link_template
      *
-     * @return string 
+     * @return string
      */
-    public function getLinkPoster()
+    public function getLinkTemplate()
     {
-        return $this->link_poster;
+        return $this->link_template;
     }
 
     /**
@@ -474,24 +473,14 @@ class District
     }
 
     /**
-     * Get link_template
-     *
-     * @return string 
-     */
-    public function getLinkTemplate()
-    {
-        return $this->link_template;
-    }
-
-    /**
      * Add meetings
      *
-     * @param \mmp\rjpBundle\Entity\Meeting $meetings
+     * @param Meeting $meeting
      * @return District
      */
-    public function addMeeting(\mmp\rjpBundle\Entity\Meeting $meetings)
+    public function addMeeting(Meeting $meeting)
     {
-        $this->meetings[] = $meetings;
+        $this->meetings[] = $meeting;
 
         return $this;
     }
@@ -499,17 +488,17 @@ class District
     /**
      * Remove meetings
      *
-     * @param \mmp\rjpBundle\Entity\Meeting $meetings
+     * @param Meeting $meeting
      */
-    public function removeMeeting(\mmp\rjpBundle\Entity\Meeting $meetings)
+    public function removeMeeting(Meeting $meeting)
     {
-        $this->meetings->removeElement($meetings);
+        $this->meetings->removeElement($meeting);
     }
 
     /**
      * Get meetings
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return Collection|Meeting[]
      */
     public function getMeetings()
     {
@@ -542,7 +531,7 @@ class District
     /**
      * Get councilors
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCouncilors()
     {
@@ -575,11 +564,21 @@ class District
     /**
      * Get images
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getImages()
     {
         return $this->images;
+    }
+
+    /**
+     * Get coordinator
+     *
+     * @return \mmp\rjpBundle\Entity\User
+     */
+    public function getCoordinator()
+    {
+        return $this->coordinator;
     }
 
     /**
@@ -594,17 +593,6 @@ class District
 
         return $this;
     }
-
-    /**
-     * Get coordinator
-     *
-     * @return \mmp\rjpBundle\Entity\User 
-     */
-    public function getCoordinator()
-    {
-        return $this->coordinator;
-    }
-
 
     public function statusIsExists() {
         return $this->status == 'exists';
@@ -624,18 +612,6 @@ class District
 
     public function statusIsElections() {
         return $this->status == 'elections';
-    }
-
-    /**
-     * Set candidates
-     *
-     * @param \Doctrine\Common\Collections\ArrayCollection $candidates
-     * @return District
-     */
-    public function setCandidates(\Doctrine\Common\Collections\ArrayCollection $candidates) {
-        $this->candidates = $candidates;
-
-        return $this;
     }
 
     /**
@@ -664,11 +640,34 @@ class District
     /**
      * Get candidates
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCandidates()
     {
         return $this->candidates;
+    }
+
+    /**
+     * Set candidates
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $candidates
+     * @return District
+     */
+    public function setCandidates(\Doctrine\Common\Collections\ArrayCollection $candidates)
+    {
+        $this->candidates = $candidates;
+
+        return $this;
+    }
+
+    /**
+     * Get rjp_street
+     *
+     * @return string
+     */
+    public function getRjpStreet()
+    {
+        return $this->rjp_street;
     }
 
     /**
@@ -685,13 +684,13 @@ class District
     }
 
     /**
-     * Get rjp_street
+     * Get rjp_name
      *
-     * @return string 
+     * @return string
      */
-    public function getRjpStreet()
+    public function getRjpName()
     {
-        return $this->rjp_street;
+        return $this->rjp_name;
     }
 
     /**
@@ -708,13 +707,13 @@ class District
     }
 
     /**
-     * Get rjp_name
+     * Get facebook_box
      *
-     * @return string 
+     * @return string
      */
-    public function getRjpName()
+    public function getFacebookBox()
     {
-        return $this->rjp_name;
+        return $this->facebook_box;
     }
 
     /**
@@ -731,13 +730,13 @@ class District
     }
 
     /**
-     * Get facebook_box
+     * Get link_kml
      *
-     * @return string 
+     * @return string
      */
-    public function getFacebookBox()
+    public function getLinkKml()
     {
-        return $this->facebook_box;
+        return $this->link_kml;
     }
 
     /**
@@ -749,29 +748,6 @@ class District
     public function setLinkKml($linkKml)
     {
         $this->link_kml = $linkKml;
-
-        return $this;
-    }
-
-    /**
-     * Get link_kml
-     *
-     * @return string 
-     */
-    public function getLinkKml()
-    {
-        return $this->link_kml;
-    }
-
-    /**
-     * Set election
-     *
-     * @param \Doctrine\Common\Collections\ArrayCollection $elections
-     * @return District
-     */
-    public function setElections(\Doctrine\Common\Collections\ArrayCollection $elections) 
-    {
-        $this->elections = $elections;
 
         return $this;
     }
@@ -802,12 +778,25 @@ class District
     /**
      * Get elections
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getElections()
     {
         return $this->elections;
-    } 
+    }
+
+    /**
+     * Set election
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $elections
+     * @return District
+     */
+    public function setElections(\Doctrine\Common\Collections\ArrayCollection $elections)
+    {
+        $this->elections = $elections;
+
+        return $this;
+    }
 
     /**
      * Add candidates
@@ -817,7 +806,7 @@ class District
      * @return District
      */
     public function addCandidatesOnElection(\Doctrine\Common\Collections\ArrayCollection $candidates, \mmp\rjpBundle\Entity\Election $election)
-    {        
+    {
         if(!$this->getCandidatesOnElection($election)) {
             $this->candidatesOnElection->set($election->getId(), $candidates);
         }
@@ -829,12 +818,12 @@ class District
      * Get candidates on election
      *
      * @param \mmp\rjpBundle\Entity\Election $election
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCandidatesOnElection(\mmp\rjpBundle\Entity\Election $election)
     {
         return $this->candidatesOnElection->get($election->getId());
-    }    
+    }
 
     /**
      * Get statistics from election-district
@@ -847,9 +836,9 @@ class District
         if(isset($this->statsOnElection[$electionKey])) {
             return $this->statsOnElection[$electionKey];
         }
-        
+
         $this->statsOnElection[$electionKey] = new \mmp\rjpBundle\Library\Statistics\ElectionDistrict($election, $this);
-        
+
         return $this->statsOnElection[$electionKey];
     }
 
@@ -879,7 +868,7 @@ class District
     /**
      * Get houseNumbersWithStreets
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getHouseNumbersWithStreets()
     {
@@ -900,9 +889,9 @@ class District
 
         foreach($xml->way as $way) {
             $streetName = null;
-            $houseNumber = null;            
+            $houseNumber = null;
 
-            foreach($way->tag as $tag) {                
+            foreach ($way->tag as $tag) {
 
                 switch($tag['k']) {
                     case 'addr:street' :
@@ -912,12 +901,12 @@ class District
                         $houseNumber = (string)$tag['v'];
                     break;
                 }
-            }    
+            }
 
             if($streetName === null) {
                 continue;
             }
-            
+
             if($houseNumber === null) {
                 $houseNumber = 0;
             }
@@ -931,9 +920,21 @@ class District
             $houseNumberModel->setNumber($houseNumber);
             $houseNumberModel->setDistrict($this);
 
-            $this->addHouseNumbersWithStreet($houseNumberModel);        
-        }                
+            $this->addHouseNumbersWithStreet($houseNumberModel);
+        }
 
         $this->streetsXmlFile = $file;
+    }
+
+    protected function getUploadRootDir()
+    {
+        // the absolute directory path where uploaded documents should be saved
+        return __DIR__ . '/../../../../web/' . $this->getUploadDir();
+    }
+
+    protected function getUploadDir()
+    {
+        // get rid of the __DIR__ so it doesn't screw when displaying uploaded doc/image in the view.
+        return 'uploads/avatars';
     }
 }

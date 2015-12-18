@@ -1,8 +1,10 @@
 <?php
 namespace mmp\rjpBundle\Entity;
-use Doctrine\ORM\Event\LifecycleEventArgs;
+
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
+use mmp\MeetingsBundle\Entity\Meeting;
 
 /**
  * @ORM\Entity
@@ -12,19 +14,18 @@ use FOS\UserBundle\Model\User as BaseUser;
 class User extends BaseUser
 {
     /**
+     * @var Collection|District[]
+     *
      * @ORM\OneToMany(targetEntity="mmp\rjpBundle\Entity\District", mappedBy="coordinator")
      */
     protected $districts;
 
     /**
-     * @ORM\OneToMany(targetEntity="mmp\rjpBundle\Entity\Meeting", mappedBy="organizer")
+     * @var Collection|Meeting[]
+     *
+     * @ORM\OneToMany(targetEntity="mmp\MeetingsBundle\Entity\Meeting", mappedBy="organizer")
      */
     protected $meetings;
-
-    /**
-     * @ORM\OneToMany(targetEntity="mmp\rjpBundle\Entity\Candidate", mappedBy="user")
-     */
-    private $candidates;
 
     /**
      * @ORM\Id
@@ -47,6 +48,13 @@ class User extends BaseUser
      * @ORM\Column(type="integer", length=11, nullable=true)
      */
     protected $phone;
+
+    /**
+     * @var Collection|Candidate
+     *
+     * @ORM\OneToMany(targetEntity="mmp\rjpBundle\Entity\Candidate", mappedBy="user")
+     */
+    private $candidates;
 
     /** /Helpers **/
 
@@ -100,10 +108,10 @@ class User extends BaseUser
     /**
      * Add meetings
      *
-     * @param \mmp\rjpBundle\Entity\Meeting $meetings
+     * @param \mmp\MeetingsBundle\Entity\Meeting $meetings
      * @return User
      */
-    public function addMeeting(\mmp\rjpBundle\Entity\Meeting $meetings)
+    public function addMeeting(\mmp\MeetingsBundle\Entity\Meeting $meetings)
     {
         $this->meetings[] = $meetings;
 
@@ -113,9 +121,9 @@ class User extends BaseUser
     /**
      * Remove meetings
      *
-     * @param \mmp\rjpBundle\Entity\Meeting $meetings
+     * @param \mmp\MeetingsBundle\Entity\Meeting $meetings
      */
-    public function removeMeeting(\mmp\rjpBundle\Entity\Meeting $meetings)
+    public function removeMeeting(\mmp\MeetingsBundle\Entity\Meeting $meetings)
     {
         $this->meetings->removeElement($meetings);
     }
@@ -154,6 +162,16 @@ class User extends BaseUser
     // }
 
     /**
+     * Get first_name
+     *
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->first_name;
+    }
+
+    /**
      * Set first_name
      *
      * @param string $firstName
@@ -167,13 +185,13 @@ class User extends BaseUser
     }
 
     /**
-     * Get first_name
+     * Get last_name
      *
      * @return string
      */
-    public function getFirstName()
+    public function getLastName()
     {
-        return $this->first_name;
+        return $this->last_name;
     }
 
     /**
@@ -190,13 +208,13 @@ class User extends BaseUser
     }
 
     /**
-     * Get last_name
+     * Get phone
      *
-     * @return string
+     * @return integer
      */
-    public function getLastName()
+    public function getPhone()
     {
-        return $this->last_name;
+        return $this->phone;
     }
 
     /**
@@ -210,16 +228,6 @@ class User extends BaseUser
         $this->phone = $phone;
 
         return $this;
-    }
-
-    /**
-     * Get phone
-     *
-     * @return integer
-     */
-    public function getPhone()
-    {
-        return $this->phone;
     }
 
     /**
