@@ -2,7 +2,6 @@
 
 namespace mmp\rjpBundle\Entity\Repository;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -12,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class DistrictRepository extends EntityRepository
-{   
+{
     public function findOneByElections($rules, $order = null) {
         $em = $this->getEntityManager();
         $district = $this->findOneBy($rules, $order);

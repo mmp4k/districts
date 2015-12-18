@@ -40,6 +40,7 @@
         <!-- Manager -->
         <service class="mmp\rjpBundle\Service\DistrictManager" id="rjp.manager.district">
             <argument type="service" id="rjp.repository.district"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
         <service class="mmp\rjpBundle\Service\MeetingManager" id="rjp.manager.meeting">
             <argument type="service" id="rjp.repository.meeting"/>
@@ -74,6 +75,12 @@
         </service>
         <service class="mmp\rjpBundle\Form\ElectionType" id="rjp.form.type.election">
             <tag name="form.type" alias="mmp_rjpbundle_election"/>
+        </service>
+        <service class="mmp\rjpBundle\Form\DistrictType" id="rjp.form.type.district">
+            <tag name="form.type" alias="mmp_rjpbundle_district"/>
+        </service>
+        <service class="mmp\rjpBundle\Form\DistrictStreetsImportType" id="rjp.form.type.districts_streets_import">
+            <tag name="form.type" alias="districtStreetsImport"/>
         </service>
     </services>
 </container>

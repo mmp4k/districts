@@ -2,13 +2,11 @@
 
 namespace mmp\rjpBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use mmp\rjpBundle\Entity\District;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use mmp\rjpBundle\Form\DistrictType;
-use mmp\rjpBundle\Form\ConfirmType;
-use mmp\rjpBundle\Form\DistrictStreetsImportType;
-use mmp\rjpBundle\Entity\District;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 class AdminDistrictsController extends Controller
@@ -19,134 +17,136 @@ class AdminDistrictsController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $districts = $em->getRepository('mmpRjpBundle:District')->findAll();
-        
-        return array(
-            'districts'  =>  $districts
-        );
+        return [
+            'districts' => $this->getDistrictManager()->findAll(),
+        ];
     }
 
     /**
      * @Route("/admin/districts/add", name="mmp_rjp_admin_districts_add")
      * @Template()
+     * @param Request $request
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function addAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
         $district = new District;
-
-        $form = $this->createForm(new DistrictType, $district);
-        
+        $form = $this->createForm('mmp_rjpbundle_district', $district);
         $form->handleRequest($request);
-        
+
         if ($form->isValid()) {
-            $em->persist($district);
-            $em->flush();
+            $this->getDistrictManager()->save($district);
 
             return $this->redirect($this->generateUrl('mmp_rjp_admin_districts'));
         }
 
-        return array(
-            'form'  =>  $form->createView()
-            );
+        return [
+            'form' => $form->createView(),
+        ];
     }
 
     /**
      * @Route("/admin/stricts/streets/import/{id}", name="mmp_rjp_admin_districts_streets_import")
      * @Template()
+     * @ParamConverter("id", class="mmpRjpBundle:District")
+     * @param Request  $request
+     * @param District $district
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|array
      */
-    public function streetsImportAction($id, Request $request)
+    public function streetsImportAction(Request $request, District $district)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $district = $em->getRepository('mmpRjpBundle:District')->find($id);
-        $form = $this->createForm(new DistrictStreetsImportType(), $district);
-        
+        $form = $this->createForm('districtStreetsImport', $district);
         $form->handleRequest($request);
-        
+
         if ($form->isValid()) {
-            $em->persist($district);
-            $em->flush();
-            
+            $this->getDistrictManager()->save($district);
+
             return $this->redirect($this->generateUrl('mmp_rjp_admin_district_streets', [
-                'id' => $id
+                'id' => $district->getId(),
             ]));
         }
+
+        return [];
     }
 
     /**
      * @Route("/admin/stricts/streets/{id}", name="mmp_rjp_admin_district_streets")
      * @Template()
+     * @ParamConverter("id", class="mmpRjpBundle:District")
+     * @param District $district
+     * @return array
      */
-    public function streetsAction($id)
+    public function streetsAction(District $district)
     {
-        $em = $this->getDoctrine()->getManager();
-        $district = $em->getRepository('mmpRjpBundle:District')->find($id);
-
-        $form = $this->createForm(new DistrictStreetsImportType, $district, [
+        $form = $this->createForm('districtStreetsImport', $district, [
             'action' => $this->generateUrl('mmp_rjp_admin_districts_streets_import', [
-                'id' => $id
-            ])
+                'id' => $district->getId(),
+            ]),
         ]);
 
         return [
             'district' => $district,
-            'form'     => $form->createView()
+            'form'     => $form->createView(),
         ];
     }
 
     /**
      * @Route("/admin/districts/edit/{id}", name="mmp_rjp_admin_district_edit")
      * @Template()
+     * @ParamConverter("id", class="mmpRjpBundle:District")
+     * @param Request  $request
+     * @param District $district
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function editAction($id, Request $request)
+    public function editAction(Request $request, District $district)
     {
-        $em       = $this->getDoctrine()->getManager();
-        $district = $em->getRepository('mmpRjpBundle:District')->findOneById($id);
-
-        $form = $this->createForm(new DistrictType, $district);
-        
+        $form = $this->createForm('mmp_rjpbundle_district', $district);
         $form->handleRequest($request);
-        
-        if ($form->isValid()) {
-            $em->persist($district);
-            $em->flush();
-            
-            return $this->redirect($this->generateUrl('mmp_rjp_admin_districts'));
-        }   
 
-        return array(
+        if ($form->isValid()) {
+            $this->getDistrictManager()->save($district);
+
+            return $this->redirect($this->generateUrl('mmp_rjp_admin_districts'));
+        }
+
+        return [
             'district' => $district,
-            'form'     => $form->createView()
-            );
+            'form'     => $form->createView(),
+        ];
     }
 
     /**
      * @Route("/admin/districts/delete/{slug}", name="mmp_rjp_admin_district_delete")
      * @Template()
+     * @ParamConverter("district", class="mmpRjpBundle:District")
+     * @param Request  $request
+     * @param District $district
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction($slug, Request $request)
+    public function deleteAction(Request $request, District $district)
     {
-        $em       = $this->getDoctrine()->getManager();
-        $district = $em->getRepository('mmpRjpBundle:District')->findOneBySlug($slug);
-
-        $form = $this->createForm(new ConfirmType, null);
-        
+        $form = $this->createForm('confirm');
         $form->handleRequest($request);
-        
+
         if ($form->isValid()) {
-            if($form->get('yes')->isClicked()) {
-                $em->remove($district);
-                $em->flush();
+            if ($form->get('yes')->isClicked()) {
+                $this->getDistrictManager()->delete($district);
             }
+
             return $this->redirect($this->generateUrl('mmp_rjp_admin_districts'));
         }
 
-        return array(
-            'district'  =>  $district,
-            'form'      =>  $form->createView()
-            );
+        return [
+            'district' => $district,
+            'form'     => $form->createView(),
+        ];
+    }
+
+    /**
+     * @return \mmp\rjpBundle\Service\DistrictManager
+     */
+    protected function getDistrictManager()
+    {
+        return $this->get('rjp.manager.district');
     }
 }
