@@ -7,33 +7,28 @@
     <services>
         <!-- Repository -->
         <service class="mmp\rjpBundle\Entity\Repository\DistrictRepository"
-                 id="rjp.repository.district"
-                 factory-service="doctrine.orm.entity_manager"
-                 factory-method="getRepository">
+                 id="rjp.repository.district">
+            <factory service="doctrine.orm.entity_manager" method="getRepository"/>
             <argument>mmpRjpBundle:District</argument>
         </service>
         <service class="mmp\rjpBundle\Entity\Repository\ElectionRepository"
-                 id="rjp.repository.election"
-                 factory-service="doctrine.orm.entity_manager"
-                 factory-method="getRepository">
+                 id="rjp.repository.election">
+            <factory service="doctrine.orm.entity_manager" method="getRepository"/>
             <argument>mmpRjpBundle:Election</argument>
         </service>
         <service class="Doctrine\ORM\EntityRepository"
-                 id="rjp.repository.electoral_commission"
-                 factory-service="doctrine.orm.entity_manager"
-                 factory-method="getRepository">
+                 id="rjp.repository.electoral_commission">
+            <factory service="doctrine.orm.entity_manager" method="getRepository"/>
             <argument>mmpRjpBundle:ElectoralCommission</argument>
         </service>
         <service class="Doctrine\ORM\EntityRepository"
-                 id="rjp.repository.election_has_electoral_commission"
-                 factory-service="doctrine.orm.entity_manager"
-                 factory-method="getRepository">
+                 id="rjp.repository.election_has_electoral_commission">
+            <factory service="doctrine.orm.entity_manager" method="getRepository"/>
             <argument>mmpRjpBundle:ElectionHasElectoralCommission</argument>
         </service>
         <service class="Doctrine\ORM\EntityRepository"
-                 id="rjp.repository.candidate"
-                 factory-service="doctrine.orm.entity_manager"
-                 factory-method="getRepository">
+                 id="rjp.repository.candidate">
+            <factory service="doctrine.orm.entity_manager" method="getRepository"/>
             <argument>mmpRjpBundle:Candidate</argument>
         </service>
 

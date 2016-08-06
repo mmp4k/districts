@@ -16,3 +16,4 @@
 !/web/uploads/.gitkeep
 !/web/uploads/avatars/.gitkeep
 .idea
+composer.lock
