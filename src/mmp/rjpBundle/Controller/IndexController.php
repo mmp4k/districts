@@ -2,6 +2,8 @@
 
 namespace mmp\rjpBundle\Controller;
 
+use mmp\rjpBundle\Entity\District;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -17,7 +19,7 @@ class IndexController extends Controller
         $districts = $this->getDistrictManager()->findOrderedBySlug();
 
         return [
-            'districts'  => $districts,
+            'districts' => $districts,
             'councilors' => $this->getElectionManager()->findLastlyCouncilorsByDistricts($districts),
         ];
     }
@@ -25,15 +27,18 @@ class IndexController extends Controller
     /**
      * @Route("/katowice/{slug}", name="mmp_rjp_district")
      * @Template()
-     * @param string $slug
+     * @ParamConverter(name="district", class="mmpRjpBundle:District", options={"repository_method" : "findOneBySlug"})
+     *
+     * @param District $district
+     *
      * @return array
      */
-    public function districtAction($slug)
+    public function districtAction(District $district)
     {
-        $district = $this->getDistrictManager()->findOneBySlug($slug);
+        $this->getElectionManager()->findWithDistrict($district);
 
         return [
-            'district'   => $district,
+            'district' => $district,
             'councilors' => $this->getElectionManager()->findLastlyCouncilorsByDistricts([$district]),
         ];
     }
@@ -59,7 +64,6 @@ class IndexController extends Controller
             'districts' => $this->getDistrictManager()->findWithLeaders(),
         ];
     }
-
 
     /**
      * @Route("/wybory", name="mmp_rjp_elections")

@@ -23,9 +23,9 @@ class ElectionManager
         return $this->electionRepository->findLastlyCouncilorsByDistricts($districts);
     }
 
-    public function findWithDistrict()
+    public function findWithDistrict($district = null)
     {
-        return $this->electionRepository->findAllWithDistricts();
+        return $this->electionRepository->findAllWithDistricts($district);
     }
 
     public function findAll()

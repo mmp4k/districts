@@ -25,12 +25,14 @@ class AdminDistrictsController extends Controller
     /**
      * @Route("/admin/districts/add", name="mmp_rjp_admin_districts_add")
      * @Template()
+     *
      * @param Request $request
+     *
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function addAction(Request $request)
     {
-        $district = new District;
+        $district = new District();
         $form = $this->createForm('mmp_rjpbundle_district', $district);
         $form->handleRequest($request);
 
@@ -49,8 +51,10 @@ class AdminDistrictsController extends Controller
      * @Route("/admin/stricts/streets/import/{id}", name="mmp_rjp_admin_districts_streets_import")
      * @Template()
      * @ParamConverter("id", class="mmpRjpBundle:District")
+     *
      * @param Request  $request
      * @param District $district
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|array
      */
     public function streetsImportAction(Request $request, District $district)
@@ -73,7 +77,9 @@ class AdminDistrictsController extends Controller
      * @Route("/admin/stricts/streets/{id}", name="mmp_rjp_admin_district_streets")
      * @Template()
      * @ParamConverter("id", class="mmpRjpBundle:District")
+     *
      * @param District $district
+     *
      * @return array
      */
     public function streetsAction(District $district)
@@ -86,7 +92,7 @@ class AdminDistrictsController extends Controller
 
         return [
             'district' => $district,
-            'form'     => $form->createView(),
+            'form' => $form->createView(),
         ];
     }
 
@@ -94,8 +100,10 @@ class AdminDistrictsController extends Controller
      * @Route("/admin/districts/edit/{id}", name="mmp_rjp_admin_district_edit")
      * @Template()
      * @ParamConverter("id", class="mmpRjpBundle:District")
+     *
      * @param Request  $request
      * @param District $district
+     *
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function editAction(Request $request, District $district)
@@ -111,7 +119,7 @@ class AdminDistrictsController extends Controller
 
         return [
             'district' => $district,
-            'form'     => $form->createView(),
+            'form' => $form->createView(),
         ];
     }
 
@@ -119,8 +127,10 @@ class AdminDistrictsController extends Controller
      * @Route("/admin/districts/delete/{slug}", name="mmp_rjp_admin_district_delete")
      * @Template()
      * @ParamConverter("district", class="mmpRjpBundle:District")
+     *
      * @param Request  $request
      * @param District $district
+     *
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteAction(Request $request, District $district)
@@ -138,7 +148,7 @@ class AdminDistrictsController extends Controller
 
         return [
             'district' => $district,
-            'form'     => $form->createView(),
+            'form' => $form->createView(),
         ];
     }
 

@@ -56,9 +56,9 @@ class Meeting
     private $district;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -66,7 +66,7 @@ class Meeting
     }
 
     /**
-     * Get date
+     * Get date.
      *
      * @return \DateTime
      */
@@ -76,9 +76,10 @@ class Meeting
     }
 
     /**
-     * Set date
+     * Set date.
      *
      * @param \DateTime $date
+     *
      * @return Meeting
      */
     public function setDate($date)
@@ -89,7 +90,7 @@ class Meeting
     }
 
     /**
-     * Get place
+     * Get place.
      *
      * @return string
      */
@@ -99,9 +100,10 @@ class Meeting
     }
 
     /**
-     * Set place
+     * Set place.
      *
      * @param string $place
+     *
      * @return Meeting
      */
     public function setPlace($place)
@@ -112,7 +114,7 @@ class Meeting
     }
 
     /**
-     * Get map_coords
+     * Get map_coords.
      *
      * @return string
      */
@@ -122,9 +124,10 @@ class Meeting
     }
 
     /**
-     * Set map_coords
+     * Set map_coords.
      *
      * @param string $mapCoords
+     *
      * @return Meeting
      */
     public function setMapCoords($mapCoords)
@@ -135,7 +138,7 @@ class Meeting
     }
 
     /**
-     * Get link_facebook
+     * Get link_facebook.
      *
      * @return string
      */
@@ -145,9 +148,10 @@ class Meeting
     }
 
     /**
-     * Set link_facebook
+     * Set link_facebook.
      *
      * @param string $linkFacebook
+     *
      * @return Meeting
      */
     public function setLinkFacebook($linkFacebook)
@@ -158,7 +162,7 @@ class Meeting
     }
 
     /**
-     * Get organizer
+     * Get organizer.
      *
      * @return \mmp\UserBundle\Entity\User
      */
@@ -168,9 +172,10 @@ class Meeting
     }
 
     /**
-     * Set organizer
+     * Set organizer.
      *
      * @param \mmp\UserBundle\Entity\User $organizer
+     *
      * @return Meeting
      */
     public function setOrganizer(\mmp\UserBundle\Entity\User $organizer = null)
@@ -181,7 +186,7 @@ class Meeting
     }
 
     /**
-     * Get district
+     * Get district.
      *
      * @return \mmp\rjpBundle\Entity\District
      */
@@ -191,9 +196,10 @@ class Meeting
     }
 
     /**
-     * Set district
+     * Set district.
      *
      * @param \mmp\rjpBundle\Entity\District $district
+     *
      * @return Meeting
      */
     public function setDistrict(\mmp\rjpBundle\Entity\District $district = null)

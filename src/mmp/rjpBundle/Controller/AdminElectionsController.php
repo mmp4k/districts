@@ -25,12 +25,14 @@ class AdminElectionsController extends Controller
     /**
      * @Route("/admin/elections/add", name="mmp_rjp_admin_election_add")
      * @Template()
+     *
      * @param Request $request
+     *
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function addAction(Request $request)
     {
-        $election = new Election;
+        $election = new Election();
         $form = $this->createForm('mmp_rjpbundle_election', $election);
         $form->handleRequest($request);
 
@@ -49,8 +51,10 @@ class AdminElectionsController extends Controller
      * @Route("/admin/elections/delete/{id}", name="mmp_rjp_admin_election_delete")
      * @Template()
      * @ParamConverter("id", class="mmpRjpBundle:Election")
+     *
      * @param Request  $request
      * @param Election $election
+     *
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteAction(Request $request, Election $election)
@@ -65,7 +69,7 @@ class AdminElectionsController extends Controller
         }
 
         return [
-            'form'     => $form->createView(),
+            'form' => $form->createView(),
             'election' => $election,
         ];
     }
@@ -74,9 +78,12 @@ class AdminElectionsController extends Controller
      * @Route("/admin/elections/edit/{id}", name="mmp_rjp_admin_election_edit")
      * @Template()
      * @ParamConverter("id", class="mmpRjpBundle:Election")
+     *
      * @param Request  $request
      * @param Election $election
+     *
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
+     *
      * @internal param $id
      */
     public function editAction(Request $request, Election $election)

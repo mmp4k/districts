@@ -12,14 +12,14 @@ class MeetingType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('district', 'entity', array( 
+            ->add('district', 'entity', array(
                     'class' => 'mmpRjpBundle:District',
-                    'query_builder' => function(EntityRepository $er) {
+                'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('d')
                             ->orderBy('d.slug', 'ASC');
                     },
@@ -32,7 +32,7 @@ class MeetingType extends AbstractType
             ->add('submit', 'submit')
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

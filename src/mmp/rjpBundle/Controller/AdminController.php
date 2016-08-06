@@ -9,6 +9,7 @@ class AdminController extends Controller
 {
     /**
      * @Template()
+     *
      * @return array
      */
     public function indexAction()

@@ -22,12 +22,14 @@ class AdminController extends Controller
 
     /**
      * @Template()
+     *
      * @param Request $request
+     *
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function addAction(Request $request)
     {
-        $meeting = new Meeting;
+        $meeting = new Meeting();
         $form = $this->createForm('mmp_rjpbundle_meeting', $meeting);
         $form->handleRequest($request);
 
@@ -45,8 +47,10 @@ class AdminController extends Controller
     /**
      * @Template()
      * @ParamConverter("id", class="mmpMeetingBundle:Meeting")
+     *
      * @param Request $request
      * @param Meeting $meeting
+     *
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function editAction(Request $request, Meeting $meeting)
@@ -68,8 +72,10 @@ class AdminController extends Controller
     /**
      * @Template()
      * @ParamConverter("id", class="mmpMeetingBundle:Meeting")
+     *
      * @param Request $request
      * @param Meeting $meeting
+     *
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteAction(Request $request, Meeting $meeting)
@@ -87,7 +93,7 @@ class AdminController extends Controller
 
         return [
             'meeting' => $meeting,
-            'form'    => $form->createView(),
+            'form' => $form->createView(),
         ];
     }
 

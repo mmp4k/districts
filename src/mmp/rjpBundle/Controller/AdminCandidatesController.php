@@ -20,7 +20,7 @@ class AdminCandidatesController extends Controller
     {
         return [
             'candidates' => $this->getCandidateManager()->findAll(),
-            'districts'  => $this->getDistrictManager()->findOrderedBySlug(),
+            'districts' => $this->getDistrictManager()->findOrderedBySlug(),
         ];
     }
 
@@ -28,8 +28,10 @@ class AdminCandidatesController extends Controller
      * @Route("/admin/candidates/id/{id}", name="mmp_rjp_admin_candidates_from_district")
      * @Template()
      * @ParamConverter("district", class="mmpRjpBundle:District")
+     *
      * @param Request  $request
      * @param District $district
+     *
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function candidatesByDistrictAction(Request $request, District $district)
@@ -48,22 +50,24 @@ class AdminCandidatesController extends Controller
         }
 
         return [
-            'district'   => $district,
+            'district' => $district,
             'candidates' => $candidates,
-            'form'       => $form->createView(),
+            'form' => $form->createView(),
         ];
     }
 
     /**
      * @Route("/admin/candidates/add", name="mmp_rjp_admin_candidate_add")
      * @Template()
+     *
      * @param Request $request
+     *
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function addAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $candidate = new Candidate;
+        $candidate = new Candidate();
         $candidate->setElection($em->getRepository('mmpRjpBundle:Election')->find(11));
         $candidate->setDistrict($em->getRepository('mmpRjpBundle:District')->find(15));
 
@@ -88,8 +92,10 @@ class AdminCandidatesController extends Controller
      * @Route("/admin/candidates/delete/{id}", name="mmp_rjp_admin_candidate_delete")
      * @Template()
      * @ParamConverter("candidate", class="mmpRjpBundle:Candidate")
+     *
      * @param Request   $request
      * @param Candidate $candidate
+     *
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteAction(Request $request, Candidate $candidate)
@@ -105,7 +111,7 @@ class AdminCandidatesController extends Controller
 
         return [
             'candidate' => $candidate,
-            'form'      => $form->createView(),
+            'form' => $form->createView(),
         ];
     }
 
@@ -113,8 +119,10 @@ class AdminCandidatesController extends Controller
      * @Route("/admin/candidates/edit/{id}", name="mmp_rjp_admin_candidate_edit")
      * @Template()
      * @ParamConverter("candidate", class="mmpRjpBundle:Candidate")
+     *
      * @param Request   $request
      * @param Candidate $candidate
+     *
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function editAction(Request $request, Candidate $candidate)

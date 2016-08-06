@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "80ac8bf79f00c44c4f2c89a1f8d5ef74",
-    "content-hash": "0b8d58d89d621e8030761d95a2afb3aa",
+    "hash": "69deefc45cb796ba266c3ee10f67ae4c",
+    "content-hash": "789672911e8ed6360003632c6c8299db",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2751,6 +2751,116 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "friendsofphp/php-cs-fixer",
+            "version": "v1.11.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
+                "reference": "41dc93abd2937a85a3889e28765231d574d2bac8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/41dc93abd2937a85a3889e28765231d574d2bac8",
+                "reference": "41dc93abd2937a85a3889e28765231d574d2bac8",
+                "shasum": ""
+            },
+            "require": {
+                "ext-tokenizer": "*",
+                "php": ">=5.3.6",
+                "sebastian/diff": "~1.1",
+                "symfony/console": "~2.3|~3.0",
+                "symfony/event-dispatcher": "~2.1|~3.0",
+                "symfony/filesystem": "~2.1|~3.0",
+                "symfony/finder": "~2.1|~3.0",
+                "symfony/process": "~2.3|~3.0",
+                "symfony/stopwatch": "~2.5|~3.0"
+            },
+            "conflict": {
+                "hhvm": "<3.9"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.5|^5",
+                "satooshi/php-coveralls": "^0.7.1"
+            },
+            "bin": [
+                "php-cs-fixer"
+            ],
+            "type": "application",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\CS\\": "Symfony/CS/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dariusz Rumiński",
+                    "email": "dariusz.ruminski@gmail.com"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "A tool to automatically fix PHP code style",
+            "time": "2016-07-22 06:46:28"
+        },
+        {
+            "name": "sebastian/diff",
+            "version": "1.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/diff.git",
+                "reference": "13edfd8706462032c2f52b4b862974dd46b71c9e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/13edfd8706462032c2f52b4b862974dd46b71c9e",
+                "reference": "13edfd8706462032c2f52b4b862974dd46b71c9e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.8"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kore Nordmann",
+                    "email": "mail@kore-nordmann.de"
+                },
+                {
+                    "name": "Sebastian Bergmann",
+                    "email": "sebastian@phpunit.de"
+                }
+            ],
+            "description": "Diff implementation",
+            "homepage": "https://github.com/sebastianbergmann/diff",
+            "keywords": [
+                "diff"
+            ],
+            "time": "2015-12-08 07:14:41"
+        },
         {
             "name": "sensio/generator-bundle",
             "version": "v2.5.3",
