@@ -1,7 +1,14 @@
 {% extends 'mmpRjpBundle::layoutAdmin.html.twig' %}
 
-{% block headline %}
-    Dodaj dzielnicę
+
+{% block page_header %}
+    <div class="container">
+        <h2 style="margin-top: 0;">Dodaj dzielnicę</h2>
+    </div>
+    <ul class="nav nav-tabs">
+        <li><a href="{{ path('mmp_rjp_admin_districts') }}">Dzielnice</a></li>
+        <li class="active"><a href="{{ path('mmp_rjp_admin_districts_add') }}">Dodaj dzielnicę</a></li>
+    </ul>
 {% endblock %}
 
 {% block content_row %}

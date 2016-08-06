@@ -10,7 +10,7 @@ class ElectionType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -21,14 +21,14 @@ class ElectionType extends AbstractType
             ->add('submit', 'submit')
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'mmp\rjpBundle\Entity\Election'
+            'data_class' => 'mmp\rjpBundle\Entity\Election',
         ));
     }
 

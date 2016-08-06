@@ -26,7 +26,7 @@
             <factory service="doctrine.orm.entity_manager" method="getRepository"/>
             <argument>mmpRjpBundle:ElectionHasElectoralCommission</argument>
         </service>
-        <service class="Doctrine\ORM\EntityRepository"
+        <service class="mmp\rjpBundle\Entity\Repository\CandidateRepository"
                  id="rjp.repository.candidate">
             <factory service="doctrine.orm.entity_manager" method="getRepository"/>
             <argument>mmpRjpBundle:Candidate</argument>

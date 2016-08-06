@@ -3,6 +3,7 @@
 namespace mmp\rjpBundle\Controller;
 
 use mmp\rjpBundle\Entity\District;
+use mmp\rjpBundle\Form\ConfirmType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -124,7 +125,7 @@ class AdminDistrictsController extends Controller
     }
 
     /**
-     * @Route("/admin/districts/delete/{slug}", name="mmp_rjp_admin_district_delete")
+     * @Route("/admin/districts/delete/{id}", name="mmp_rjp_admin_district_delete")
      * @Template()
      * @ParamConverter("district", class="mmpRjpBundle:District")
      *
@@ -135,7 +136,7 @@ class AdminDistrictsController extends Controller
      */
     public function deleteAction(Request $request, District $district)
     {
-        $form = $this->createForm('confirm');
+        $form = $this->createForm(ConfirmType::class);
         $form->handleRequest($request);
 
         if ($form->isValid()) {

@@ -1,6 +1,8 @@
 <?php
+
 namespace mmp\rjpBundle\Entity;
-use Doctrine\ORM\Mapping AS ORM;
+
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
@@ -21,7 +23,6 @@ class Councilor
      */
     private $candidate;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="mmp\rjpBundle\Entity\District", inversedBy="councilors")
      * @ORM\JoinColumn(name="district_id", referencedColumnName="id")
@@ -29,20 +30,30 @@ class Councilor
     private $district;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * Get district.
+     *
+     * @return \mmp\rjpBundle\Entity\District
+     */
+    public function getDistrict()
+    {
+        return $this->district;
+    }
 
     /**
-     * Set district
+     * Set district.
      *
      * @param \mmp\rjpBundle\Entity\District $district
+     *
      * @return Councilor
      */
     public function setDistrict(\mmp\rjpBundle\Entity\District $district = null)
@@ -53,20 +64,20 @@ class Councilor
     }
 
     /**
-     * Get district
+     * Get candidate.
      *
-     * @return \mmp\rjpBundle\Entity\District 
+     * @return \mmp\rjpBundle\Entity\Candidate
      */
-    public function getDistrict()
+    public function getCandidate()
     {
-        return $this->district;
+        return $this->candidate;
     }
 
-
     /**
-     * Set candidate
+     * Set candidate.
      *
      * @param \mmp\rjpBundle\Entity\Candidate $candidate
+     *
      * @return Councilor
      */
     public function setCandidate(\mmp\rjpBundle\Entity\Candidate $candidate)
@@ -74,15 +85,5 @@ class Councilor
         $this->candidate = $candidate;
 
         return $this;
-    }
-
-    /**
-     * Get candidate
-     *
-     * @return \mmp\rjpBundle\Entity\Candidate 
-     */
-    public function getCandidate()
-    {
-        return $this->candidate;
     }
 }

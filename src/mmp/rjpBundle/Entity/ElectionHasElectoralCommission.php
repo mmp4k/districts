@@ -1,5 +1,7 @@
 <?php
+
 namespace mmp\rjpBundle\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -47,7 +49,7 @@ class ElectionHasElectoralCommission
      */
     private $houseNumbersWithStreets;
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -55,9 +57,9 @@ class ElectionHasElectoralCommission
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -65,9 +67,20 @@ class ElectionHasElectoralCommission
     }
 
     /**
-     * Set votes
+     * Get votes.
      *
-     * @param integer $votes
+     * @return int
+     */
+    public function getVotes()
+    {
+        return $this->votes;
+    }
+
+    /**
+     * Set votes.
+     *
+     * @param int $votes
+     *
      * @return ElectionHasElectoralCommission
      */
     public function setVotes($votes)
@@ -78,19 +91,20 @@ class ElectionHasElectoralCommission
     }
 
     /**
-     * Get votes
+     * Get authorized.
      *
-     * @return integer 
+     * @return int
      */
-    public function getVotes()
+    public function getAuthorized()
     {
-        return $this->votes;
+        return $this->authorized;
     }
 
     /**
-     * Set authorized
+     * Set authorized.
      *
-     * @param integer $authorized
+     * @param int $authorized
+     *
      * @return ElectionHasElectoralCommission
      */
     public function setAuthorized($authorized)
@@ -101,19 +115,20 @@ class ElectionHasElectoralCommission
     }
 
     /**
-     * Get authorized
+     * Get election.
      *
-     * @return integer 
+     * @return \mmp\rjpBundle\Entity\Election
      */
-    public function getAuthorized()
+    public function getElection()
     {
-        return $this->authorized;
+        return $this->election;
     }
 
     /**
-     * Set election
+     * Set election.
      *
      * @param \mmp\rjpBundle\Entity\Election $election
+     *
      * @return ElectionHasElectoralCommission
      */
     public function setElection(\mmp\rjpBundle\Entity\Election $election = null)
@@ -124,19 +139,20 @@ class ElectionHasElectoralCommission
     }
 
     /**
-     * Get election
+     * Get electoralCommission.
      *
-     * @return \mmp\rjpBundle\Entity\Election 
+     * @return \mmp\rjpBundle\Entity\ElectoralCommission
      */
-    public function getElection()
+    public function getElectoralCommission()
     {
-        return $this->election;
+        return $this->electoralCommission;
     }
 
     /**
-     * Set electoralCommission
+     * Set electoralCommission.
      *
      * @param \mmp\rjpBundle\Entity\ElectoralCommission $electoralCommission
+     *
      * @return ElectionHasElectoralCommission
      */
     public function setElectoralCommission(\mmp\rjpBundle\Entity\ElectoralCommission $electoralCommission = null)
@@ -147,19 +163,20 @@ class ElectionHasElectoralCommission
     }
 
     /**
-     * Get electoralCommission
+     * Get district.
      *
-     * @return \mmp\rjpBundle\Entity\ElectoralCommission 
+     * @return \mmp\rjpBundle\Entity\District
      */
-    public function getElectoralCommission()
+    public function getDistrict()
     {
-        return $this->electoralCommission;
+        return $this->district;
     }
 
     /**
-     * Set district
+     * Set district.
      *
      * @param \mmp\rjpBundle\Entity\District $district
+     *
      * @return ElectionHasElectoralCommission
      */
     public function setDistrict(\mmp\rjpBundle\Entity\District $district = null)
@@ -170,19 +187,10 @@ class ElectionHasElectoralCommission
     }
 
     /**
-     * Get district
-     *
-     * @return \mmp\rjpBundle\Entity\District 
-     */
-    public function getDistrict()
-    {
-        return $this->district;
-    }
-
-    /**
-     * Add houseNumbersWithStreets
+     * Add houseNumbersWithStreets.
      *
      * @param \mmp\rjpBundle\Entity\HouseNumber $houseNumbersWithStreets
+     *
      * @return ElectionHasElectoralCommission
      */
     public function addHouseNumbersWithStreet(\mmp\rjpBundle\Entity\HouseNumber $houseNumbersWithStreets)
@@ -193,7 +201,7 @@ class ElectionHasElectoralCommission
     }
 
     /**
-     * Remove houseNumbersWithStreets
+     * Remove houseNumbersWithStreets.
      *
      * @param \mmp\rjpBundle\Entity\HouseNumber $houseNumbersWithStreets
      */
@@ -203,9 +211,9 @@ class ElectionHasElectoralCommission
     }
 
     /**
-     * Get houseNumbersWithStreets
+     * Get houseNumbersWithStreets.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getHouseNumbersWithStreets()
     {

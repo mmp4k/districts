@@ -1,6 +1,8 @@
 <?php
+
 namespace mmp\rjpBundle\Entity;
-use Doctrine\ORM\Mapping AS ORM;
+
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
@@ -32,9 +34,9 @@ class HouseNumber
     private $district;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -42,9 +44,20 @@ class HouseNumber
     }
 
     /**
-     * Set number
+     * Get number.
+     *
+     * @return string
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    /**
+     * Set number.
      *
      * @param string $number
+     *
      * @return HouseNumber
      */
     public function setNumber($number)
@@ -55,19 +68,20 @@ class HouseNumber
     }
 
     /**
-     * Get number
+     * Get street.
      *
-     * @return string 
+     * @return \mmp\rjpBundle\Entity\Street
      */
-    public function getNumber()
+    public function getStreet()
     {
-        return $this->number;
+        return $this->street;
     }
 
     /**
-     * Set street
+     * Set street.
      *
      * @param \mmp\rjpBundle\Entity\Street $street
+     *
      * @return HouseNumber
      */
     public function setStreet(\mmp\rjpBundle\Entity\Street $street = null)
@@ -78,19 +92,20 @@ class HouseNumber
     }
 
     /**
-     * Get street
+     * Get district.
      *
-     * @return \mmp\rjpBundle\Entity\Street 
+     * @return \mmp\rjpBundle\Entity\District
      */
-    public function getStreet()
+    public function getDistrict()
     {
-        return $this->street;
+        return $this->district;
     }
 
     /**
-     * Set district
+     * Set district.
      *
      * @param \mmp\rjpBundle\Entity\District $district
+     *
      * @return HouseNumber
      */
     public function setDistrict(\mmp\rjpBundle\Entity\District $district = null)
@@ -100,17 +115,8 @@ class HouseNumber
         return $this;
     }
 
-    /**
-     * Get district
-     *
-     * @return \mmp\rjpBundle\Entity\District 
-     */
-    public function getDistrict()
+    public function __toString()
     {
-        return $this->district;
-    }
-
-    public function __toString() {
         return $this->getStreet()->getName() . ' ' . $this->getNumber();
     }
 }

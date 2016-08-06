@@ -1,4 +1,5 @@
 <?php
+
 namespace mmp\rjpBundle\Entity;
 
 use Doctrine\Common\Collections\Collection;
@@ -9,7 +10,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * 
  * @ORM\Table(
  *     indexes={@ORM\Index(name="CoordinatorIndex", columns={"coordinator_id"})},
  *     uniqueConstraints={@ORM\UniqueConstraint(name="SlugIndex", columns={"slug"})}
@@ -128,25 +128,34 @@ class District
     private $coordinator;
 
     /**
-     * Elections
+     * Elections.
+     *
      * @ORM\ManyToMany(targetEntity="mmp\rjpBundle\Entity\Election", mappedBy="districts")
      * @ORM\OrderBy({"date"="desc"})
      */
     private $elections;
 
     /**
-     * Vars for handle import files with streets
+     * Vars for handle import files with streets.
      */
     private $streetsXmlFile;
 
     private $candidatesOnElection;
+
+    private $statuses = [
+        'exists' => 'Istnieje',
+        'in_office' => 'Podpisy złożone',
+        'need_coordinator' => 'Potrzebny koordynator',
+        'collecting' => 'Trwa zbiórka',
+        'elections' => 'Wybory zapowiedziane',
+    ];
 
     private $file;
     private $temp;
     private $statsOnElection;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -157,15 +166,17 @@ class District
         $this->candidatesOnElection = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return $this->getName();
     }
 
     /**
      * @ORM\PostLoad
      */
-    public function init() {
-        $this->candidatesOnElection = new \Doctrine\Common\Collections\ArrayCollection();;
+    public function init()
+    {
+        $this->candidatesOnElection = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -176,7 +187,7 @@ class District
     {
         if (null !== $this->getFile()) {
             // do whatever you want to generate a unique name
-            $this->avatar = filter_var($this->getName(), FILTER_SANITIZE_URL) .'.'.$this->getFile()->guessExtension();
+            $this->avatar = filter_var($this->getName(), FILTER_SANITIZE_URL) . '.' . $this->getFile()->guessExtension();
         }
     }
 
@@ -256,9 +267,9 @@ class District
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -266,7 +277,7 @@ class District
     }
 
     /**
-     * Get slug
+     * Get slug.
      *
      * @return string
      */
@@ -276,9 +287,10 @@ class District
     }
 
     /**
-     * Set slug
+     * Set slug.
      *
      * @param string $slug
+     *
      * @return District
      */
     public function setSlug($slug)
@@ -289,7 +301,7 @@ class District
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -299,9 +311,10 @@ class District
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return District
      */
     public function setName($name)
@@ -312,7 +325,7 @@ class District
     }
 
     /**
-     * Get status
+     * Get status.
      *
      * @return string
      */
@@ -322,9 +335,10 @@ class District
     }
 
     /**
-     * Set status
+     * Set status.
      *
      * @param string $status
+     *
      * @return District
      */
     public function setStatus($status)
@@ -335,9 +349,9 @@ class District
     }
 
     /**
-     * Get signature_needed
+     * Get signature_needed.
      *
-     * @return integer
+     * @return int
      */
     public function getSignatureNeeded()
     {
@@ -345,9 +359,10 @@ class District
     }
 
     /**
-     * Set signature_needed
+     * Set signature_needed.
      *
-     * @param integer $signatureNeeded
+     * @param int $signatureNeeded
+     *
      * @return District
      */
     public function setSignatureNeeded($signatureNeeded)
@@ -358,9 +373,9 @@ class District
     }
 
     /**
-     * Get signature_gained
+     * Get signature_gained.
      *
-     * @return integer
+     * @return int
      */
     public function getSignatureGained()
     {
@@ -368,9 +383,10 @@ class District
     }
 
     /**
-     * Set signature_gained
+     * Set signature_gained.
      *
-     * @param integer $signatureGained
+     * @param int $signatureGained
+     *
      * @return District
      */
     public function setSignatureGained($signatureGained)
@@ -381,7 +397,7 @@ class District
     }
 
     /**
-     * Get avatar
+     * Get avatar.
      *
      * @return string
      */
@@ -391,9 +407,10 @@ class District
     }
 
     /**
-     * Set avatar
+     * Set avatar.
      *
      * @param string $avatar
+     *
      * @return District
      */
     public function setAvatar($avatar)
@@ -404,7 +421,7 @@ class District
     }
 
     /**
-     * Get link_facebook
+     * Get link_facebook.
      *
      * @return string
      */
@@ -414,9 +431,10 @@ class District
     }
 
     /**
-     * Set link_facebook
+     * Set link_facebook.
      *
      * @param string $linkFacebook
+     *
      * @return District
      */
     public function setLinkFacebook($linkFacebook)
@@ -427,7 +445,7 @@ class District
     }
 
     /**
-     * Get link_poster
+     * Get link_poster.
      *
      * @return string
      */
@@ -437,9 +455,10 @@ class District
     }
 
     /**
-     * Set link_poster
+     * Set link_poster.
      *
      * @param string $linkPoster
+     *
      * @return District
      */
     public function setLinkPoster($linkPoster)
@@ -450,7 +469,7 @@ class District
     }
 
     /**
-     * Get link_template
+     * Get link_template.
      *
      * @return string
      */
@@ -460,9 +479,10 @@ class District
     }
 
     /**
-     * Set link_template
+     * Set link_template.
      *
      * @param string $linkTemplate
+     *
      * @return District
      */
     public function setLinkTemplate($linkTemplate)
@@ -473,9 +493,10 @@ class District
     }
 
     /**
-     * Add meetings
+     * Add meetings.
      *
      * @param Meeting $meeting
+     *
      * @return District
      */
     public function addMeeting(Meeting $meeting)
@@ -486,7 +507,7 @@ class District
     }
 
     /**
-     * Remove meetings
+     * Remove meetings.
      *
      * @param Meeting $meeting
      */
@@ -496,7 +517,7 @@ class District
     }
 
     /**
-     * Get meetings
+     * Get meetings.
      *
      * @return Collection|Meeting[]
      */
@@ -506,9 +527,10 @@ class District
     }
 
     /**
-     * Add councilors
+     * Add councilors.
      *
      * @param \mmp\rjpBundle\Entity\Councilor $councilors
+     *
      * @return District
      */
     public function addCouncilor(\mmp\rjpBundle\Entity\Councilor $councilors)
@@ -519,7 +541,7 @@ class District
     }
 
     /**
-     * Remove councilors
+     * Remove councilors.
      *
      * @param \mmp\rjpBundle\Entity\Councilor $councilors
      */
@@ -529,7 +551,7 @@ class District
     }
 
     /**
-     * Get councilors
+     * Get councilors.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -539,9 +561,10 @@ class District
     }
 
     /**
-     * Add images
+     * Add images.
      *
      * @param \mmp\rjpBundle\Entity\DistrictImage $images
+     *
      * @return District
      */
     public function addImage(\mmp\rjpBundle\Entity\DistrictImage $images)
@@ -552,7 +575,7 @@ class District
     }
 
     /**
-     * Remove images
+     * Remove images.
      *
      * @param \mmp\rjpBundle\Entity\DistrictImage $images
      */
@@ -562,7 +585,7 @@ class District
     }
 
     /**
-     * Get images
+     * Get images.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -572,7 +595,7 @@ class District
     }
 
     /**
-     * Get coordinator
+     * Get coordinator.
      *
      * @return \mmp\UserBundle\Entity\User
      */
@@ -582,9 +605,10 @@ class District
     }
 
     /**
-     * Set coordinator
+     * Set coordinator.
      *
      * @param \mmp\UserBundle\Entity\User $coordinator
+     *
      * @return District
      */
     public function setCoordinator(\mmp\UserBundle\Entity\User $coordinator = null)
@@ -594,30 +618,36 @@ class District
         return $this;
     }
 
-    public function statusIsExists() {
+    public function statusIsExists()
+    {
         return $this->status == 'exists';
     }
 
-    public function statusIsInOffice() {
+    public function statusIsInOffice()
+    {
         return $this->status == 'in_office';
     }
 
-    public function statusIsNeedCoordinator() {
+    public function statusIsNeedCoordinator()
+    {
         return $this->status == 'need_coordinator';
     }
 
-    public function statusIsCollecting() {
+    public function statusIsCollecting()
+    {
         return $this->status == 'collecting';
     }
 
-    public function statusIsElections() {
+    public function statusIsElections()
+    {
         return $this->status == 'elections';
     }
 
     /**
-     * Add candidates
+     * Add candidates.
      *
      * @param \mmp\rjpBundle\Entity\Candidate $candidates
+     *
      * @return District
      */
     public function addCandidate(\mmp\rjpBundle\Entity\Candidate $candidates)
@@ -628,7 +658,7 @@ class District
     }
 
     /**
-     * Remove candidates
+     * Remove candidates.
      *
      * @param \mmp\rjpBundle\Entity\Candidate $candidates
      */
@@ -638,7 +668,7 @@ class District
     }
 
     /**
-     * Get candidates
+     * Get candidates.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -648,9 +678,10 @@ class District
     }
 
     /**
-     * Set candidates
+     * Set candidates.
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $candidates
+     *
      * @return District
      */
     public function setCandidates(\Doctrine\Common\Collections\ArrayCollection $candidates)
@@ -661,7 +692,7 @@ class District
     }
 
     /**
-     * Get rjp_street
+     * Get rjp_street.
      *
      * @return string
      */
@@ -671,9 +702,10 @@ class District
     }
 
     /**
-     * Set rjp_street
+     * Set rjp_street.
      *
      * @param string $rjpStreet
+     *
      * @return District
      */
     public function setRjpStreet($rjpStreet)
@@ -684,7 +716,7 @@ class District
     }
 
     /**
-     * Get rjp_name
+     * Get rjp_name.
      *
      * @return string
      */
@@ -694,9 +726,10 @@ class District
     }
 
     /**
-     * Set rjp_name
+     * Set rjp_name.
      *
      * @param string $rjpName
+     *
      * @return District
      */
     public function setRjpName($rjpName)
@@ -707,7 +740,7 @@ class District
     }
 
     /**
-     * Get facebook_box
+     * Get facebook_box.
      *
      * @return string
      */
@@ -717,9 +750,10 @@ class District
     }
 
     /**
-     * Set facebook_box
+     * Set facebook_box.
      *
      * @param string $facebookBox
+     *
      * @return District
      */
     public function setFacebookBox($facebookBox)
@@ -730,7 +764,7 @@ class District
     }
 
     /**
-     * Get link_kml
+     * Get link_kml.
      *
      * @return string
      */
@@ -740,9 +774,10 @@ class District
     }
 
     /**
-     * Set link_kml
+     * Set link_kml.
      *
      * @param string $linkKml
+     *
      * @return District
      */
     public function setLinkKml($linkKml)
@@ -753,9 +788,10 @@ class District
     }
 
     /**
-     * Add election
+     * Add election.
      *
      * @param \mmp\rjpBundle\Entity\Election $elections
+     *
      * @return District
      */
     public function addElection(\mmp\rjpBundle\Entity\Election $elections)
@@ -766,7 +802,7 @@ class District
     }
 
     /**
-     * Remove election
+     * Remove election.
      *
      * @param \mmp\rjpBundle\Entity\Election $elections
      */
@@ -776,7 +812,7 @@ class District
     }
 
     /**
-     * Get elections
+     * Get elections.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -786,9 +822,10 @@ class District
     }
 
     /**
-     * Set election
+     * Set election.
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $elections
+     *
      * @return District
      */
     public function setElections(\Doctrine\Common\Collections\ArrayCollection $elections)
@@ -799,15 +836,16 @@ class District
     }
 
     /**
-     * Add candidates
+     * Add candidates.
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $candidates
-     * @param \mmp\rjpBundle\Entity\Election $election
+     * @param \mmp\rjpBundle\Entity\Election               $election
+     *
      * @return District
      */
     public function addCandidatesOnElection(\Doctrine\Common\Collections\ArrayCollection $candidates, \mmp\rjpBundle\Entity\Election $election)
     {
-        if(!$this->getCandidatesOnElection($election)) {
+        if (!$this->getCandidatesOnElection($election)) {
             $this->candidatesOnElection->set($election->getId(), $candidates);
         }
 
@@ -815,9 +853,10 @@ class District
     }
 
     /**
-     * Get candidates on election
+     * Get candidates on election.
      *
      * @param \mmp\rjpBundle\Entity\Election $election
+     *
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getCandidatesOnElection(\mmp\rjpBundle\Entity\Election $election)
@@ -826,14 +865,16 @@ class District
     }
 
     /**
-     * Get statistics from election-district
+     * Get statistics from election-district.
+     *
      * @param \mmp\rjpBundle\Entity\Election $election
+     *
      * @return \mmp\rjpBundle\Library\Statistics\ElectionDistrict
      */
     public function getStatsOnElection(\mmp\rjpBundle\Entity\Election $election)
     {
         $electionKey = (string)$election;
-        if(isset($this->statsOnElection[$electionKey])) {
+        if (isset($this->statsOnElection[$electionKey])) {
             return $this->statsOnElection[$electionKey];
         }
 
@@ -843,9 +884,10 @@ class District
     }
 
     /**
-     * Add houseNumbersWithStreets
+     * Add houseNumbersWithStreets.
      *
      * @param \mmp\rjpBundle\Entity\HouseNumber $houseNumbersWithStreets
+     *
      * @return District
      */
     public function addHouseNumbersWithStreet(\mmp\rjpBundle\Entity\HouseNumber $houseNumbersWithStreets)
@@ -856,7 +898,7 @@ class District
     }
 
     /**
-     * Remove houseNumbersWithStreets
+     * Remove houseNumbersWithStreets.
      *
      * @param \mmp\rjpBundle\Entity\HouseNumber $houseNumbersWithStreets
      */
@@ -866,7 +908,7 @@ class District
     }
 
     /**
-     * Get houseNumbersWithStreets
+     * Get houseNumbersWithStreets.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -875,25 +917,26 @@ class District
         return $this->houseNumbersWithStreets;
     }
 
-    public function getStreetsXmlFile() {
+    public function getStreetsXmlFile()
+    {
         return $this->streetsXmlFile;
     }
 
-    public function setStreetsXmlFile(UploadedFile $file = null) {
-        if(!$file->isValid()) {
+    public function setStreetsXmlFile(UploadedFile $file = null)
+    {
+        if (!$file->isValid()) {
             return;
         }
         echo '<pre>';
         $xml = simplexml_load_file($file->getRealPath());
         $streetsModels = array();
 
-        foreach($xml->way as $way) {
+        foreach ($xml->way as $way) {
             $streetName = null;
             $houseNumber = null;
 
             foreach ($way->tag as $tag) {
-
-                switch($tag['k']) {
+                switch ($tag['k']) {
                     case 'addr:street' :
                         $streetName = (string)$tag['v'];
                     break;
@@ -903,19 +946,19 @@ class District
                 }
             }
 
-            if($streetName === null) {
+            if ($streetName === null) {
                 continue;
             }
 
-            if($houseNumber === null) {
+            if ($houseNumber === null) {
                 $houseNumber = 0;
             }
 
-            $streetModel = isset($streetsModels[$streetName]) ? $streetsModels[$streetName] : new Street;
+            $streetModel = isset($streetsModels[$streetName]) ? $streetsModels[$streetName] : new Street();
             $streetModel->setName($streetName);
             $streetsModels[$streetName] = $streetModel;
 
-            $houseNumberModel = new HouseNumber;
+            $houseNumberModel = new HouseNumber();
             $houseNumberModel->setStreet($streetModel);
             $houseNumberModel->setNumber($houseNumber);
             $houseNumberModel->setDistrict($this);
@@ -924,6 +967,11 @@ class District
         }
 
         $this->streetsXmlFile = $file;
+    }
+
+    public function getStatusText()
+    {
+        return $this->statuses[$this->status];
     }
 
     protected function getUploadRootDir()

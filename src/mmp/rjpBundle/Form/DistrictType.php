@@ -10,7 +10,7 @@ class DistrictType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -18,12 +18,12 @@ class DistrictType extends AbstractType
             ->add('slug')
             ->add('name')
             ->add('status', 'choice', array(
-                    'choices'    =>  array(
-                        'exists' => 'Istnieje', 
+                'choices' => array(
+                    'exists' => 'Istnieje',
                         'collecting' => 'Trwa zbiórka podpisów',
                         'need_coordinator' => 'Szukamy koordynatora',
-                        'elections' =>  'Wybory',
-                        'in_office' => 'Podpisy złożone')
+                    'elections' => 'Wybory',
+                    'in_office' => 'Podpisy złożone',),
                 ))
             ->add('signature_needed')
             ->add('signature_gained')
@@ -39,14 +39,14 @@ class DistrictType extends AbstractType
             ->add('submit', 'submit')
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'mmp\rjpBundle\Entity\District'
+            'data_class' => 'mmp\rjpBundle\Entity\District',
         ));
     }
 

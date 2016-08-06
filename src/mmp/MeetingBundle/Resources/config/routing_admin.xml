@@ -19,4 +19,7 @@
     <route id="mmp_rjp_admin_meeting_delete" path="/admin/meetings/delete/{id}">
         <default key="_controller">mmpMeetingBundle:Admin:delete</default>
     </route>
+    <route id="mmp_rjp_admin_meetings_from_district" path="/admin/meetings/id/{id}">
+        <default key="_controller">mmpMeetingBundle:Admin:meetingsByDistrict</default>
+    </route>
 </routes>

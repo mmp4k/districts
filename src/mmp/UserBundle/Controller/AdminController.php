@@ -22,7 +22,9 @@ class AdminController extends Controller
 
     /**
      * @Template()
+     *
      * @param Request $request
+     *
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function addAction(Request $request)
@@ -33,9 +35,9 @@ class AdminController extends Controller
 
         if ($form->isValid()) {
             if (!$user->getUsername()) {
-               $user->setUsername(uniqid("u", true));
-               $user->setEmail(uniqid("e", true));
-               $user->setPassword(uniqid("e", true));
+                $user->setUsername(uniqid('u', true));
+                $user->setEmail(uniqid('e', true));
+                $user->setPassword(uniqid('e', true));
             }
             $this->getUserManager()->updateUser($user);
 
@@ -43,15 +45,17 @@ class AdminController extends Controller
         }
 
         return [
-            'form'  =>  $form->createView()
+            'form' => $form->createView(),
         ];
     }
 
     /**
      * @Template()
      * @ParamConverter("id", class="mmpUserBundle:User")
+     *
      * @param Request $request
      * @param User    $user
+     *
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function editAction(Request $request, User $user)
@@ -73,8 +77,10 @@ class AdminController extends Controller
     /**
      * @Template()
      * @ParamConverter("id", class="mmpUserBundle:User")
+     *
      * @param Request $request
      * @param User    $user
+     *
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteAction(Request $request, User $user)

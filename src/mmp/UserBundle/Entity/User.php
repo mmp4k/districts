@@ -1,4 +1,5 @@
 <?php
+
 namespace mmp\UserBundle\Entity;
 
 use Doctrine\Common\Collections\Collection;
@@ -11,7 +12,6 @@ use mmp\rjpBundle\Entity\District;
 /**
  * @ORM\Entity
  * @ORM\Table(name="fos_user")
- *
  */
 class User extends BaseUser
 {
@@ -59,15 +59,15 @@ class User extends BaseUser
     private $candidates;
 
     /** /Helpers **/
-
-    public function __construct() {
-    	parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -75,9 +75,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add districts
+     * Add districts.
      *
      * @param \mmp\rjpBundle\Entity\District $districts
+     *
      * @return User
      */
     public function addDistrict(\mmp\rjpBundle\Entity\District $districts)
@@ -88,7 +89,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove districts
+     * Remove districts.
      *
      * @param \mmp\rjpBundle\Entity\District $districts
      */
@@ -98,7 +99,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get districts
+     * Get districts.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -108,9 +109,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add meetings
+     * Add meetings.
      *
      * @param \mmp\MeetingBundle\Entity\Meeting $meetings
+     *
      * @return User
      */
     public function addMeeting(\mmp\MeetingBundle\Entity\Meeting $meetings)
@@ -121,7 +123,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove meetings
+     * Remove meetings.
      *
      * @param \mmp\MeetingBundle\Entity\Meeting $meetings
      */
@@ -131,7 +133,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get meetings
+     * Get meetings.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -164,7 +166,7 @@ class User extends BaseUser
     // }
 
     /**
-     * Get first_name
+     * Get first_name.
      *
      * @return string
      */
@@ -174,9 +176,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set first_name
+     * Set first_name.
      *
      * @param string $firstName
+     *
      * @return User
      */
     public function setFirstName($firstName)
@@ -187,7 +190,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get last_name
+     * Get last_name.
      *
      * @return string
      */
@@ -197,9 +200,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set last_name
+     * Set last_name.
      *
      * @param string $lastName
+     *
      * @return User
      */
     public function setLastName($lastName)
@@ -210,9 +214,9 @@ class User extends BaseUser
     }
 
     /**
-     * Get phone
+     * Get phone.
      *
-     * @return integer
+     * @return int
      */
     public function getPhone()
     {
@@ -220,9 +224,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set phone
+     * Set phone.
      *
-     * @param integer $phone
+     * @param int $phone
+     *
      * @return User
      */
     public function setPhone($phone)
@@ -233,9 +238,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add candidates
+     * Add candidates.
      *
      * @param \mmp\rjpBundle\Entity\Candidate $candidates
+     *
      * @return User
      */
     public function addCandidate(\mmp\rjpBundle\Entity\Candidate $candidates)
@@ -246,7 +252,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove candidates
+     * Remove candidates.
      *
      * @param \mmp\rjpBundle\Entity\Candidate $candidates
      */
@@ -256,7 +262,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get candidates
+     * Get candidates.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -265,9 +271,8 @@ class User extends BaseUser
         return $this->candidates;
     }
 
-
-    public function __toString() {
+    public function __toString()
+    {
         return $this->getLastName() . ' ' . $this->getFirstName();
     }
-
 }

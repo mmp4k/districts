@@ -1,35 +1,38 @@
 <?php
+
 namespace mmp\rjpBundle\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="mmp\rjpBundle\Entity\Repository\ElectionRepository")
- * 
  */
 class Election
 {
+    /**
+     * @var mmp\rjpBundle\Library\Statistics\Election
+     */
+    protected $statistics;
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
     /**
+     * @var \DateTime
+     *
      * @ORM\Column(type="date", nullable=false)
      */
     private $date;
-
     /**
      * @ORM\OneToMany(targetEntity="mmp\rjpBundle\Entity\Candidate", mappedBy="election")
      */
     private $candidates;
-
     /**
      * @ORM\OneToMany(targetEntity="mmp\rjpBundle\Entity\ElectionHasElectoralCommission", mappedBy="election")
      */
     private $electoralCommissions;
-
     /**
      * @ORM\ManyToMany(targetEntity="mmp\rjpBundle\Entity\District", inversedBy="elections")
      * @ORM\JoinTable(
@@ -41,23 +44,18 @@ class Election
     private $districts;
 
     /**
-     * @var mmp\rjpBundle\Library\Statistics\Election
-     */
-    protected $statistics;
-
-    /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         $this->candidates = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->districts  = new \Doctrine\Common\Collections\ArrayCollection();        
+        $this->districts = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -65,9 +63,20 @@ class Election
     }
 
     /**
-     * Set date
+     * Get date.
+     *
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * Set date.
      *
      * @param \DateTime $date
+     *
      * @return Election
      */
     public function setDate($date)
@@ -78,19 +87,10 @@ class Election
     }
 
     /**
-     * Get date
-     *
-     * @return \DateTime 
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    /**
-     * Add candidates
+     * Add candidates.
      *
      * @param \mmp\rjpBundle\Entity\Candidate $candidates
+     *
      * @return Election
      */
     public function addCandidate(\mmp\rjpBundle\Entity\Candidate $candidates)
@@ -101,7 +101,7 @@ class Election
     }
 
     /**
-     * Remove candidates
+     * Remove candidates.
      *
      * @param \mmp\rjpBundle\Entity\Candidate $candidates
      */
@@ -111,23 +111,25 @@ class Election
     }
 
     /**
-     * Get candidates
+     * Get candidates.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCandidates()
     {
         return $this->candidates;
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return $this->date->format('d.m.Y');
     }
 
-    public function getCandidatesByDistrict(\mmp\rjpBundle\Entity\District $district) {
+    public function getCandidatesByDistrict(\mmp\rjpBundle\Entity\District $district)
+    {
         $candidatesByDistrict = array();
-        foreach($this->getCandidates() as $candidate) {
-            if($candidate->getDistrict() == $district) {
+        foreach ($this->getCandidates() as $candidate) {
+            if ($candidate->getDistrict() == $district) {
                 $candidatesByDistrict[] = $candidate;
             }
         }
@@ -136,9 +138,10 @@ class Election
     }
 
     /**
-     * Add districts
+     * Add districts.
      *
      * @param \mmp\rjpBundle\Entity\District $districts
+     *
      * @return Election
      */
     public function addDistrict(\mmp\rjpBundle\Entity\District $districts)
@@ -149,7 +152,7 @@ class Election
     }
 
     /**
-     * Remove districts
+     * Remove districts.
      *
      * @param \mmp\rjpBundle\Entity\District $districts
      */
@@ -159,9 +162,9 @@ class Election
     }
 
     /**
-     * Get districts
+     * Get districts.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDistricts()
     {
@@ -169,23 +172,26 @@ class Election
     }
 
     /**
-     * Get statistcs
+     * Get statistcs.
      *
      * @return mmp\rjpBundle\Library\Statistics\Election
      */
-    public function getStatistics() {
-        if($this->statistics) {
+    public function getStatistics()
+    {
+        if ($this->statistics) {
             return $this->statistics;
         }
 
         $this->statistics = new \mmp\rjpBundle\Library\Statistics\Election($this);
+
         return $this->statistics;
     }
 
     /**
-     * Add electoralCommissions
+     * Add electoralCommissions.
      *
      * @param \mmp\rjpBundle\Entity\ElectionHasElectoralCommission $electoralCommissions
+     *
      * @return Election
      */
     public function addElectoralCommission(\mmp\rjpBundle\Entity\ElectionHasElectoralCommission $electoralCommissions)
@@ -196,7 +202,7 @@ class Election
     }
 
     /**
-     * Remove electoralCommissions
+     * Remove electoralCommissions.
      *
      * @param \mmp\rjpBundle\Entity\ElectionHasElectoralCommission $electoralCommissions
      */
@@ -206,9 +212,9 @@ class Election
     }
 
     /**
-     * Get electoralCommissions
+     * Get electoralCommissions.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getElectoralCommissions()
     {

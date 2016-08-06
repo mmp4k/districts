@@ -1,6 +1,8 @@
 <?php
+
 namespace mmp\rjpBundle\Entity;
-use Doctrine\ORM\Mapping AS ORM;
+
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
@@ -24,7 +26,7 @@ class Street
      */
     private $houseNumbers;
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -32,9 +34,9 @@ class Street
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -42,9 +44,20 @@ class Street
     }
 
     /**
-     * Set name
+     * Get name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set name.
      *
      * @param string $name
+     *
      * @return Street
      */
     public function setName($name)
@@ -55,19 +68,10 @@ class Street
     }
 
     /**
-     * Get name
-     *
-     * @return string 
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Add houseNumbers
+     * Add houseNumbers.
      *
      * @param \mmp\rjpBundle\Entity\HouseNumber $houseNumbers
+     *
      * @return Street
      */
     public function addHouseNumber(\mmp\rjpBundle\Entity\HouseNumber $houseNumbers)
@@ -78,7 +82,7 @@ class Street
     }
 
     /**
-     * Remove houseNumbers
+     * Remove houseNumbers.
      *
      * @param \mmp\rjpBundle\Entity\HouseNumber $houseNumbers
      */
@@ -88,9 +92,9 @@ class Street
     }
 
     /**
-     * Get houseNumbers
+     * Get houseNumbers.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getHouseNumbers()
     {

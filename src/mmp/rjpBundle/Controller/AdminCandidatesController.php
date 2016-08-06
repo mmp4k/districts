@@ -4,6 +4,7 @@ namespace mmp\rjpBundle\Controller;
 
 use mmp\rjpBundle\Entity\Candidate;
 use mmp\rjpBundle\Entity\District;
+use mmp\rjpBundle\Form\DistrictWithCandidatesType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -38,7 +39,7 @@ class AdminCandidatesController extends Controller
     {
         $candidates = $this->getCandidateManager()->findByDistrict($district);
 
-        $form = $this->createForm('districtWithCandidates', $district);
+        $form = $this->createForm(DistrictWithCandidatesType::class, $district);
         $form->handleRequest($request);
 
         if ($form->isValid()) {

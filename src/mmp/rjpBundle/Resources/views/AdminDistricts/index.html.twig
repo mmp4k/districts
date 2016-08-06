@@ -1,22 +1,26 @@
 {% extends 'mmpRjpBundle::layoutAdmin.html.twig' %}
 
-{% block headline %}
-    Dzielnice
+{% block page_header %}
+    <div class="container">
+        <h2 style="margin-top: 0;">Lista dzielnic</h2>
+    </div>
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="{{ path('mmp_rjp_admin_districts') }}">Dzielnice</a></li>
+        <li><a href="{{ path('mmp_rjp_admin_districts_add') }}">Dodaj dzielnicę</a></li>
+    </ul>
 {% endblock %}
 
 {% block content_row %}
-<a href="{{ path('mmp_rjp_admin_districts_add') }}">Dodaj dzielnicę</a>
 <table style="width:100%" class="table">
     <thead>
         <th colspan="2">ID</th>
         <th>Nazwa</th>
-        <th>Stan</th>
         <th>Koordynator</th>
         <th>Opcje</th>
     </thead>
     {% for district in districts %}
         <tr>
-            <td style="width:60px">
+            <td style="width:60px;vertical-align: middle" rowspan="2">
                 {% if district.avatar %}
                     <img src="/{{ district.getWebPath() }}" width="50" />
                 {% else %}
@@ -25,20 +29,29 @@
                     {% endimage %}
                 {% endif %}
             </td>
-            <td >
+            <td rowspan="2" style="vertical-align: middle">
                 {{ district.id }}
             </td>
-            <td>{{ district.name }}</td>
-            <td>{{ district.status }}</td>
+            <td>[{{ district.statusText }}] {{ district.name }}</td>
             <td>{% if district.coordinator %}
                 {{ district.coordinator.username }}
                 {% endif %}
             </td>
             <td>
                 <a href="{{ path('mmp_rjp_admin_district_edit', { 'id' : district.id }) }}">Edytuj</a>
-                <a href="{{ path('mmp_rjp_admin_district_delete', { 'slug' : district.slug }) }}">Usuń</a>
+                |
+                <a href="{{ path('mmp_rjp_admin_district_delete', { 'id' : district.id }) }}">Usuń</a>
+
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                Z dzielnicy:
                 <a href="{{ path('mmp_rjp_admin_candidates_from_district', { 'id' : district.id }) }}">Kandydaci</a>
+                |
                 <a href="{{ path('mmp_rjp_admin_district_streets', { 'id' : district.id }) }}">Ulice</a>
+                |
+                <a href="{{ path('mmp_rjp_admin_meetings_from_district', {'id' : district.id}) }}">Spotkania</a>
             </td>
         </tr>
     {% endfor %}

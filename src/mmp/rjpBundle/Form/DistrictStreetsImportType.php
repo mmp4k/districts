@@ -13,7 +13,7 @@ class DistrictStreetsImportType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder            
+        $builder
             ->add('streets_xml_file', 'file')
             ->add('submit', 'submit')
         ;

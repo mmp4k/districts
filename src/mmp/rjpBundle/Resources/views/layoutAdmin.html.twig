@@ -27,6 +27,12 @@
 </nav>
 {% endblock %}
 
+{% block page_header %}
+    <div class="page-header" style="margin: 0; padding: 0;">
+        <h1>{% block headline %}Mopa Bootstrap Bundle{% endblock headline %}</h1>
+    </div>
+{% endblock page_header %}
+
 {% block footer %}
 <p>&copy; <a href="http://bogucice.org.pl" target="_blank">Bogucice - kierunek przyszłośc</a> 2015</p>
 {% endblock footer %}

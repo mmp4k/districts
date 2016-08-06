@@ -1,6 +1,10 @@
 <?php
+
 namespace mmp\rjpBundle\Form;
+
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -12,10 +16,10 @@ class DistrictWithCandidatesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('candidates', 'collection', [
-                'type' => new CandidateSimpleType
+            ->add('candidates', CollectionType::class, [
+                'type' => new CandidateSimpleType(),
             ])
-            ->add('submit', 'submit')
+            ->add('submit', SubmitType::class)
         ;
     }
 
@@ -27,13 +31,5 @@ class DistrictWithCandidatesType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'mmp\rjpBundle\Entity\District',
         ));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'districtWithCandidates';
     }
 }

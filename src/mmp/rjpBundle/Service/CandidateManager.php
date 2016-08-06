@@ -3,9 +3,9 @@
 namespace mmp\rjpBundle\Service;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use mmp\rjpBundle\Entity\Candidate;
 use mmp\rjpBundle\Entity\District;
+use mmp\rjpBundle\Entity\Repository\CandidateRepository;
 
 class CandidateManager
 {
@@ -13,7 +13,7 @@ class CandidateManager
 
     protected $candidateRepository;
 
-    public function __construct(EntityRepository $candidateRepository, EntityManager $entityManager)
+    public function __construct(CandidateRepository $candidateRepository, EntityManager $entityManager)
     {
         $this->candidateRepository = $candidateRepository;
         $this->entityManager = $entityManager;

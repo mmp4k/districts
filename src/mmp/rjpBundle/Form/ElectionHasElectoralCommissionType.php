@@ -10,26 +10,26 @@ class ElectionHasElectoralCommissionType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('votes')
             ->add('authorized')
-            ->add('election')            
+            ->add('election')
             ->add('district')
             // ->add('houseNumbersWithStreets')
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'mmp\rjpBundle\Entity\ElectionHasElectoralCommission'
+            'data_class' => 'mmp\rjpBundle\Entity\ElectionHasElectoralCommission',
         ));
     }
 

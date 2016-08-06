@@ -1,6 +1,8 @@
 <?php
+
 namespace mmp\rjpBundle\Entity;
-use Doctrine\ORM\Mapping AS ORM;
+
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
@@ -32,9 +34,9 @@ class DistrictImage
     private $district;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -42,9 +44,20 @@ class DistrictImage
     }
 
     /**
-     * Set title
+     * Get title.
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set title.
      *
      * @param string $title
+     *
      * @return DistrictImage
      */
     public function setTitle($title)
@@ -55,19 +68,20 @@ class DistrictImage
     }
 
     /**
-     * Get title
+     * Get image.
      *
-     * @return string 
+     * @return string
      */
-    public function getTitle()
+    public function getImage()
     {
-        return $this->title;
+        return $this->image;
     }
 
     /**
-     * Set image
+     * Set image.
      *
      * @param string $image
+     *
      * @return DistrictImage
      */
     public function setImage($image)
@@ -78,19 +92,20 @@ class DistrictImage
     }
 
     /**
-     * Get image
+     * Get district.
      *
-     * @return string 
+     * @return \mmp\rjpBundle\Entity\District
      */
-    public function getImage()
+    public function getDistrict()
     {
-        return $this->image;
+        return $this->district;
     }
 
     /**
-     * Set district
+     * Set district.
      *
      * @param \mmp\rjpBundle\Entity\District $district
+     *
      * @return DistrictImage
      */
     public function setDistrict(\mmp\rjpBundle\Entity\District $district = null)
@@ -98,15 +113,5 @@ class DistrictImage
         $this->district = $district;
 
         return $this;
-    }
-
-    /**
-     * Get district
-     *
-     * @return \mmp\rjpBundle\Entity\District 
-     */
-    public function getDistrict()
-    {
-        return $this->district;
     }
 }

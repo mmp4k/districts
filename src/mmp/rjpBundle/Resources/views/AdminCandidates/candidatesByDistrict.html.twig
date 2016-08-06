@@ -1,13 +1,24 @@
 {% extends 'mmpRjpBundle::layoutAdmin.html.twig' %}
 
-{% block headline %}
-    Kandydaci z dzielnicy {{ district.name }}
+{% block page_header %}
+    <div class="container">
+        <h2 style="margin-top: 0;">{{ district.name }}</h2>
+    </div>
+    <ul class="nav nav-tabs">
+        <li><a href="{{ path('mmp_rjp_admin_districts') }}">Dzielnice</a></li>
+        <li><a href="{{ path('mmp_rjp_admin_districts_add') }}">Dodaj dzielnicę</a></li>
+        <li><a href="{{ path('mmp_rjp_admin_district_edit', {'id' : district.id}) }}">Edytuj</a></li>
+        <li><a href="{{ path('mmp_rjp_admin_district_delete', {'id' : district.id}) }}">Usuń</a></li>
+        <li><a href="{{ path('mmp_rjp_admin_candidates_from_district', { 'id' : district.id }) }}">Kandydaci</a></li>
+        <li class="active"><a href="{{ path('mmp_rjp_admin_district_streets', { 'id' : district.id }) }}">Ulice</a></li>
+        <li><a href="{{ path('mmp_rjp_admin_meetings_from_district', { 'id' : district.id }) }}">Spotkania</a></li>
+    </ul>
 {% endblock %}
 
-{% block content_row %}
+{% block content %}
+    <div class="container">
+        <div class="col-sm-12" style="padding:2em">
     {{ form_start(form) }}
-
-    <h3>Candidates</h3>
     <table class="table">
         <thead>
             <th>Name</th>
@@ -31,4 +42,6 @@
         </tbody>
     </table>
 {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}

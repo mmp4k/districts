@@ -5,6 +5,7 @@ namespace mmp\MeetingBundle\Service;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use mmp\MeetingBundle\Entity\Meeting;
+use mmp\rjpBundle\Entity\District;
 
 class MeetingManager
 {
@@ -35,6 +36,16 @@ class MeetingManager
     {
         return $this->meetingRepository->findBy([], [
             'date' => 'desc',
+        ]);
+    }
+
+    /**
+     * @return array|Meeting[]
+     */
+    public function findAllFromDistrict(District $district)
+    {
+        return $this->meetingRepository->findBy([
+            'district' => $district,
         ]);
     }
 

@@ -1,10 +1,12 @@
 <?php
+
 namespace mmp\rjpBundle\Entity;
+
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="mmp\rjpBundle\Entity\Repository\CandidateRepository")
  * @ORM\Table(
  *     indexes={
  *         @ORM\Index(name="UserIndex", columns={"user_id"}),
@@ -13,7 +15,6 @@ use Doctrine\ORM\Mapping as ORM;
  *     }
  * )
  * @ORM\HasLifecycleCallbacks
- * 
  */
 class Candidate
 {
@@ -50,7 +51,6 @@ class Candidate
     private $councilor;
 
     /**
-     * 
      * @ORM\JoinColumn(name="election_id", referencedColumnName="id", nullable=false)
      * @ORM\ManyToOne(targetEntity="mmp\rjpBundle\Entity\Election", inversedBy="candidates")
      */
@@ -68,13 +68,12 @@ class Candidate
      */
     private $user;
 
-
     private $isCouncilor;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -82,7 +81,7 @@ class Candidate
     }
 
     /**
-     * Get councilor
+     * Get councilor.
      *
      * @return \mmp\rjpBundle\Entity\Councilor
      */
@@ -92,9 +91,10 @@ class Candidate
     }
 
     /**
-     * Set councilor
+     * Set councilor.
      *
      * @param \mmp\rjpBundle\Entity\Councilor $councilor
+     *
      * @return Candidate
      */
     public function setCouncilor(\mmp\rjpBundle\Entity\Councilor $councilor = null)
@@ -105,7 +105,7 @@ class Candidate
     }
 
     /**
-     * Get election
+     * Get election.
      *
      * @return \mmp\rjpBundle\Entity\Election
      */
@@ -115,9 +115,10 @@ class Candidate
     }
 
     /**
-     * Set election
+     * Set election.
      *
      * @param \mmp\rjpBundle\Entity\Election $election
+     *
      * @return Candidate
      */
     public function setElection(\mmp\rjpBundle\Entity\Election $election)
@@ -128,7 +129,7 @@ class Candidate
     }
 
     /**
-     * Get district
+     * Get district.
      *
      * @return \mmp\rjpBundle\Entity\District
      */
@@ -138,9 +139,10 @@ class Candidate
     }
 
     /**
-     * Set district
+     * Set district.
      *
      * @param \mmp\rjpBundle\Entity\District $district
+     *
      * @return Candidate
      */
     public function setDistrict(\mmp\rjpBundle\Entity\District $district)
@@ -151,7 +153,7 @@ class Candidate
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return \mmp\UserBundle\Entity\User
      */
@@ -161,9 +163,10 @@ class Candidate
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \mmp\UserBundle\Entity\User $user
+     *
      * @return Candidate
      */
     public function setUser(\mmp\UserBundle\Entity\User $user)
@@ -173,11 +176,13 @@ class Candidate
         return $this;
     }
 
-    public function isCouncilor() {
+    public function isCouncilor()
+    {
         return (bool) ($this->isCouncilor || ($this->councilor));
     }
 
-    public function setIsCouncilor($value) {
+    public function setIsCouncilor($value)
+    {
         $this->isCouncilor = $value;
 
         return $this;
@@ -187,26 +192,26 @@ class Candidate
      * @ORM\PostPersist()
      * @ORM\PostUpdate()
      */
-    public function appendCouncilorIfNeeded(LifecycleEventArgs $args) {
-        if(!$this->isCouncilor) {
+    public function appendCouncilorIfNeeded(LifecycleEventArgs $args)
+    {
+        if (!$this->isCouncilor) {
             return;
         }
 
         $em = $args->getEntityManager();
 
-        $councilor = $this->getCouncilor() ? $this->getCouncilor() : new Councilor;
+        $councilor = $this->getCouncilor() ? $this->getCouncilor() : new Councilor();
         $councilor->setCandidate($this);
         $councilor->setDistrict($this->getDistrict());
 
         $em->persist($councilor);
         $em->flush();
-
     }
 
     /**
-     * Get votes
+     * Get votes.
      *
-     * @return integer
+     * @return int
      */
     public function getVotes()
     {
@@ -214,9 +219,10 @@ class Candidate
     }
 
     /**
-     * Set votes
+     * Set votes.
      *
-     * @param integer $votes
+     * @param int $votes
+     *
      * @return Candidate
      */
     public function setVotes($votes)
@@ -227,7 +233,7 @@ class Candidate
     }
 
     /**
-     * Get occupation
+     * Get occupation.
      *
      * @return string
      */
@@ -237,9 +243,10 @@ class Candidate
     }
 
     /**
-     * Set occupation
+     * Set occupation.
      *
      * @param string $occupation
+     *
      * @return Candidate
      */
     public function setOccupation($occupation)
@@ -250,7 +257,7 @@ class Candidate
     }
 
     /**
-     * Get sex
+     * Get sex.
      *
      * @return string
      */
@@ -260,9 +267,10 @@ class Candidate
     }
 
     /**
-     * Set sex
+     * Set sex.
      *
      * @param string $sex
+     *
      * @return Candidate
      */
     public function setSex($sex)
@@ -273,9 +281,9 @@ class Candidate
     }
 
     /**
-     * Get age
+     * Get age.
      *
-     * @return integer
+     * @return int
      */
     public function getAge()
     {
@@ -283,9 +291,10 @@ class Candidate
     }
 
     /**
-     * Set age
+     * Set age.
      *
-     * @param integer $age
+     * @param int $age
+     *
      * @return Candidate
      */
     public function setAge($age)

@@ -3,6 +3,7 @@
 namespace mmp\MeetingBundle\Controller;
 
 use mmp\MeetingBundle\Entity\Meeting;
+use mmp\rjpBundle\Entity\District;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -17,6 +18,22 @@ class AdminController extends Controller
     {
         return [
             'meetings' => $this->getMeetingManager()->findAll(),
+        ];
+    }
+
+    /**
+     * @Template()
+     * @ParamConverter("district", class="mmpRjpBundle:District")
+     *
+     * @param District $district
+     *
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function meetingsByDistrictAction(District $district)
+    {
+        return [
+            'meetings' => $this->getMeetingManager()->findAllFromDistrict($district),
+            'district' => $district,
         ];
     }
 

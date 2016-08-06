@@ -1,5 +1,7 @@
 <?php
+
 namespace mmp\rjpBundle\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -63,7 +65,7 @@ class ElectoralCommission
      */
     private $elections;
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -71,9 +73,9 @@ class ElectoralCommission
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -81,9 +83,20 @@ class ElectoralCommission
     }
 
     /**
-     * Set name
+     * Get name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set name.
      *
      * @param string $name
+     *
      * @return ElectoralCommission
      */
     public function setName($name)
@@ -94,19 +107,20 @@ class ElectoralCommission
     }
 
     /**
-     * Get name
+     * Get point.
      *
-     * @return string 
+     * @return string
      */
-    public function getName()
+    public function getPoint()
     {
-        return $this->name;
+        return $this->point;
     }
 
     /**
-     * Set point
+     * Set point.
      *
      * @param string $point
+     *
      * @return ElectoralCommission
      */
     public function setPoint($point)
@@ -117,19 +131,20 @@ class ElectoralCommission
     }
 
     /**
-     * Get point
+     * Get polygon.
      *
-     * @return string 
+     * @return string
      */
-    public function getPoint()
+    public function getPolygon()
     {
-        return $this->point;
+        return $this->polygon;
     }
 
     /**
-     * Set polygon
+     * Set polygon.
      *
      * @param string $polygon
+     *
      * @return ElectoralCommission
      */
     public function setPolygon($polygon)
@@ -140,19 +155,10 @@ class ElectoralCommission
     }
 
     /**
-     * Get polygon
-     *
-     * @return string 
-     */
-    public function getPolygon()
-    {
-        return $this->polygon;
-    }
-
-    /**
-     * Add elections
+     * Add elections.
      *
      * @param \mmp\rjpBundle\Entity\ElectionHasElectoralCommission $elections
+     *
      * @return ElectoralCommission
      */
     public function addElection(\mmp\rjpBundle\Entity\ElectionHasElectoralCommission $elections)
@@ -163,7 +169,7 @@ class ElectoralCommission
     }
 
     /**
-     * Remove elections
+     * Remove elections.
      *
      * @param \mmp\rjpBundle\Entity\ElectionHasElectoralCommission $elections
      */
@@ -173,9 +179,9 @@ class ElectoralCommission
     }
 
     /**
-     * Get elections
+     * Get elections.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getElections()
     {
@@ -183,9 +189,20 @@ class ElectoralCommission
     }
 
     /**
-     * Set point_name
+     * Get point_name.
+     *
+     * @return string
+     */
+    public function getPointName()
+    {
+        return $this->point_name;
+    }
+
+    /**
+     * Set point_name.
      *
      * @param string $pointName
+     *
      * @return ElectoralCommission
      */
     public function setPointName($pointName)
@@ -196,19 +213,20 @@ class ElectoralCommission
     }
 
     /**
-     * Get point_name
+     * Get point_street.
      *
-     * @return string 
+     * @return string
      */
-    public function getPointName()
+    public function getPointStreet()
     {
-        return $this->point_name;
+        return $this->point_street;
     }
 
     /**
-     * Set point_street
+     * Set point_street.
      *
      * @param string $pointStreet
+     *
      * @return ElectoralCommission
      */
     public function setPointStreet($pointStreet)
@@ -218,26 +236,17 @@ class ElectoralCommission
         return $this;
     }
 
-    /**
-     * Get point_street
-     *
-     * @return string 
-     */
-    public function getPointStreet()
+    public function getPolygonArray()
     {
-        return $this->point_street;
-    }
-
-    public function getPolygonArray() {
         $polygonArray = array();
-        foreach(preg_split('/\n|\s/', $this->getPolygon()) as $pointLine) {
-            if(!trim($pointLine)) {
+        foreach (preg_split('/\n|\s/', $this->getPolygon()) as $pointLine) {
+            if (!trim($pointLine)) {
                 continue;
             }
             list($lat, $lng) = explode(',', $pointLine);
             $polygonArray[] = [
-                'lat'   =>  $lat,
-                'lng'   =>  $lng
+                'lat' => $lat,
+                'lng' => $lng,
             ];
         }
 
@@ -245,9 +254,20 @@ class ElectoralCommission
     }
 
     /**
-     * Set image_url_min
+     * Get image_url_min.
+     *
+     * @return string
+     */
+    public function getImageUrlMin()
+    {
+        return $this->image_url_min;
+    }
+
+    /**
+     * Set image_url_min.
      *
      * @param string $imageUrlMin
+     *
      * @return ElectoralCommission
      */
     public function setImageUrlMin($imageUrlMin)
@@ -258,19 +278,20 @@ class ElectoralCommission
     }
 
     /**
-     * Get image_url_min
+     * Get image_url.
      *
-     * @return string 
+     * @return string
      */
-    public function getImageUrlMin()
+    public function getImageUrl()
     {
-        return $this->image_url_min;
+        return $this->image_url;
     }
 
     /**
-     * Set image_url
+     * Set image_url.
      *
      * @param string $imageUrl
+     *
      * @return ElectoralCommission
      */
     public function setImageUrl($imageUrl)
@@ -278,15 +299,5 @@ class ElectoralCommission
         $this->image_url = $imageUrl;
 
         return $this;
-    }
-
-    /**
-     * Get image_url
-     *
-     * @return string 
-     */
-    public function getImageUrl()
-    {
-        return $this->image_url;
     }
 }
